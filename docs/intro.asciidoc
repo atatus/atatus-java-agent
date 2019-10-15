@@ -1,0 +1,60 @@
+ifdef::env-github[]
+NOTE: For the best reading experience,
+please view this documentation at https://www.elastic.co/guide/en/apm/agent/java[elastic.co]
+endif::[]
+
+[[intro]]
+== Introduction
+
+Welcome to the APM Java Agent documentation.
+
+Elastic APM automatically measures the performance of your application and tracks errors.
+For example, it records spans for database queries and transactions for incoming HTTP requests.
+See <<supported-technologies>> to learn about which frameworks and technologies the Elastic APM Java agent supports out-of-the-box.
+
+Spans are grouped in transactions - by default one for each incoming HTTP request.
+But it's possible to create custom transactions not associated with an HTTP request.
+
+By default the agent comes with support for common frameworks out-of-the-box.
+To instrument other events,
+you can use custom spans.
+For information about custom spans,
+see the <<public-api,public api documentation>>.
+
+NOTE: The minimum required version of the APM Server is 6.5.0
+
+[float]
+[[additional-components]]
+=== Additional components
+
+APM Agents work in conjunction with the {apm-server-ref-v}/index.html[APM Server], {ref}/index.html[Elasticsearch], and {kibana-ref}/index.html[Kibana].
+Please view the {apm-overview-ref-v}/index.html[APM Overview] for details on how these components work together.
+
+[float]
+[[get-started]]
+=== Get started
+
+[float]
+[[intro-setup]]
+==== Set up
+
+There are three different ways to set up the Elastic APM Java Agent:
+
+. <<setup-javaagent>> - Manually set up and configure the agent with the `-javaagent` JVM flag.
+. <<setup-attach-cli>> - Automatically set up the agent without needing to alter the configuration of your application server.
+. <<setup-attach-api>> - Use the `apm-agent-attach` artifact and the `attach` API to set up the agent.
+
+[float]
+[[get-started-configuration]]
+==== Configuration
+
+Once you've setup the agent,
+see the <<configuration,configuration guide>> on how to configure Elastic APM.
+
+[float]
+[[supported-technologies]]
+=== Supported technologies
+
+Please check <<supported-technologies-details, the supported technologies page>>
+whether the Elastic APM agent supports auto-instrumentation of the technologies your application is using.
+
