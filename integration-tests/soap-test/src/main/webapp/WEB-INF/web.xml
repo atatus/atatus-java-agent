@@ -4,7 +4,7 @@
 
     <servlet>
         <servlet-name>SoapClientServlet</servlet-name>
-        <servlet-class>co.elastic.apm.soap.SoapClientServlet</servlet-class>
+        <servlet-class>com.atatus.apm.soap.SoapClientServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

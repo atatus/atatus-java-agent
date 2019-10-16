@@ -1,1 +1,1 @@
-co.elastic.apm.agent.quartz.job.JobTransactionNameInstrumentation
+com.atatus.apm.agent.quartz.job.JobTransactionNameInstrumentation

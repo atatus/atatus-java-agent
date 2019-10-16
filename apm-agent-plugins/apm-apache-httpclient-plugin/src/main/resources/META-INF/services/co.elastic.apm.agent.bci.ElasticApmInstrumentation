@@ -1,4 +1,4 @@
-co.elastic.apm.agent.httpclient.ApacheHttpClientInstrumentation
-co.elastic.apm.agent.httpclient.ApacheHttpAsyncClientInstrumentation
-co.elastic.apm.agent.httpclient.ApacheHttpAsyncClientRedirectInstrumentation
-co.elastic.apm.agent.httpclient.LegacyApacheHttpClientInstrumentation
+com.atatus.apm.agent.httpclient.ApacheHttpClientInstrumentation
+com.atatus.apm.agent.httpclient.ApacheHttpAsyncClientInstrumentation
+com.atatus.apm.agent.httpclient.ApacheHttpAsyncClientRedirectInstrumentation
+com.atatus.apm.agent.httpclient.LegacyApacheHttpClientInstrumentation

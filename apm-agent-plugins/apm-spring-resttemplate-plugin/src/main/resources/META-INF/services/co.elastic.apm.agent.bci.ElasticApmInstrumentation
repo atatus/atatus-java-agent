@@ -1,1 +1,1 @@
-co.elastic.apm.agent.resttemplate.SpringRestTemplateInstrumentation
+com.atatus.apm.agent.resttemplate.SpringRestTemplateInstrumentation

@@ -1,1 +1,1 @@
-co.elastic.apm.agent.spring.scheduled.ScheduledTransactionNameInstrumentation
+com.atatus.apm.agent.spring.scheduled.ScheduledTransactionNameInstrumentation

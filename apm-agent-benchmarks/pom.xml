@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>apm-agent-parent</artifactId>
-        <groupId>co.elastic.apm</groupId>
-        <version>1.10.1-SNAPSHOT</version>
+        <groupId>com.atatus.apm</groupId>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>apm-agent-benchmarks</artifactId>
@@ -19,8 +19,8 @@
             <version>${project.version}</version>
         </dependency>
         <!--
-        we can't add elastic-apm-agent as it causes shading problems:
-        java.util.ServiceConfigurationError: org.stagemonitor.configuration.ConfigurationOptionProvider: co.elastic.apm.agent.web.WebConfiguration not a subtype
+        we can't add atatus-apm-agent as it causes shading problems:
+        java.util.ServiceConfigurationError: org.stagemonitor.configuration.ConfigurationOptionProvider: com.atatus.apm.agent.web.WebConfiguration not a subtype
         -->
         <dependency>
             <groupId>${project.groupId}</groupId>

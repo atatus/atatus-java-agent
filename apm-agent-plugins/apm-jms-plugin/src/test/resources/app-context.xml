@@ -9,7 +9,7 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <context:component-scan base-package="co.elastic.apm.agent.jms"/>
+    <context:component-scan base-package="com.atatus.apm.agent.jms"/>
 
     <!-- =============================================== -->
     <!-- JMS Common，Define JMS connection Factory       -->

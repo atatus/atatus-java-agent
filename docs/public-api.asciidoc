@@ -15,7 +15,7 @@ The first step in getting started with the API is to declare a dependency to the
 .pom.xml
 ----
 <dependency>
-    <groupId>co.elastic.apm</groupId>
+    <groupId>com.atatus.apm</groupId>
     <artifactId>apm-agent-api</artifactId>
     <version>${elastic-apm.version}</version>
 </dependency>
@@ -38,7 +38,7 @@ image:https://img.shields.io/maven-central/v/co.elastic.apm/apm-agent-api.svg[Ma
 The tracer gives you access to the currently active transaction and span.
 It can also be used to track an exception.
 
-To use the API, you can just invoke the static methods on the class `co.elastic.apm.api.ElasticApm`.
+To use the API, you can just invoke the static methods on the class `com.atatus.apm.api.ElasticApm`.
 
 [float]
 [[api-current-transaction]]
@@ -52,8 +52,8 @@ which means that you never have to check for `null` values.
 
 [source,java]
 ----
-import co.elastic.apm.api.ElasticApm;
-import co.elastic.apm.api.Transaction;
+import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.Transaction;
 
 Transaction transaction = ElasticApm.currentTransaction();
 ----
@@ -78,8 +78,8 @@ These exceptions will not have a link to a Span or a Transaction.
 
 [source,java]
 ----
-import co.elastic.apm.api.ElasticApm;
-import co.elastic.apm.api.Span;
+import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.Span;
 
 Span span = ElasticApm.currentSpan();
 ----

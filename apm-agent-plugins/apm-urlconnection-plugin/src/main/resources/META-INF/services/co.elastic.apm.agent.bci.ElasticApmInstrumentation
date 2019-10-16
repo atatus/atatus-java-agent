@@ -1,2 +1,2 @@
-co.elastic.apm.agent.urlconnection.HttpUrlConnectionInstrumentation$CreateSpanInstrumentation
-co.elastic.apm.agent.urlconnection.HttpUrlConnectionInstrumentation$DisconnectInstrumentation
+com.atatus.apm.agent.urlconnection.HttpUrlConnectionInstrumentation$CreateSpanInstrumentation
+com.atatus.apm.agent.urlconnection.HttpUrlConnectionInstrumentation$DisconnectInstrumentation

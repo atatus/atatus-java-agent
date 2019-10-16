@@ -7,9 +7,9 @@
     </properties>
 
     <parent>
-        <groupId>co.elastic.apm</groupId>
+        <groupId>com.atatus.apm</groupId>
         <artifactId>apm-agent-parent</artifactId>
-        <version>1.10.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>apm-agent-core</artifactId>
@@ -23,7 +23,7 @@
                 <version>0.5.1</version>
                 <configuration>
                     <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory>
-                    <targetPackage>co.elastic.apm.agent.impl.intake</targetPackage>
+                    <targetPackage>com.atatus.apm.agent.impl.intake</targetPackage>
                     <usePrimitives>true</usePrimitives>
                     <useLongIntegers>true</useLongIntegers>
                     <includeAdditionalProperties>false</includeAdditionalProperties>

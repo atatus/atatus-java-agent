@@ -1,4 +1,4 @@
-co.elastic.apm.agent.jdbc.ConnectionInstrumentation
-co.elastic.apm.agent.jdbc.StatementInstrumentation$ExecuteWithQueryInstrumentation
-co.elastic.apm.agent.jdbc.StatementInstrumentation$AddBatchInstrumentation
-co.elastic.apm.agent.jdbc.StatementInstrumentation$ExecuteWithoutQueryInstrumentation
+com.atatus.apm.agent.jdbc.ConnectionInstrumentation
+com.atatus.apm.agent.jdbc.StatementInstrumentation$ExecuteWithQueryInstrumentation
+com.atatus.apm.agent.jdbc.StatementInstrumentation$AddBatchInstrumentation
+com.atatus.apm.agent.jdbc.StatementInstrumentation$ExecuteWithoutQueryInstrumentation

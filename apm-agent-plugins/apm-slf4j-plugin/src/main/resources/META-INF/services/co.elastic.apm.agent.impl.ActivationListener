@@ -1,1 +1,1 @@
-co.elastic.apm.agent.slf4j.Slf4JMdcActivationListener
+com.atatus.apm.agent.slf4j.Slf4JMdcActivationListener

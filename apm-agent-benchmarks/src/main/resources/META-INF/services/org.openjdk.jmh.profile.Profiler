@@ -1,1 +1,1 @@
-co.elastic.apm.agent.benchmark.profiler.ReporterProfiler
+com.atatus.apm.agent.benchmark.profiler.ReporterProfiler

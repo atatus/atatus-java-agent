@@ -1,0 +1,159 @@
+/*-
+ * #%L
+ * Elastic APM Java agent
+ * %%
+ * Copyright (C) 2018 - 2019 Elastic and contributors
+ * %%
+ * Licensed to Elasticsearch B.V. under one or more contributor
+ * license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Elasticsearch B.V. licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * #L%
+ */
+package com.atatus.apm.agent.report;
+
+import com.atatus.apm.agent.MockTracer;
+import com.atatus.apm.agent.configuration.CoreConfiguration;
+import com.atatus.apm.agent.configuration.SpyConfiguration;
+import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.MetaData;
+import com.atatus.apm.agent.impl.error.ErrorCapture;
+import com.atatus.apm.agent.impl.payload.ProcessInfo;
+import com.atatus.apm.agent.impl.payload.Service;
+import com.atatus.apm.agent.impl.payload.SystemInfo;
+import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
+import com.atatus.apm.agent.impl.transaction.Span;
+import com.atatus.apm.agent.impl.transaction.Transaction;
+import com.atatus.apm.agent.report.processor.ProcessorEventHandler;
+import com.atatus.apm.agent.report.serialize.DslJsonSerializer;
+import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.stagemonitor.configuration.ConfigurationRegistry;
+
+import com.atatus.apm.agent.report.ApmServerClient;
+import com.atatus.apm.agent.report.ApmServerReporter;
+import com.atatus.apm.agent.report.IntakeV2ReportingEventHandler;
+import com.atatus.apm.agent.report.ReporterConfiguration;
+
+import java.net.InetSocketAddress;
+import java.net.URL;
+import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class ApmServerReporterIntegrationTest {
+
+    private static Undertow server;
+    private static int port;
+    private static AtomicInteger receivedIntakeApiCalls = new AtomicInteger();
+    private static HttpHandler handler;
+    private final ElasticApmTracer tracer = MockTracer.create();
+    private ReporterConfiguration reporterConfiguration;
+    private ApmServerReporter reporter;
+    private ConfigurationRegistry config;
+
+    @BeforeAll
+    static void startServer() {
+        server = Undertow.builder()
+            .addHttpListener(0, "127.0.0.1")
+            .setHandler(exchange -> {
+                if (handler != null) {
+                    handler.handleRequest(exchange);
+                }
+            }).build();
+        server.start();
+        port = ((InetSocketAddress) server.getListenerInfo().get(0).getAddress()).getPort();
+    }
+
+    @AfterAll
+    static void stopServer() {
+        server.stop();
+    }
+
+    @BeforeEach
+    void setUp() throws Exception {
+        handler = exchange -> {
+            if (exchange.getRequestPath().equals("/intake/v2/events")) {
+                receivedIntakeApiCalls.incrementAndGet();
+            }
+            exchange.setStatusCode(200).endExchange();
+        };
+        receivedIntakeApiCalls.set(0);
+        config = SpyConfiguration.createSpyConfig();
+        reporterConfiguration = config.getConfig(ReporterConfiguration.class);
+        when(reporterConfiguration.getServerUrls()).thenReturn(Collections.singletonList(new URL("http://localhost:" + port)));
+        SystemInfo system = new SystemInfo("x64", "localhost", "platform");
+        final Service service = new Service();
+        final ProcessInfo title = new ProcessInfo("title");
+        final ProcessorEventHandler processorEventHandler = ProcessorEventHandler.loadProcessors(config);
+        ApmServerClient apmServerClient = new ApmServerClient(reporterConfiguration);
+        final IntakeV2ReportingEventHandler v2handler = new IntakeV2ReportingEventHandler(
+            reporterConfiguration,
+            processorEventHandler,
+            new DslJsonSerializer(mock(StacktraceConfiguration.class), apmServerClient),
+            new MetaData(title, service, system, Collections.emptyMap()),
+            apmServerClient);
+        reporter = new ApmServerReporter(false, reporterConfiguration, config.getConfig(CoreConfiguration.class), v2handler);
+    }
+
+    @Test
+    void testReportTransaction() throws ExecutionException, InterruptedException {
+        reporter.report(new Transaction(tracer));
+        reporter.flush().get();
+        assertThat(reporter.getDropped()).isEqualTo(0);
+        assertThat(receivedIntakeApiCalls.get()).isEqualTo(1);
+    }
+
+    @Test
+    void testReportSpan() throws ExecutionException, InterruptedException {
+        reporter.report(new Span(tracer));
+        reporter.flush().get();
+        assertThat(reporter.getDropped()).isEqualTo(0);
+        assertThat(receivedIntakeApiCalls.get()).isEqualTo(1);
+    }
+
+    @Test
+    void testSecretToken() throws ExecutionException, InterruptedException {
+        when(reporterConfiguration.getSecretToken()).thenReturn("token");
+        handler = exchange -> {
+            if (exchange.getRequestPath().equals("/intake/v2/events")) {
+                assertThat(exchange.getRequestHeaders().get("Authorization").getFirst()).isEqualTo("Bearer token");
+                receivedIntakeApiCalls.incrementAndGet();
+            }
+            exchange.setStatusCode(200).endExchange();
+        };
+        reporter.report(new Transaction(tracer));
+        reporter.flush().get();
+        assertThat(reporter.getDropped()).isEqualTo(0);
+        assertThat(receivedIntakeApiCalls.get()).isEqualTo(1);
+    }
+
+    @Test
+    void testReportErrorCapture() throws ExecutionException, InterruptedException {
+        reporter.report(new ErrorCapture(tracer));
+        reporter.flush().get();
+        assertThat(reporter.getDropped()).isEqualTo(0);
+        assertThat(receivedIntakeApiCalls.get()).isEqualTo(1);
+    }
+
+}

@@ -37,7 +37,7 @@ Declare a dependency to the link:https://search.maven.org/search?q=g:co.elastic.
 .pom.xml
 ----
 <dependency>
-    <groupId>co.elastic.apm</groupId>
+    <groupId>com.atatus.apm</groupId>
     <artifactId>apm-agent-attach</artifactId>
     <version>${elastic-apm.version}</version>
 </dependency>
@@ -51,7 +51,7 @@ This example demonstrates the the usage of the `attach` API with a simple Spring
 [source,java]
 .MyApplication.java
 ----
-import co.elastic.apm.attach.ElasticApmAttacher;
+import com.atatus.apm.attach.ElasticApmAttacher;
 import org.springframework.boot.SpringApplication;
 
 @SpringBootApplication

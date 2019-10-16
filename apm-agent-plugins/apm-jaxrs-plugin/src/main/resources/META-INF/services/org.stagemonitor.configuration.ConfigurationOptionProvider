@@ -1,1 +1,1 @@
-co.elastic.apm.agent.jaxrs.JaxRsConfiguration
+com.atatus.apm.agent.jaxrs.JaxRsConfiguration

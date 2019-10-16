@@ -1,4 +1,4 @@
-co.elastic.apm.agent.util.DependencyInjectingServiceLoaderTest$ServiceImpl
+com.atatus.apm.agent.util.DependencyInjectingServiceLoaderTest$ServiceImpl
 # comment
 
-co.elastic.apm.agent.util.DependencyInjectingServiceLoaderTest$ServiceImpl2
+com.atatus.apm.agent.util.DependencyInjectingServiceLoaderTest$ServiceImpl2

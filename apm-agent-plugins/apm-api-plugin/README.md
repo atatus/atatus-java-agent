@@ -27,6 +27,6 @@ it injects the actual implementation of the API,
 turning the noop into an actual working implementation.
 
 This magic is implemented in the following classes:
- - co.elastic.apm.agent.plugin.api.ElasticApmApiInstrumentation
- - co.elastic.apm.agent.plugin.api.SpanInstrumentation
- - co.elastic.apm.agent.plugin.api.TransactionInstrumentation
+ - com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation
+ - com.atatus.apm.agent.plugin.api.SpanInstrumentation
+ - com.atatus.apm.agent.plugin.api.TransactionInstrumentation

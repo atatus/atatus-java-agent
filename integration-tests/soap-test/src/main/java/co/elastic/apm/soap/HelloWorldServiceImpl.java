@@ -24,9 +24,9 @@
  */
 package co.elastic.apm.soap;
 
-import co.elastic.apm.api.ElasticApm;
-
 import javax.jws.WebService;
+
+import com.atatus.apm.api.ElasticApm;
 
 @WebService(serviceName = "HelloWorldService", portName = "HelloWorld", name = "HelloWorld",
     endpointInterface = "co.elastic.apm.soap.HelloWorldService",

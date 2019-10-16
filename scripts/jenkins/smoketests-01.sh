@@ -3,8 +3,8 @@
 set -euxo pipefail
 
 # clean projects which use the shade plugin to avoid
-# Error creating shaded jar: duplicate entry: META-INF/services/co.elastic.apm.agent.shaded.stagemonitor.configuration.ConfigurationOptionProvider
-./mvnw -pl elastic-apm-agent,apm-agent-attach clean
+# Error creating shaded jar: duplicate entry: META-INF/services/com.atatus.apm.agent.shaded.stagemonitor.configuration.ConfigurationOptionProvider
+./mvnw -pl atatus-apm-agent,apm-agent-attach clean
 
 MOD=$(find apm-agent-plugins -maxdepth 1 -mindepth 1 -type d|grep -v "target"|tr "\n" ",")
 

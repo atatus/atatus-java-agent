@@ -1,5 +1,5 @@
-co.elastic.apm.agent.servlet.ServletInstrumentation
-co.elastic.apm.agent.servlet.FilterChainInstrumentation
-co.elastic.apm.agent.servlet.AsyncInstrumentation$StartAsyncInstrumentation
-co.elastic.apm.agent.servlet.AsyncInstrumentation$AsyncContextInstrumentation
-co.elastic.apm.agent.servlet.RequestStreamRecordingInstrumentation
+com.atatus.apm.agent.servlet.ServletInstrumentation
+com.atatus.apm.agent.servlet.FilterChainInstrumentation
+com.atatus.apm.agent.servlet.AsyncInstrumentation$StartAsyncInstrumentation
+com.atatus.apm.agent.servlet.AsyncInstrumentation$AsyncContextInstrumentation
+com.atatus.apm.agent.servlet.RequestStreamRecordingInstrumentation

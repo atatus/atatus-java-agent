@@ -73,7 +73,7 @@ pipeline {
               }
               stash allowEmpty: true, name: 'build', useDefaultExcludes: false
               archiveArtifacts allowEmptyArchive: true,
-                artifacts: "${BASE_DIR}/elastic-apm-agent/target/elastic-apm-agent-*.jar,${BASE_DIR}/apm-agent-attach/target/apm-agent-attach-*.jar,\
+                artifacts: "${BASE_DIR}/atatus-apm-agent/target/atatus-apm-agent-*.jar,${BASE_DIR}/apm-agent-attach/target/apm-agent-attach-*.jar,\
                       ${BASE_DIR}/target/site/aggregate-third-party-report.html",
                 onlyIfSuccessful: true
             }

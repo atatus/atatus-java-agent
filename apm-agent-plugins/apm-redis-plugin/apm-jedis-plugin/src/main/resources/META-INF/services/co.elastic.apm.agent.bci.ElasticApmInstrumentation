@@ -1,2 +1,2 @@
-co.elastic.apm.agent.redis.jedis.JedisInstrumentation
-co.elastic.apm.agent.redis.jedis.JedisSpanNameInstrumentation
+com.atatus.apm.agent.redis.jedis.JedisInstrumentation
+com.atatus.apm.agent.redis.jedis.JedisSpanNameInstrumentation

@@ -56,7 +56,7 @@ The first step in getting started with the OpenTracing API bridge is to declare 
 .pom.xml
 ----
 <dependency>
-    <groupId>co.elastic.apm</groupId>
+    <groupId>com.atatus.apm</groupId>
     <artifactId>apm-opentracing</artifactId>
     <version>${elastic-apm.version}</version>
 </dependency>
@@ -80,7 +80,7 @@ image:https://img.shields.io/maven-central/v/co.elastic.apm/apm-opentracing.svg[
 
 [source,java]
 ----
-import co.elastic.apm.opentracing.ElasticApmTracer;
+import com.atatus.apm.opentracing.ElasticApmTracer;
 import io.opentracing.Tracer
 
 Tracer tracer = new ElasticApmTracer();

@@ -1,1 +1,1 @@
-co.elastic.apm.agent.hibernate.search.v6_x.HibernateSearch6Instrumentation
+com.atatus.apm.agent.hibernate.search.v6_x.HibernateSearch6Instrumentation

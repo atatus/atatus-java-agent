@@ -1,2 +1,2 @@
-co.elastic.apm.agent.concurrent.ExecutorInstrumentation$ExecutorRunnableInstrumentation
-co.elastic.apm.agent.concurrent.ExecutorInstrumentation$ExecutorCallableInstrumentation
+com.atatus.apm.agent.concurrent.ExecutorInstrumentation$ExecutorRunnableInstrumentation
+com.atatus.apm.agent.concurrent.ExecutorInstrumentation$ExecutorCallableInstrumentation

@@ -1,1 +1,1 @@
-co.elastic.apm.agent.jaxws.JaxWsTransactionNameInstrumentation
+com.atatus.apm.agent.jaxws.JaxWsTransactionNameInstrumentation

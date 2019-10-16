@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -24,13 +24,9 @@
  */
 package co.elastic.apm.spring.boot;
 
-import co.elastic.apm.agent.MockReporter;
-import co.elastic.apm.agent.bci.ElasticApmAgent;
-import co.elastic.apm.agent.configuration.SpyConfiguration;
-import co.elastic.apm.agent.impl.ElasticApmTracer;
-import co.elastic.apm.agent.impl.ElasticApmTracerBuilder;
-import co.elastic.apm.agent.report.ReporterConfiguration;
-import co.elastic.apm.agent.web.WebConfiguration;
+import com.atatus.apm.agent.MockReporter;
+import com.atatus.apm.agent.configuration.SpyConfiguration;
+
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.junit.After;
 import org.junit.Before;
@@ -47,6 +43,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.stagemonitor.configuration.ConfigurationRegistry;
+
+import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.report.ReporterConfiguration;
+import com.atatus.apm.agent.web.WebConfiguration;
 
 import java.util.Collections;
 

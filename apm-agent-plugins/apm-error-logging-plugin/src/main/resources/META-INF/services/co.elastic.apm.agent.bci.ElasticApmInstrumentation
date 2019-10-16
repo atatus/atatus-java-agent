@@ -1,1 +1,1 @@
-co.elastic.apm.agent.error.logging.Slf4jLoggingInstrumentation
+com.atatus.apm.agent.error.logging.Slf4jLoggingInstrumentation
