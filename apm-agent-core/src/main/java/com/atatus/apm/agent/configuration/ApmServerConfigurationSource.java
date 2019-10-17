@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.configuration;
 
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.report.ApmServerClient;
 import com.atatus.apm.agent.report.serialize.PayloadSerializer;
@@ -105,7 +105,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
     }
 
     @Override
-    public void start(final ElasticApmTracer tracer) {
+    public void start(final AtatusApmTracer tracer) {
         threadPool = ExecutorUtils.createSingleThreadDeamonPool("apm-remote-config-poller", 1);
         threadPool.execute(new Runnable() {
             @Override

@@ -38,7 +38,7 @@ class ApmSpanBuilder implements Tracer.SpanBuilder {
 
     @Nullable
     private final String operationName;
-    // com.atatus.apm.agent.impl.ElasticApmTracer
+    // com.atatus.apm.agent.impl.AtatusApmTracer
     private final Map<String, Object> tags = new HashMap<>();
     private final ApmScopeManager scopeManager;
 

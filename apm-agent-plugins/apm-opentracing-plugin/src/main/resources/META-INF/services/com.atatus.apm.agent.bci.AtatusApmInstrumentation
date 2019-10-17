@@ -13,5 +13,5 @@ com.atatus.apm.agent.opentracing.impl.SpanContextInstrumentation$ToTraceIdInstru
 com.atatus.apm.agent.opentracing.impl.SpanContextInstrumentation$ToSpanIdInstrumentation
 com.atatus.apm.agent.opentracing.impl.ExternalSpanContextInstrumentation$ToTraceIdInstrumentation
 com.atatus.apm.agent.opentracing.impl.ExternalSpanContextInstrumentation$ToSpanIdInstrumentation
-com.atatus.apm.agent.opentracing.impl.ElasticApmTracerInstrumentation
+com.atatus.apm.agent.opentracing.impl.AtatusApmTracerInstrumentation
 

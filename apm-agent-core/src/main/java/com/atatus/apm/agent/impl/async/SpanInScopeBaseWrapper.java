@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,15 +27,15 @@ package com.atatus.apm.agent.impl.async;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.AbstractSpan;
 
 @SuppressWarnings("WeakerAccess")
 abstract class SpanInScopeBaseWrapper {
     private static final Logger logger = LoggerFactory.getLogger(SpanInScopeCallableWrapper.class);
-    protected final ElasticApmTracer tracer;
+    protected final AtatusApmTracer tracer;
 
-    protected SpanInScopeBaseWrapper(ElasticApmTracer tracer) {
+    protected SpanInScopeBaseWrapper(AtatusApmTracer tracer) {
         this.tracer = tracer;
     }
 

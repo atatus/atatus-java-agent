@@ -80,10 +80,10 @@ image:https://img.shields.io/maven-central/v/com.atatus.apm/apm-opentracing.svg[
 
 [source,java]
 ----
-import com.atatus.apm.opentracing.ElasticApmTracer;
+import com.atatus.apm.opentracing.AtatusApmTracer;
 import io.opentracing.Tracer
 
-Tracer tracer = new ElasticApmTracer();
+Tracer tracer = new AtatusApmTracer();
 ----
 
 

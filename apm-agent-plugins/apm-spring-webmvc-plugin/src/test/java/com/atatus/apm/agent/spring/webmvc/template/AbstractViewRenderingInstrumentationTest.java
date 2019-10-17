@@ -43,9 +43,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.servlet.ServletInstrumentation;
 import com.atatus.apm.agent.spring.webmvc.ViewRenderInstrumentation;
@@ -62,7 +62,7 @@ import static org.junit.Assert.assertEquals;
 @TestConfiguration
 abstract class AbstractViewRenderingInstrumentationTest {
 
-    protected static ElasticApmTracer tracer;
+    protected static AtatusApmTracer tracer;
     protected static MockReporter reporter;
     protected static ConfigurationRegistry config;
     protected MockMvc mockMvc;
@@ -74,16 +74,16 @@ abstract class AbstractViewRenderingInstrumentationTest {
     static void beforeAll() {
         reporter = new MockReporter();
         config = SpyConfiguration.createSpyConfig();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install(), Arrays.asList(new ServletInstrumentation(tracer), new ViewRenderInstrumentation()));
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install(), Arrays.asList(new ServletInstrumentation(tracer), new ViewRenderInstrumentation()));
     }
 
     @AfterAll
     static void afterAll() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @BeforeEach

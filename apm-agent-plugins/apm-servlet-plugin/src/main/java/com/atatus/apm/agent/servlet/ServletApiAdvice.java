@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.Scope;
 import com.atatus.apm.agent.impl.context.Request;
 import com.atatus.apm.agent.impl.context.Response;
@@ -67,7 +67,7 @@ public class ServletApiAdvice {
     public static ServletTransactionHelper servletTransactionHelper;
     @Nullable
     @VisibleForAdvice
-    public static ElasticApmTracer tracer;
+    public static AtatusApmTracer tracer;
     @VisibleForAdvice
     public static ThreadLocal<Boolean> excluded = new ThreadLocal<Boolean>() {
         @Override
@@ -79,7 +79,7 @@ public class ServletApiAdvice {
     @VisibleForAdvice
     public static final List<String> requestExceptionAttributes = Arrays.asList("javax.servlet.error.exception", "exception", "org.springframework.web.servlet.DispatcherServlet.EXCEPTION", "com.atatus.apm.exception");
 
-    static void init(ElasticApmTracer tracer) {
+    static void init(AtatusApmTracer tracer) {
         ServletApiAdvice.tracer = tracer;
         servletTransactionHelper = new ServletTransactionHelper(tracer);
     }

@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.metrics.builtin;
 
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.metrics.DoubleSupplier;
 import com.atatus.apm.agent.metrics.Labels;
 import com.atatus.apm.agent.metrics.MetricRegistry;
@@ -41,7 +41,7 @@ public class JvmGcMetrics implements LifecycleListener {
     private final List<GarbageCollectorMXBean> garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         bindTo(tracer.getMetricRegistry());
     }
 

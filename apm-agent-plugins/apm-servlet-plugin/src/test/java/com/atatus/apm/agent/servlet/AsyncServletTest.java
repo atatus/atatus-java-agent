@@ -25,10 +25,10 @@
 package com.atatus.apm.agent.servlet;
 
 import com.atatus.apm.agent.AbstractServletTest;
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.context.TransactionContext;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import net.bytebuddy.agent.ByteBuddyAgent;
@@ -59,20 +59,20 @@ public class AsyncServletTest extends AbstractServletTest {
 
     private static final String ACTIVE_TRANSACTION_ATTRIBUTE = "active-transaction";
 
-    private static ElasticApmTracer tracer;
+    private static AtatusApmTracer tracer;
 
     @BeforeAll
     static void setUp() {
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(SpyConfiguration.createSpyConfig())
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @AfterAll
     static void afterAll() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Override

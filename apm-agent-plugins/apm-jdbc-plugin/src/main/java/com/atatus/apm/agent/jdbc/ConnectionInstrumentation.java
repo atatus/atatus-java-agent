@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -35,7 +35,7 @@ import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.jdbc.helper.JdbcHelper;
 
@@ -53,7 +53,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
  * Matches the various {@link Connection#prepareCall} and {@link Connection#prepareStatement} methods
  * and keeps a reference to from the resulting {@link java.sql.CallableStatement} or {@link PreparedStatement} to the sql.
  */
-public class ConnectionInstrumentation extends ElasticApmInstrumentation {
+public class ConnectionInstrumentation extends AtatusApmInstrumentation {
 
     static final String JDBC_INSTRUMENTATION_GROUP = "jdbc";
 

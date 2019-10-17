@@ -29,7 +29,7 @@ import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.bci.bytebuddy.SimpleMethodSignatureOffsetMappingFactory.SimpleMethodSignature;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
@@ -45,16 +45,16 @@ public class JobTransactionNameAdvice {
     @Advice.OnMethodEnter(suppress = Throwable.class)
     private static void setTransactionName(@Advice.Argument(value = 0) @Nullable JobExecutionContext context,
                                            @SimpleMethodSignature String signature, @Advice.Origin Class<?> clazz, @Advice.Local("transaction") Transaction transaction) {
-        if (ElasticApmInstrumentation.tracer != null) {
-            TraceContextHolder<?> active = ElasticApmInstrumentation.tracer.getActive();
+        if (AtatusApmInstrumentation.tracer != null) {
+            TraceContextHolder<?> active = AtatusApmInstrumentation.tracer.getActive();
             if (context == null) {
                 logger.warn("Cannot correctly name transaction for method {} because JobExecutionContext is null", signature);
-                transaction = ElasticApmInstrumentation.tracer.startTransaction(TraceContext.asRoot(), null, clazz.getClassLoader())
+                transaction = AtatusApmInstrumentation.tracer.startTransaction(TraceContext.asRoot(), null, clazz.getClassLoader())
                     .withName(signature)
                     .withType(JobTransactionNameInstrumentation.TRANSACTION_TYPE)
                     .activate();
             } else if (active == null) {
-                transaction = ElasticApmInstrumentation.tracer.startTransaction(TraceContext.asRoot(), null, clazz.getClassLoader())
+                transaction = AtatusApmInstrumentation.tracer.startTransaction(TraceContext.asRoot(), null, clazz.getClassLoader())
                     .withName(context.getJobDetail().getKey().toString())
                     .withType(JobTransactionNameInstrumentation.TRANSACTION_TYPE)
                     .activate();

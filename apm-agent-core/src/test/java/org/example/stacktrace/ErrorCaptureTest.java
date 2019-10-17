@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 class ErrorCaptureTest {
 
     private StacktraceConfiguration stacktraceConfiguration;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
 
     @BeforeEach
     void setUp() {

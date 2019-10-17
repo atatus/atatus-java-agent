@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
  * Copyright (C) 2018 - 2019 Elastic and contributors
  * %%
@@ -86,7 +86,7 @@ public class ApmServerHealthChecker implements Callable<Version> {
                         try {
                             // prints out the version info of the APM Server
                             String body = HttpUtils.readToString(connection.getInputStream());
-                            logger.info("Elastic APM server is available: {}", body);
+                            logger.info("Atatus APM server is available: {}", body);
                             JsonReader<Object> reader = dslJson.newReader(body.getBytes(UTF_8));
                             reader.startObject();
                             String versionString;
@@ -110,7 +110,7 @@ public class ApmServerHealthChecker implements Callable<Version> {
                         }
                     }
                 } catch (Exception e) {
-                    logger.warn("Elastic APM server {} is not available ({})", connection.getURL(), e.getMessage());
+                    logger.warn("Atatus APM server {} is not available ({})", connection.getURL(), e.getMessage());
                 }
                 return null;
             }

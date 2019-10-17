@@ -5,16 +5,16 @@
     "type": "object",
     "properties": {
         "agent": {
-            "description": "Name and version of the Elastic APM agent",
+            "description": "Name and version of the Atatus APM agent",
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "Name of the Elastic APM agent, e.g. \"Python\"",
+                    "description": "Name of the Atatus APM agent, e.g. \"Python\"",
                     "type": "string",
                     "maxLength": 1024
                 },
                 "version": {
-                    "description": "Version of the Elastic APM agent, e.g.\"1.0.0\"",
+                    "description": "Version of the Atatus APM agent, e.g.\"1.0.0\"",
                     "type": "string",
                     "maxLength": 1024
                 }

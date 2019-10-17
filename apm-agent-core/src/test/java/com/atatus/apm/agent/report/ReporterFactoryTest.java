@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.report.ApmServerClient;

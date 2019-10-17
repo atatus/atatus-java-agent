@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
@@ -44,9 +44,9 @@ import javax.jms.Topic;
 public class JmsInstrumentationHelperImpl implements JmsInstrumentationHelper<Destination, Message, MessageListener> {
 
     private static final Logger logger = LoggerFactory.getLogger(JmsInstrumentationHelperImpl.class);
-    private final ElasticApmTracer tracer;
+    private final AtatusApmTracer tracer;
 
-    public JmsInstrumentationHelperImpl(ElasticApmTracer tracer) {
+    public JmsInstrumentationHelperImpl(AtatusApmTracer tracer) {
         this.tracer = tracer;
     }
 

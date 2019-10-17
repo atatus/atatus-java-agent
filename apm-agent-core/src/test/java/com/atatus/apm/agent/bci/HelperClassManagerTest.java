@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.bci;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
@@ -61,14 +61,14 @@ class HelperClassManagerTest {
 
     @Test
     void testFailOnlyOnceSingleClassLoader() {
-        final HelperClassManager<Object> helperClassManager = HelperClassManager.ForSingleClassLoader.of(mock(ElasticApmTracer.class),
+        final HelperClassManager<Object> helperClassManager = HelperClassManager.ForSingleClassLoader.of(mock(AtatusApmTracer.class),
             "com.atatus.apm.agent.bci.NonExistingHelperClass");
         assertFailLoadingOnlyOnce(helperClassManager, getClass());
     }
 
     @Test
     void testFailOnlyOnceAnyClassLoader() throws ClassNotFoundException {
-        final HelperClassManager<Object> helperClassManager = HelperClassManager.ForAnyClassLoader.of(mock(ElasticApmTracer.class),
+        final HelperClassManager<Object> helperClassManager = HelperClassManager.ForAnyClassLoader.of(mock(AtatusApmTracer.class),
             "com.atatus.apm.agent.bci.NonExistingHelperClass");
         URL[] urls = {getClass().getProtectionDomain().getCodeSource().getLocation()};
         ClassLoader targetClassLoader1 = new URLClassLoader(urls, getClass().getClassLoader().getParent());
@@ -86,7 +86,7 @@ class HelperClassManagerTest {
     @SuppressWarnings("UnusedAssignment")
     @Test
     void testCaching() throws ClassNotFoundException, InterruptedException {
-        HelperClassManager.ForAnyClassLoader<?> helperClassManager1 = HelperClassManager.ForAnyClassLoader.of(mock(ElasticApmTracer.class),
+        HelperClassManager.ForAnyClassLoader<?> helperClassManager1 = HelperClassManager.ForAnyClassLoader.of(mock(AtatusApmTracer.class),
             "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$HelperClassImpl");
         URL[] urls = {getClass().getProtectionDomain().getCodeSource().getLocation()};
         ClassLoader targetClassLoader1 = new URLClassLoader(urls, getClass().getClassLoader().getParent());
@@ -97,7 +97,7 @@ class HelperClassManagerTest {
         assertThat(HelperClassManager.ForAnyClassLoader.clId2helperImplListMap.size()).isEqualTo(1);
         assertThat(HelperClassManager.ForAnyClassLoader.clId2helperImplListMap.get(targetClassLoader1)).isNotNull();
 
-        HelperClassManager.ForAnyClassLoader<?> helperClassManager2 = HelperClassManager.ForAnyClassLoader.of(mock(ElasticApmTracer.class),
+        HelperClassManager.ForAnyClassLoader<?> helperClassManager2 = HelperClassManager.ForAnyClassLoader.of(mock(AtatusApmTracer.class),
             "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$HelperClassImpl");
         Object helper2 = helperClassManager2.getForClassLoaderOfClass(libClass1);
         assertThat(helperClassManager2.clId2helperMap.containsKey(targetClassLoader1)).isTrue();
@@ -135,7 +135,7 @@ class HelperClassManagerTest {
 
     private static class InnerTestClass {
         private void testLoadHelperSingleClassLoader() {
-            final HelperClassManager<HelperClassInterface> helperClassManager = HelperClassManager.ForSingleClassLoader.of(mock(ElasticApmTracer.class),
+            final HelperClassManager<HelperClassInterface> helperClassManager = HelperClassManager.ForSingleClassLoader.of(mock(AtatusApmTracer.class),
                 "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$HelperClassImpl",
                 "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$AdditionalHelper");
 
@@ -147,7 +147,7 @@ class HelperClassManagerTest {
 
         @SuppressWarnings("UnusedAssignment")
         private void testLoadHelperAnyClassLoader() throws ClassNotFoundException, InterruptedException {
-            final HelperClassManager<HelperClassInterface> helperClassManager = HelperClassManager.ForAnyClassLoader.of(mock(ElasticApmTracer.class),
+            final HelperClassManager<HelperClassInterface> helperClassManager = HelperClassManager.ForAnyClassLoader.of(mock(AtatusApmTracer.class),
                 "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$HelperClassImpl",
                 "com.atatus.apm.agent.bci.HelperClassManagerTest$InnerTestClass$AdditionalHelper");
 

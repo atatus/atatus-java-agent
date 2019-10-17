@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.impl.transaction;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.util.PotentiallyMultiValuedMap;
 
 import com.atatus.apm.agent.impl.transaction.TraceContext;
@@ -59,7 +59,7 @@ public class TraceContextW3CTest {
                 if (headersMap.getAll("traceparent").size() == 1) {
                     final String traceParentHeader = headersMap.getFirst("traceparent");
                     final boolean traceparentValid = testCase.get("is_traceparent_valid").booleanValue();
-                    final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+                    final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
                     softly.assertThat(traceContext.asChildOf(traceParentHeader))
                         .withFailMessage("Expected '%s' to be %s", traceParentHeader, traceparentValid ? "valid" : "invalid")
                         .isEqualTo(traceparentValid);

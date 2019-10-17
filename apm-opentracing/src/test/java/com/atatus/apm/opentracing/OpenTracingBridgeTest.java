@@ -30,7 +30,7 @@ import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.opentracing.ApmScope;
 import com.atatus.apm.opentracing.ApmSpanBuilder;
-import com.atatus.apm.opentracing.ElasticApmTracer;
+import com.atatus.apm.opentracing.AtatusApmTracer;
 
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -55,11 +55,11 @@ import static org.assertj.core.data.Offset.offset;
 
 class OpenTracingBridgeTest extends AbstractInstrumentationTest {
 
-    private ElasticApmTracer apmTracer;
+    private AtatusApmTracer apmTracer;
 
     @BeforeEach
     void setUp() {
-        apmTracer = new ElasticApmTracer();
+        apmTracer = new AtatusApmTracer();
         reporter.reset();
     }
 

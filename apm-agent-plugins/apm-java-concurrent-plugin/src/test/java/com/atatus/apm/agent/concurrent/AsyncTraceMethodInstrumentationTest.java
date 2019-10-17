@@ -25,13 +25,13 @@
 package com.atatus.apm.agent.concurrent;
 
 import com.atatus.apm.agent.MockReporter;
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.bci.methodmatching.MethodMatcher;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
 import com.atatus.apm.agent.configuration.converter.TimeDuration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.when;
 class AsyncTraceMethodInstrumentationTest {
 
     private MockReporter reporter;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private CoreConfiguration coreConfiguration;
 
     @BeforeEach
@@ -68,16 +68,16 @@ class AsyncTraceMethodInstrumentationTest {
             when(coreConfiguration.getTraceMethodsDurationThreshold()).thenReturn(TimeDuration.of(tags.iterator().next()));
         }
 
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @AfterEach
     void tearDown() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Test

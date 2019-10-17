@@ -28,24 +28,24 @@ import org.apache.http.HttpEntity;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseListener;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 
 
-public abstract class ElasticsearchRestClientInstrumentation extends ElasticApmInstrumentation {
+public abstract class ElasticsearchRestClientInstrumentation extends AtatusApmInstrumentation {
 
     @Nullable
     @VisibleForAdvice
     // Referencing ES classes is legal due to type erasure. The field must be public in order for it to be accessible from injected code
     public static HelperClassManager<ElasticsearchRestClientInstrumentationHelper<HttpEntity, Response, ResponseListener>> esClientInstrHelperManager;
 
-    public ElasticsearchRestClientInstrumentation(ElasticApmTracer tracer) {
+    public ElasticsearchRestClientInstrumentation(AtatusApmTracer tracer) {
         esClientInstrHelperManager = HelperClassManager.ForAnyClassLoader.of(tracer,
             "com.atatus.apm.agent.es.restclient.ElasticsearchRestClientInstrumentationHelperImpl",
             "com.atatus.apm.agent.es.restclient.ResponseListenerWrapper",

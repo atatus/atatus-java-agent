@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.hibernate.search;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
@@ -37,7 +37,7 @@ public final class HibernateSearchHelper {
     }
 
     @VisibleForAdvice
-    public static Span createAndActivateSpan(final ElasticApmTracer tracer, final String methodName,
+    public static Span createAndActivateSpan(final AtatusApmTracer tracer, final String methodName,
                                              final String query) {
         Span span = null;
 

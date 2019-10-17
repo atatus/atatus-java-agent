@@ -253,7 +253,7 @@ class ApmFilterTest extends AbstractInstrumentationTest {
         when(webConfiguration.isCaptureHeaders()).thenReturn(false);
         filterChain = new MockFilterChain(new TestServlet());
         final MockHttpServletRequest get = new MockHttpServletRequest("GET", "/foo");
-        get.addHeader("Elastic-Apm-Traceparent", "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01");
+        get.addHeader("Atatus-Apm-Traceparent", "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01");
         get.setCookies(new Cookie("foo", "bar"));
         final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
         mockResponse.addHeader("foo", "bar");

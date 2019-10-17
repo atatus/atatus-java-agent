@@ -41,8 +41,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.Scope;
 
 import java.io.IOException;
@@ -55,9 +55,9 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-class ElasticApmTracerTest {
+class AtatusApmTracerTest {
 
-    private ElasticApmTracer tracerImpl;
+    private AtatusApmTracer tracerImpl;
     private MockReporter reporter;
     private ConfigurationRegistry config;
 
@@ -65,7 +65,7 @@ class ElasticApmTracerTest {
     void setUp() {
         reporter = new MockReporter();
         config = SpyConfiguration.createSpyConfig();
-        tracerImpl = new ElasticApmTracerBuilder()
+        tracerImpl = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
@@ -186,7 +186,7 @@ class ElasticApmTracerTest {
     @Test
     void testDoesNotRecordIgnoredExceptions() {
         List<WildcardMatcher> wildcardList = Stream.of(
-            "com.atatus.apm.agent.impl.ElasticApmTracerTest$DummyException1",
+            "com.atatus.apm.agent.impl.AtatusApmTracerTest$DummyException1",
             "*DummyException2")
             .map(WildcardMatcher::valueOf)
             .collect(Collectors.toList());
@@ -343,12 +343,12 @@ class ElasticApmTracerTest {
     void testLifecycleListener() {
         final AtomicBoolean startCalled = new AtomicBoolean();
         final AtomicBoolean stopCalled = new AtomicBoolean();
-        final ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+        final AtatusApmTracer tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .lifecycleListeners(Collections.singletonList(new LifecycleListener() {
                 @Override
-                public void start(ElasticApmTracer tracer) {
+                public void start(AtatusApmTracer tracer) {
                     startCalled.set(true);
                 }
 
@@ -436,7 +436,7 @@ class ElasticApmTracerTest {
 
     @Test
     void testOverrideServiceNameWithoutExplicitServiceName() {
-        final ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+        final AtatusApmTracer tracer = new AtatusApmTracerBuilder()
             .reporter(reporter)
             .build();
         tracer.overrideServiceNameForClassLoader(getClass().getClassLoader(), "overridden");
@@ -446,7 +446,7 @@ class ElasticApmTracerTest {
 
     @Test
     void testOverrideServiceNameExplicitServiceName() {
-        final ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+        final AtatusApmTracer tracer = new AtatusApmTracerBuilder()
             .withConfig("service_name", "explicit-service-name")
             .reporter(reporter)
             .build();

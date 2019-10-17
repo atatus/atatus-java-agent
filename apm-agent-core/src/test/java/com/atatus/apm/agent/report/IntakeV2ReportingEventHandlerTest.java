@@ -26,7 +26,7 @@ package com.atatus.apm.agent.report;
 
 import com.atatus.apm.agent.MockTracer;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.payload.ProcessInfo;

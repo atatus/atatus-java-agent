@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
  * Copyright (C) 2018 - 2019 Elastic and contributors
  * %%
@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -29,17 +29,17 @@ package com.atatus.apm.agent.impl.payload;
 import java.util.UUID;
 
 /**
- * Name and version of the Elastic APM agent
+ * Name and version of the Atatus APM agent
  */
 public class Agent {
 
     /**
-     * Name of the Elastic APM agent, e.g. "Python"
+     * Name of the Atatus APM agent, e.g. "Python"
      * (Required)
      */
     private final String name;
     /**
-     * Version of the Elastic APM agent, e.g."1.0.0"
+     * Version of the Atatus APM agent, e.g."1.0.0"
      * (Required)
      */
     private final String version;
@@ -56,7 +56,7 @@ public class Agent {
     }
 
     /**
-     * Name of the Elastic APM agent, e.g. "Python"
+     * Name of the Atatus APM agent, e.g. "Python"
      * (Required)
      */
     public String getName() {
@@ -64,7 +64,7 @@ public class Agent {
     }
 
     /**
-     * Version of the Elastic APM agent, e.g."1.0.0"
+     * Version of the Atatus APM agent, e.g."1.0.0"
      * (Required)
      */
     public String getVersion() {

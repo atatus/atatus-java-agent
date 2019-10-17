@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,13 +32,13 @@ import net.bytebuddy.matcher.ElementMatcher;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 
 import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class Slf4jLoggingInstrumentation extends ElasticApmInstrumentation {
+public class Slf4jLoggingInstrumentation extends AtatusApmInstrumentation {
 
     @Override
     public Class<?> getAdviceClass() {

@@ -34,7 +34,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.http.client.HttpClientHelper;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
@@ -52,7 +52,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
 @SuppressWarnings("Duplicates")
-public class LegacyApacheHttpClientInstrumentation extends ElasticApmInstrumentation {
+public class LegacyApacheHttpClientInstrumentation extends AtatusApmInstrumentation {
 
     private static class LegacyApacheHttpClientAdvice {
         @Advice.OnMethodEnter(suppress = Throwable.class)

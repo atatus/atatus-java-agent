@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.servlet.wildfly;
 
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 /**
  * Makes the {@code com.atatus.apm} package visible from all modules
@@ -36,7 +36,7 @@ public class WildFlyLifecycleListener implements LifecycleListener {
     private static final String APM_BASE_PACKAGE = "com.atatus.apm.agent";
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         final String systemPackages = System.getProperty(JBOSS_MODULES_SYSTEM_PKGS);
         if (systemPackages != null) {
             System.setProperty(JBOSS_MODULES_SYSTEM_PKGS, systemPackages + "," + APM_BASE_PACKAGE);

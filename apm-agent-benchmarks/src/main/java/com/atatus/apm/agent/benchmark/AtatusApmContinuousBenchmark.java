@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -39,11 +39,11 @@ import org.stagemonitor.configuration.ConfigurationOptionProvider;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 import org.stagemonitor.configuration.source.SimpleSource;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.benchmark.sql.BlackholeConnection;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.report.Reporter;
 
 import javax.servlet.ServletException;
@@ -95,17 +95,17 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
-public abstract class ElasticApmContinuousBenchmark extends AbstractBenchmark {
+public abstract class AtatusApmContinuousBenchmark extends AbstractBenchmark {
 
     private final boolean apmEnabled;
     private final byte[] buffer = new byte[32 * 1024];
     protected HttpServlet httpServlet;
     private Undertow server;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private long receivedPayloads = 0;
     private long receivedBytes = 0;
 
-    public ElasticApmContinuousBenchmark(boolean apmEnabled) {
+    public AtatusApmContinuousBenchmark(boolean apmEnabled) {
         this.apmEnabled = apmEnabled;
     }
 
@@ -130,7 +130,7 @@ public abstract class ElasticApmContinuousBenchmark extends AbstractBenchmark {
 
         server.start();
         int port = ((InetSocketAddress) server.getListenerInfo().get(0).getAddress()).getPort();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(ConfigurationRegistry.builder()
                 .addConfigSource(new SimpleSource()
                     .add(CoreConfiguration.SERVICE_NAME, "benchmark")
@@ -142,7 +142,7 @@ public abstract class ElasticApmContinuousBenchmark extends AbstractBenchmark {
                 .optionProviders(ServiceLoader.load(ConfigurationOptionProvider.class))
                 .build())
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
         final BlackholeConnection blackholeConnection = BlackholeConnection.INSTANCE;
         blackholeConnection.init(blackhole);
         httpServlet = new BenchmarkingServlet(blackholeConnection, tracer, blackhole);
@@ -201,7 +201,7 @@ public abstract class ElasticApmContinuousBenchmark extends AbstractBenchmark {
         private final Reporter reporter;
         private final Blackhole blackhole;
 
-        private BenchmarkingServlet(Connection connection, ElasticApmTracer tracer, Blackhole blackhole) {
+        private BenchmarkingServlet(Connection connection, AtatusApmTracer tracer, Blackhole blackhole) {
             this.connection = connection;
             this.reporter = tracer.getReporter();
             this.blackhole = blackhole;

@@ -31,7 +31,7 @@ import org.stagemonitor.configuration.ConfigurationRegistry;
 
 import com.atatus.apm.agent.configuration.converter.TimeDuration;
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.util.VersionUtils;
 
@@ -64,7 +64,7 @@ public class StartupInfo implements LifecycleListener {
     }
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         ConfigurationRegistry configurationRegistry = tracer.getConfigurationRegistry();
         logConfiguration(configurationRegistry, logger);
     }

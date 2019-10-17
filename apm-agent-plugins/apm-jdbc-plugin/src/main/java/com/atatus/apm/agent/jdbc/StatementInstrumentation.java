@@ -32,10 +32,10 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.jdbc.helper.JdbcHelper;
 
@@ -58,7 +58,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 /**
  * Creates spans for JDBC calls
  */
-public abstract class StatementInstrumentation extends ElasticApmInstrumentation {
+public abstract class StatementInstrumentation extends AtatusApmInstrumentation {
 
     @SuppressWarnings("WeakerAccess")
     @Nullable
@@ -67,7 +67,7 @@ public abstract class StatementInstrumentation extends ElasticApmInstrumentation
 
     private final ElementMatcher<? super MethodDescription> methodMatcher;
 
-    StatementInstrumentation(ElasticApmTracer tracer, ElementMatcher<? super MethodDescription> methodMatcher) {
+    StatementInstrumentation(AtatusApmTracer tracer, ElementMatcher<? super MethodDescription> methodMatcher) {
         this.methodMatcher = methodMatcher;
         jdbcHelperManager = HelperClassManager.ForSingleClassLoader.of(tracer,
             "com.atatus.apm.agent.jdbc.helper.JdbcHelperImpl",
@@ -98,7 +98,7 @@ public abstract class StatementInstrumentation extends ElasticApmInstrumentation
 
     public static class ExecuteWithQueryInstrumentation extends StatementInstrumentation {
 
-        public ExecuteWithQueryInstrumentation(ElasticApmTracer tracer) {
+        public ExecuteWithQueryInstrumentation(AtatusApmTracer tracer) {
             super(tracer,
                 nameStartsWith("execute")
                     .and(takesArgument(0, String.class))
@@ -132,7 +132,7 @@ public abstract class StatementInstrumentation extends ElasticApmInstrumentation
 
     public static class AddBatchInstrumentation extends StatementInstrumentation {
 
-        public AddBatchInstrumentation(ElasticApmTracer tracer) {
+        public AddBatchInstrumentation(AtatusApmTracer tracer) {
             super(tracer,
                 nameStartsWith("addBatch")
                     .and(takesArgument(0, String.class))
@@ -152,7 +152,7 @@ public abstract class StatementInstrumentation extends ElasticApmInstrumentation
     }
 
     public static class ExecuteWithoutQueryInstrumentation extends StatementInstrumentation {
-        public ExecuteWithoutQueryInstrumentation(ElasticApmTracer tracer) {
+        public ExecuteWithoutQueryInstrumentation(AtatusApmTracer tracer) {
             super(tracer,
                 nameStartsWith("execute")
                     .and(takesArguments(0))

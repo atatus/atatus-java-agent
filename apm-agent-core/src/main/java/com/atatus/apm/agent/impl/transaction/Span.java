@@ -27,7 +27,7 @@ package com.atatus.apm.agent.impl.transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.SpanContext;
 import com.atatus.apm.agent.objectpool.Recyclable;
 
@@ -69,7 +69,7 @@ public class Span extends AbstractSpan<Span> implements Recyclable {
     @Nullable
     private Transaction transaction;
 
-    public Span(ElasticApmTracer tracer) {
+    public Span(AtatusApmTracer tracer) {
         super(tracer);
     }
 

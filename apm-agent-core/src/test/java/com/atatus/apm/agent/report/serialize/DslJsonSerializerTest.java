@@ -28,7 +28,7 @@ import com.atatus.apm.agent.MockReporter;
 import com.atatus.apm.agent.MockTracer;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.context.AbstractContext;
 import com.atatus.apm.agent.impl.context.Request;
@@ -108,7 +108,7 @@ class DslJsonSerializerTest {
 
     @Test
     void testErrorSerialization() {
-        ElasticApmTracer tracer = MockTracer.create();
+        AtatusApmTracer tracer = MockTracer.create();
         Transaction transaction = new Transaction(tracer);
         ErrorCapture error = new ErrorCapture(tracer).asChildOf(transaction.getTraceContext()).withTimestamp(5000);
         error.setTransactionSampled(true);
@@ -134,7 +134,7 @@ class DslJsonSerializerTest {
     @Test
     void testErrorSerializationOutsideTrace() {
         MockReporter reporter = new MockReporter();
-        ElasticApmTracer tracer = MockTracer.createRealTracer(reporter);
+        AtatusApmTracer tracer = MockTracer.createRealTracer(reporter);
         tracer.captureException(new Exception("test"), getClass().getClassLoader());
 
         String errorJson = serializer.toJsonString(reporter.getFirstError());
@@ -155,7 +155,7 @@ class DslJsonSerializerTest {
     void testErrorSerializationWithExceptionCause() throws JsonProcessingException {
         // testing outside trace is enough to test exception serialization logic
         MockReporter reporter = new MockReporter();
-        ElasticApmTracer tracer = MockTracer.createRealTracer(reporter);
+        AtatusApmTracer tracer = MockTracer.createRealTracer(reporter);
 
         Exception cause2 = new IllegalStateException("second cause");
         Exception cause1 = new RuntimeException("first cause", cause2);
@@ -372,7 +372,7 @@ class DslJsonSerializerTest {
     @Test
     void testTransactionContext() {
 
-        ElasticApmTracer tracer = MockTracer.create();
+        AtatusApmTracer tracer = MockTracer.create();
         Transaction transaction = new Transaction(tracer);
 
         transaction.getContext().getUser()

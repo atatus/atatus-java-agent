@@ -33,11 +33,11 @@ import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.bci.bytebuddy.AnnotationValueOffsetMappingFactory;
 import com.atatus.apm.agent.bci.bytebuddy.SimpleMethodSignatureOffsetMappingFactory;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
@@ -48,19 +48,19 @@ import java.util.Collection;
 
 import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.classLoaderCanLoadClass;
 import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.isInAnyPackage;
-import static com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation.PUBLIC_API_INSTRUMENTATION_GROUP;
+import static com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation.PUBLIC_API_INSTRUMENTATION_GROUP;
 import static net.bytebuddy.matcher.ElementMatchers.declaresMethod;
 import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
-public class CaptureSpanInstrumentation extends ElasticApmInstrumentation {
+public class CaptureSpanInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     public static final Logger logger = LoggerFactory.getLogger(CaptureSpanInstrumentation.class);
 
     private final StacktraceConfiguration config;
 
-    public CaptureSpanInstrumentation(ElasticApmTracer tracer) {
+    public CaptureSpanInstrumentation(AtatusApmTracer tracer) {
         config = tracer.getConfig(StacktraceConfiguration.class);
     }
 

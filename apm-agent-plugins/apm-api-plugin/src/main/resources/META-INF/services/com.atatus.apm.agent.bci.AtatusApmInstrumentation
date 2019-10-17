@@ -1,8 +1,8 @@
-com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation$StartTransactionInstrumentation
-com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation$StartTransactionWithRemoteParentInstrumentation
-com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation$CurrentTransactionInstrumentation
-com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation$CurrentSpanInstrumentation
-com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation$CaptureExceptionInstrumentation
+com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation$StartTransactionInstrumentation
+com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation$StartTransactionWithRemoteParentInstrumentation
+com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation$CurrentTransactionInstrumentation
+com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation$CurrentSpanInstrumentation
+com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation$CaptureExceptionInstrumentation
 com.atatus.apm.agent.plugin.api.TransactionInstrumentation$SetUserInstrumentation
 com.atatus.apm.agent.plugin.api.TransactionInstrumentation$EnsureParentIdInstrumentation
 com.atatus.apm.agent.plugin.api.TransactionInstrumentation$SetResultInstrumentation

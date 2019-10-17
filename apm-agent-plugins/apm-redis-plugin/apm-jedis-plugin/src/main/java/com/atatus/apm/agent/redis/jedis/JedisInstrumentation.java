@@ -31,7 +31,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.redis.RedisSpanUtils;
 
@@ -45,7 +45,7 @@ import static net.bytebuddy.matcher.ElementMatchers.nameEndsWith;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public class JedisInstrumentation extends ElasticApmInstrumentation {
+public class JedisInstrumentation extends AtatusApmInstrumentation {
 
     @Advice.OnMethodEnter(suppress = Throwable.class)
     private static void beforeSendCommand(@Advice.Local("span") Span span, @Advice.Origin("#m") String method) {

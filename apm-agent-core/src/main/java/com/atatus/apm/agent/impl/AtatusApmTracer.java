@@ -71,8 +71,8 @@ import static org.jctools.queues.spec.ConcurrentQueueSpec.createBoundedMpmc;
  * Note that this is a internal API, so there are no guarantees in terms of backwards compatibility.
  * </p>
  */
-public class ElasticApmTracer {
-    private static final Logger logger = LoggerFactory.getLogger(ElasticApmTracer.class);
+public class AtatusApmTracer {
+    private static final Logger logger = LoggerFactory.getLogger(AtatusApmTracer.class);
 
     /**
      * The number of required {@link Runnable} wrappers does not depend on the size of the disruptor
@@ -116,7 +116,7 @@ public class ElasticApmTracer {
     boolean assertionsEnabled = false;
     private static final WeakConcurrentMap<ClassLoader, String> serviceNameByClassLoader = new WeakConcurrentMap.WithInlinedExpunction<>();
 
-    ElasticApmTracer(ConfigurationRegistry configurationRegistry, Reporter reporter, Iterable<LifecycleListener> lifecycleListeners) {
+    AtatusApmTracer(ConfigurationRegistry configurationRegistry, Reporter reporter, Iterable<LifecycleListener> lifecycleListeners) {
         this.metricRegistry = new MetricRegistry(configurationRegistry.getConfig(ReporterConfiguration.class));
         this.configurationRegistry = configurationRegistry;
         this.reporter = reporter;
@@ -128,14 +128,14 @@ public class ElasticApmTracer {
             new Allocator<Transaction>() {
                 @Override
                 public Transaction createInstance() {
-                    return new Transaction(ElasticApmTracer.this);
+                    return new Transaction(AtatusApmTracer.this);
                 }
             });
         spanPool = QueueBasedObjectPool.ofRecyclable(AtomicQueueFactory.<Span>newQueue(createBoundedMpmc(maxPooledElements)), false,
             new Allocator<Span>() {
                 @Override
                 public Span createInstance() {
-                    return new Span(ElasticApmTracer.this);
+                    return new Span(AtatusApmTracer.this);
                 }
             });
         // we are assuming that we don't need as many errors as spans or transactions
@@ -143,7 +143,7 @@ public class ElasticApmTracer {
             new Allocator<ErrorCapture>() {
                 @Override
                 public ErrorCapture createInstance() {
-                    return new ErrorCapture(ElasticApmTracer.this);
+                    return new ErrorCapture(AtatusApmTracer.this);
                 }
             });
         // consider specialized object pools which return the objects to the thread-local pool of their originating thread
@@ -152,28 +152,28 @@ public class ElasticApmTracer {
             new Allocator<SpanInScopeRunnableWrapper>() {
                 @Override
                 public SpanInScopeRunnableWrapper createInstance() {
-                    return new SpanInScopeRunnableWrapper(ElasticApmTracer.this);
+                    return new SpanInScopeRunnableWrapper(AtatusApmTracer.this);
                 }
             });
         callableSpanWrapperObjectPool = QueueBasedObjectPool.ofRecyclable(AtomicQueueFactory.<SpanInScopeCallableWrapper<?>>newQueue(createBoundedMpmc(MAX_POOLED_RUNNABLES)), false,
             new Allocator<SpanInScopeCallableWrapper<?>>() {
                 @Override
                 public SpanInScopeCallableWrapper<?> createInstance() {
-                    return new SpanInScopeCallableWrapper<>(ElasticApmTracer.this);
+                    return new SpanInScopeCallableWrapper<>(AtatusApmTracer.this);
                 }
             });
         runnableContextWrapperObjectPool = QueueBasedObjectPool.ofRecyclable(AtomicQueueFactory.<ContextInScopeRunnableWrapper>newQueue(createBoundedMpmc(MAX_POOLED_RUNNABLES)), false,
             new Allocator<ContextInScopeRunnableWrapper>() {
                 @Override
                 public ContextInScopeRunnableWrapper createInstance() {
-                    return new ContextInScopeRunnableWrapper(ElasticApmTracer.this);
+                    return new ContextInScopeRunnableWrapper(AtatusApmTracer.this);
                 }
             });
         callableContextWrapperObjectPool = QueueBasedObjectPool.ofRecyclable(AtomicQueueFactory.<ContextInScopeCallableWrapper<?>>newQueue(createBoundedMpmc(MAX_POOLED_RUNNABLES)), false,
             new Allocator<ContextInScopeCallableWrapper<?>>() {
                 @Override
                 public ContextInScopeCallableWrapper<?> createInstance() {
-                    return new ContextInScopeCallableWrapper<>(ElasticApmTracer.this);
+                    return new ContextInScopeCallableWrapper<>(AtatusApmTracer.this);
                 }
             });
         sampler = ProbabilitySampler.of(coreConfiguration.getSampleRate().get());

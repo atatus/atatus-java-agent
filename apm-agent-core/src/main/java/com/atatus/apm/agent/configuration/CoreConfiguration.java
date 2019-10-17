@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
  * Copyright (C) 2018 - 2019 Elastic and contributors
  * %%
@@ -31,7 +31,7 @@ import org.stagemonitor.configuration.converter.MapValueConverter;
 import org.stagemonitor.configuration.converter.StringValueConverter;
 import org.stagemonitor.configuration.source.ConfigurationSource;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.bci.methodmatching.MethodMatcher;
 import com.atatus.apm.agent.bci.methodmatching.configuration.MethodMatcherValueConverter;
 import com.atatus.apm.agent.configuration.converter.TimeDuration;
@@ -71,7 +71,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
             "As this is a reversible switch, agent threads are not being killed when inactivated, but they will be \n" +
             "mostly idle in this state, so the overhead should be negligible.\n" +
             "\n" +
-            "You can use this setting to dynamically disable Elastic APM at runtime.")
+            "You can use this setting to dynamically disable Atatus APM at runtime.")
         .dynamic(true)
         .buildWithDefault(true);
 
@@ -79,7 +79,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
         .key(INSTRUMENT)
         .configurationCategory(CORE_CATEGORY)
         .description("A boolean specifying if the agent should instrument the application to collect performance metrics for the app. " +
-            "When set to false, Elastic APM will not affect your application at all.\n" +
+            "When set to false, Atatus APM will not affect your application at all.\n" +
             "\n" +
             "NOTE: Both active and instrument needs to be true for instrumentation to be running.")
         .buildWithDefault(true);
@@ -89,7 +89,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
         .configurationCategory(CORE_CATEGORY)
         .label("The name of your service")
         .description("This is used to keep all the errors and transactions of your service together\n" +
-            "and is the primary filter in the Elastic APM user interface.\n" +
+            "and is the primary filter in the Atatus APM user interface.\n" +
             "\n" +
             "The service name must conform to this regular expression: `^[a-zA-Z0-9 _-]+$`.\n" +
             "In less regexy terms:\n" +
@@ -102,7 +102,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
             "for example `tomcat-application`.\n" +
             "That is because there may be multiple web applications deployed to a single JVM/servlet container.\n" +
             "However, you can view those metrics by selecting the `tomcat-application` service name, for example.\n" +
-            "Future versions of the Elastic APM stack will have better support for that scenario.\n" +
+            "Future versions of the Atatus APM stack will have better support for that scenario.\n" +
             "A workaround is to explicitly set the `service_name` which means all applications deployed to the same servlet container will have the same name\n" +
             "or to disable the corresponding `*-service-name` detecting instrumentations via <<config-disable-instrumentations>>.\n" +
             "\n" +
@@ -181,7 +181,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
         .builder(new ListValueConverter<>(new WildcardMatcherValueConverter()), List.class)
         .key("sanitize_field_names")
         .configurationCategory(CORE_CATEGORY)
-        .description("Sometimes it is necessary to sanitize the data sent to Elastic APM,\n" +
+        .description("Sometimes it is necessary to sanitize the data sent to Atatus APM,\n" +
             "e.g. remove sensitive data.\n" +
             "\n" +
             "Configure a list of wildcard patterns of field names which should be sanitized.\n" +
@@ -193,7 +193,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
             "as sensitive information should not be sent in the query string.\n" +
             "See https://www.owasp.org/index.php/Information_exposure_through_query_strings_in_url for more information\n" +
             "\n" +
-            "NOTE: Review the data captured by Elastic APM carefully to make sure it does not capture sensitive information.\n" +
+            "NOTE: Review the data captured by Atatus APM carefully to make sure it does not capture sensitive information.\n" +
             "If you do find sensitive data in the Elasticsearch index,\n" +
             "you should add an additional entry to this list (make sure to also include the default entries)."
             /* A disadvantage of this approach is when a user adds a custom value,
@@ -576,7 +576,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
             }
         }
         if (configFileLocation.contains(AGENT_HOME_PLACEHOLDER)) {
-            String agentHome = ElasticApmAgent.getAgentHome();
+            String agentHome = AtatusApmAgent.getAgentHome();
             if (agentHome != null) {
                 return configFileLocation.replace(AGENT_HOME_PLACEHOLDER, agentHome);
             } else {

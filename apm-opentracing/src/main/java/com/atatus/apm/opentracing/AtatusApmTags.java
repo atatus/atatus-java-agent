@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,7 +26,7 @@ package com.atatus.apm.opentracing;
 
 import io.opentracing.tag.StringTag;
 
-public class ElasticApmTags {
+public class AtatusApmTags {
 
     /**
      * Sets the type of the transaction or span.
@@ -49,19 +49,19 @@ public class ElasticApmTags {
 
     /**
      * Sets the user id,
-     * appears in the "User" tab in the transaction details in the Elastic APM UI
+     * appears in the "User" tab in the transaction details in the Atatus APM UI
      */
     public static final StringTag USER_ID = new StringTag("user.id");
 
     /**
      * Sets the user email address,
-     * appears in the "User" tab in the transaction details in the Elastic APM UI
+     * appears in the "User" tab in the transaction details in the Atatus APM UI
      */
     public static final StringTag USER_EMAIL = new StringTag("user.email");
 
     /**
      * Sets the user ,
-     * appears in the "User" tab in the transaction details in the Elastic APM UI
+     * appears in the "User" tab in the transaction details in the Atatus APM UI
      */
     public static final StringTag USER_USERNAME = new StringTag("user.username");
 

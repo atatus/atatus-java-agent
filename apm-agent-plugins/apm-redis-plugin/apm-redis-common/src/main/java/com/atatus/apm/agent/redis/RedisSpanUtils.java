@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,15 +26,15 @@ package com.atatus.apm.agent.redis;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
 public class RedisSpanUtils {
     @Nullable
     public static Span createRedisSpan(String command) {
-        if (ElasticApmInstrumentation.tracer != null) {
-            TraceContextHolder<?> activeSpan = ElasticApmInstrumentation.tracer.getActive();
+        if (AtatusApmInstrumentation.tracer != null) {
+            TraceContextHolder<?> activeSpan = AtatusApmInstrumentation.tracer.getActive();
             if (activeSpan != null) {
                 if (activeSpan.isExit()) {
                     return null;

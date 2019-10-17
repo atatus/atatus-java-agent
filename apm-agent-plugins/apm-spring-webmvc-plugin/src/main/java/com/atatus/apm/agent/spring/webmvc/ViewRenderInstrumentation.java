@@ -31,7 +31,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.springframework.web.servlet.view.AbstractView;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
@@ -47,7 +47,7 @@ import static net.bytebuddy.matcher.ElementMatchers.nameContains;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class ViewRenderInstrumentation extends ElasticApmInstrumentation {
+public class ViewRenderInstrumentation extends AtatusApmInstrumentation {
 
     private static final String SPAN_TYPE = "template";
     private static final String SPAN_ACTION = "render";

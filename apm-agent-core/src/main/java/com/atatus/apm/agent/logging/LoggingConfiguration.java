@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
  * Copyright (C) 2018 - 2019 Elastic and contributors
  * %%
@@ -30,7 +30,7 @@ import org.stagemonitor.configuration.ConfigurationOption;
 import org.stagemonitor.configuration.ConfigurationOptionProvider;
 import org.stagemonitor.configuration.source.ConfigurationSource;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -121,7 +121,7 @@ public class LoggingConfiguration extends ConfigurationOptionProvider {
     public static void init(List<ConfigurationSource> sources) {
         setLogLevel(getValue(LOG_LEVEL_KEY, sources,
             getValue(DEPRECATED_LOG_LEVEL_KEY, sources, Level.INFO.toString())));
-        setLogFileLocation(ElasticApmAgent.getAgentHome(), getValue(LOG_FILE_KEY, sources,
+        setLogFileLocation(AtatusApmAgent.getAgentHome(), getValue(LOG_FILE_KEY, sources,
             getValue(DEPRECATED_LOG_FILE_KEY, sources, DEFAULT_LOG_FILE)));
     }
 
@@ -173,7 +173,7 @@ public class LoggingConfiguration extends ConfigurationOptionProvider {
             System.err.println("Log file " + logFile + " is not writable. Falling back to System.out.");
             return SYSTEM_OUT;
         }
-        System.out.println("Writing Elastic APM logs to " + logFile);
+        System.out.println("Writing Atatus APM logs to " + logFile);
         return logFile;
     }
 

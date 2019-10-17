@@ -35,10 +35,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.jaxrs.JaxRsConfiguration;
@@ -58,7 +58,7 @@ import static org.mockito.Mockito.when;
  */
 public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
 
-    private static ElasticApmTracer tracer;
+    private static AtatusApmTracer tracer;
     private static MockReporter reporter;
     private static ConfigurationRegistry config;
 
@@ -66,7 +66,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     public static void beforeClass() {
         reporter = new MockReporter();
         config = SpyConfiguration.createSpyConfig();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
@@ -75,7 +75,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     @After
     public void after() {
         //reset after each method to test different non-dynamic parameters
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Before
@@ -87,7 +87,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     @Test
     public void testJaxRsTransactionNameWithoutJaxrsAnnotationInheritance() {
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(false);
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("test");
         doRequest("testInterface");
@@ -102,7 +102,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     @Test
     public void testJaxRsTransactionNameWithJaxrsAnnotationInheritance() {
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("test");
         doRequest("testInterface");
@@ -118,7 +118,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     @Test
     public void testProxyClassInstrumentationExclusion() {
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("testViewProxy");
         doRequest("testProxyProxy");
@@ -132,7 +132,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
     @Test
     public void testJaxRsTransactionNameNonSampledTransactions() throws IOException {
         config.getConfig(CoreConfiguration.class).getSampleRate().update(0.0, SpyConfiguration.CONFIG_SOURCE_NAME);
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("test");
 
@@ -146,7 +146,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("test");
         doRequest("testAbstract");
@@ -164,7 +164,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(false);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("test");
         doRequest("testInterface");
@@ -182,7 +182,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("testWithPathMethod");
         doRequest("testWithPathMethod/15");
@@ -198,7 +198,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("testWithPathMethodSlash");
         doRequest("testWithPathMethodSlash/15");
@@ -214,7 +214,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("/foo/bar");
 
@@ -228,7 +228,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("");
 
@@ -242,7 +242,7 @@ public class JaxRsTransactionNameInstrumentationTest extends JerseyTest {
         when(config.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName()).thenReturn(true);
         when(config.getConfig(JaxRsConfiguration.class).isEnableJaxrsAnnotationInheritance()).thenReturn(true);
 
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
 
         doRequest("/testInterface/test");
 

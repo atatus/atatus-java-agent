@@ -42,9 +42,9 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Attaches the Elastic Apm agent to the current or a remote JVM
+ * Attaches the Atatus Apm agent to the current or a remote JVM
  */
-public class ElasticApmAttacher {
+public class AtatusApmAttacher {
 
     /**
      * This key is very short on purpose.
@@ -63,7 +63,7 @@ public class ElasticApmAttacher {
         new CachedAttachmentProvider(ByteBuddyAgent.AttachmentProvider.ForUserDefinedToolsJar.INSTANCE));
 
     /**
-     * Attaches the Elastic Apm agent to the current JVM.
+     * Attaches the Atatus Apm agent to the current JVM.
      * <p>
      * This method may only be invoked once.
      * </p>
@@ -77,7 +77,7 @@ public class ElasticApmAttacher {
     private static Map<String, String> loadProperties() {
         Map<String, String> propertyMap = new HashMap<>();
         final Properties props = new Properties();
-        try (InputStream resourceStream = ElasticApmAttacher.class.getClassLoader().getResourceAsStream("atatus.properties")) {
+        try (InputStream resourceStream = AtatusApmAttacher.class.getClassLoader().getResourceAsStream("atatus.properties")) {
             if (resourceStream != null) {
                 props.load(resourceStream);
                 for (String propertyName : props.stringPropertyNames()) {
@@ -91,7 +91,7 @@ public class ElasticApmAttacher {
     }
 
     /**
-     * Attaches the Elastic Apm agent to the current JVM.
+     * Attaches the Atatus Apm agent to the current JVM.
      * <p>
      * This method may only be invoked once.
      * </p>
@@ -101,7 +101,7 @@ public class ElasticApmAttacher {
      */
     public static void attach(Map<String, String> configuration) {
         // optimization, this is checked in AgentMain#init again
-        if (Boolean.getBoolean("ElasticApm.attached")) {
+        if (Boolean.getBoolean("AtatusApm.attached")) {
             return;
         }
         File tempFile = createTempProperties(configuration);
@@ -171,11 +171,11 @@ public class ElasticApmAttacher {
         final File agentJarFile = getAgentJarFile();
 
         private static File getAgentJarFile() {
-            try (InputStream agentJar = ElasticApmAttacher.class.getResourceAsStream("/atatus-apm-agent.jar")) {
+            try (InputStream agentJar = AtatusApmAttacher.class.getResourceAsStream("/atatus-apm-agent.jar")) {
                 if (agentJar == null) {
                     throw new IllegalStateException("Agent jar not found");
                 }
-                String hash = md5Hash(ElasticApmAttacher.class.getResourceAsStream("/atatus-apm-agent.jar"));
+                String hash = md5Hash(AtatusApmAttacher.class.getResourceAsStream("/atatus-apm-agent.jar"));
                 File tempAgentJar = new File(System.getProperty("java.io.tmpdir"), "atatus-apm-agent-" + hash + ".jar");
                 if (!tempAgentJar.exists()) {
                     try (OutputStream out = new FileOutputStream(tempAgentJar)) {

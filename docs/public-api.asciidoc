@@ -38,7 +38,7 @@ image:https://img.shields.io/maven-central/v/com.atatus.apm/apm-agent-api.svg[Ma
 The tracer gives you access to the currently active transaction and span.
 It can also be used to track an exception.
 
-To use the API, you can just invoke the static methods on the class `com.atatus.apm.api.ElasticApm`.
+To use the API, you can just invoke the static methods on the class `com.atatus.apm.api.AtatusApm`.
 
 [float]
 [[api-current-transaction]]
@@ -52,13 +52,13 @@ which means that you never have to check for `null` values.
 
 [source,java]
 ----
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 import com.atatus.apm.api.Transaction;
 
-Transaction transaction = ElasticApm.currentTransaction();
+Transaction transaction = AtatusApm.currentTransaction();
 ----
 
-NOTE: Transactions created via <<api-start-transaction, `ElasticApm.startTransaction()`>>
+NOTE: Transactions created via <<api-start-transaction, `AtatusApm.startTransaction()`>>
 can not be retrieved by calling this method.
 See <<api-span-activate, `span.activate()`>> on how to achieve that.
 
@@ -78,10 +78,10 @@ These exceptions will not have a link to a Span or a Transaction.
 
 [source,java]
 ----
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 import com.atatus.apm.api.Span;
 
-Span span = ElasticApm.currentSpan();
+Span span = AtatusApm.currentSpan();
 ----
 
 NOTE: Spans created via <<api-span-start-span, `startSpan()`>> or <<api-span-start-span-with-type, `startSpan(String, String, String)`>>
@@ -103,7 +103,7 @@ Example:
 
 [source,java]
 ----
-Transaction transaction = ElasticApm.startTransaction();
+Transaction transaction = AtatusApm.startTransaction();
 try {
     transaction.setName("MyController#myAction");
     transaction.setType(Transaction.TYPE_REQUEST);
@@ -116,8 +116,8 @@ try {
 }
 ----
 
-NOTE: Transactions created via this method can not be retrieved by calling <<api-current-span, `ElasticApm.currentSpan()`>>
-or <<api-current-transaction, `ElasticApm.currentTransaction()`>>.
+NOTE: Transactions created via this method can not be retrieved by calling <<api-current-span, `AtatusApm.currentSpan()`>>
+or <<api-current-transaction, `AtatusApm.currentTransaction()`>>.
 See <<api-transaction-activate, `transaction.activate()`>> on how to achieve that.
 
 
@@ -135,7 +135,7 @@ Example:
 // Hook into a callback provided by the framework that is called on incoming requests
 public Response onIncomingRequest(Request request) throws Exception {
     // creates a transaction representing the server-side handling of the request
-    Transaction transaction = ElasticApm.startTransactionWithRemoteParent(key -> request.getHeader(key));
+    Transaction transaction = AtatusApm.startTransactionWithRemoteParent(key -> request.getHeader(key));
     try (final Scope scope = transaction.activate()) {
         String name = "a useful name like ClassName#methodName where the request is handled";
         transaction.setName(name);
@@ -168,7 +168,7 @@ Example:
 // Hook into a callback provided by the framework that is called on incoming requests
 public Response onIncomingRequest(Request request) throws Exception {
     // creates a transaction representing the server-side handling of the request
-    Transaction transaction = ElasticApm.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
+    Transaction transaction = AtatusApm.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
     try (final Scope scope = transaction.activate()) {
         String name = "a useful name like ClassName#methodName where the request is handled";
         transaction.setName(name);
@@ -209,7 +209,7 @@ Note that this only works when there is no active transaction on the same thread
 
 NOTE: Using this annotation implicitly creates a Transaction and activates it when entering the annotated
 method. It also implicitly ends it and deactivates it before exiting the annotated method.
-See <<api-start-transaction, `ElasticApm.startTransaction()`>>, <<api-transaction-activate, `transaction.activate()`>>
+See <<api-start-transaction, `AtatusApm.startTransaction()`>>, <<api-transaction-activate, `transaction.activate()`>>
 and <<api-transaction-end, `transaction.end()`>>
 
 [float]
@@ -392,7 +392,7 @@ If your backend service generates the HTML page dynamically,
 initializing the JavaScript RUM agent with the value of this method allows analyzing the time spent in the browser vs in the backend services.
 
 To enable the JavaScript RUM agent when using an HTML templating language like Freemarker,
-add `ElasticApm.currentTransaction()` with the key `"transaction"` to the model.
+add `AtatusApm.currentTransaction()` with the key `"transaction"` to the model.
 
 Also, add a snippet similar to this to the body of your HTML page,
 preferably before other JS libraries:
@@ -445,7 +445,7 @@ try {
 }
 ----
 
-NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `ElasticApm.currentSpan()`>>.
+NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `AtatusApm.currentSpan()`>>.
 See <<api-span-activate, `span.activate()`>> on how to achieve that.
 
 [float]
@@ -471,7 +471,7 @@ try {
 }
 ----
 
-NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `ElasticApm.currentSpan()`>>.
+NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `AtatusApm.currentSpan()`>>.
 See <<api-span-activate, `span.activate()`>> on how to achieve that.
 
 [float]
@@ -529,9 +529,9 @@ Failing to close a scope can lead to memory leaks and corrupts the parent-child 
 This method should always be used within a try-with-resources statement:
 [source,java]
 ----
-Transaction transaction = ElasticApm.startTransaction();
+Transaction transaction = AtatusApm.startTransaction();
 // Within the try block the transaction is available
-// on the current thread via ElasticApm.currentTransaction().
+// on the current thread via AtatusApm.currentTransaction().
 // This is also true for methods called within the try block.
 try (final Scope scope = transaction.activate()) {
     transaction.setName("MyController#myAction");
@@ -572,7 +572,7 @@ Example:
 // Hook into a callback provided by the RPC framework that is called on outgoing requests
 public Response onOutgoingRequest(Request request) throws Exception {
     // creates a span representing the external call
-    Span span = ElasticApm.currentSpan()
+    Span span = AtatusApm.currentSpan()
             .startSpan("external", "http", null)
             .setName(request.getMethod() + " " + request.getHost());
     try (final Scope scope = transaction.activate()) {
@@ -725,7 +725,7 @@ try {
 }
 ----
 
-NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `ElasticApm.currentSpan()`>>.
+NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `AtatusApm.currentSpan()`>>.
 See <<api-span-activate, `span.activate()`>> on how to achieve that.
 
 [float]
@@ -751,7 +751,7 @@ try {
 }
 ----
 
-NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `ElasticApm.currentSpan()`>>.
+NOTE: Spans created via this method can not be retrieved by calling <<api-current-span, `AtatusApm.currentSpan()`>>.
 See <<api-span-activate, `span.activate()`>> on how to achieve that.
 
 [float]
@@ -767,7 +767,7 @@ This method should always be used within a try-with-resources statement:
 ----
 Span span = parent.startSpan("db", "mysql", "query");
 // Within the try block the span is available
-// on the current thread via ElasticApm.currentSpan().
+// on the current thread via AtatusApm.currentSpan().
 // This is also true for methods called within the try block.
 try (final Scope scope = span.activate()) {
     span.setName("SELECT FROM customer");
@@ -810,7 +810,7 @@ Example:
 // Hook into a callback provided by the RPC framework that is called on outgoing requests
 public Response onOutgoingRequest(Request request) throws Exception {
     // creates a span representing the external call
-    Span span = ElasticApm.currentSpan()
+    Span span = AtatusApm.currentSpan()
             .startSpan("external", "http", null)
             .setName(request.getMethod() + " " + request.getHost());
     try (final Scope scope = transaction.activate()) {

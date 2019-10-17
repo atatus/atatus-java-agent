@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 
@@ -62,7 +62,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
  * Supports Spring MVC 3.x-5.x
  * </p>
  */
-public class SpringTransactionNameInstrumentation extends ElasticApmInstrumentation {
+public class SpringTransactionNameInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     @SuppressWarnings("WeakerAccess")

@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.stagemonitor.configuration.ConfigurationOption;
 
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.metrics.DoubleSupplier;
 import com.atatus.apm.agent.metrics.Labels;
 import com.atatus.apm.agent.metrics.MetricRegistry;
@@ -53,18 +53,18 @@ public class JmxMetricTracker implements LifecycleListener {
     private final JmxConfiguration jmxConfiguration;
     private final MetricRegistry metricRegistry;
 
-    public JmxMetricTracker(ElasticApmTracer tracer) {
+    public JmxMetricTracker(AtatusApmTracer tracer) {
         this(tracer, LoggerFactory.getLogger(JmxMetricTracker.class));
     }
 
-    JmxMetricTracker(ElasticApmTracer tracer, Logger logger) {
+    JmxMetricTracker(AtatusApmTracer tracer, Logger logger) {
         this.logger = logger;
         jmxConfiguration = tracer.getConfig(JmxConfiguration.class);
         metricRegistry = tracer.getMetricRegistry();
     }
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         jmxConfiguration.getCaptureJmxMetrics().addChangeListener(new ConfigurationOption.ChangeListener<List<JmxMetric>>() {
             @Override
             public void onChange(ConfigurationOption<?> configurationOption, List<JmxMetric> oldValue, List<JmxMetric> newValue) {

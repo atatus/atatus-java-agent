@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.sampling.ConstantSampler;
 import com.atatus.apm.agent.impl.sampling.Sampler;
 import com.atatus.apm.agent.impl.transaction.AbstractSpan;
@@ -104,7 +104,7 @@ public class ApmSpanBuilderInstrumentation extends OpenTracingBridgeInstrumentat
 
         @Nonnull
         private static AbstractSpan<?> createTransaction(Map<String, Object> tags, String operationName, long microseconds,
-                                                         @Nullable Iterable<Map.Entry<String, String>> baggage, ElasticApmTracer tracer, ClassLoader classLoader) {
+                                                         @Nullable Iterable<Map.Entry<String, String>> baggage, AtatusApmTracer tracer, ClassLoader classLoader) {
             if ("client".equals(tags.get("span.kind"))) {
                 logger.info("Ignoring transaction '{}', as a span.kind client can never be a transaction. " +
                     "Consider creating a span for the whole request.", operationName);

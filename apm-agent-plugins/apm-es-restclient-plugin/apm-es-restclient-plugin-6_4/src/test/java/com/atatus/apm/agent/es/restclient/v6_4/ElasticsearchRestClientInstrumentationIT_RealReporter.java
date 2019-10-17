@@ -24,11 +24,11 @@
  */
 package com.atatus.apm.agent.es.restclient.v6_4;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.payload.Agent;
 import com.atatus.apm.agent.impl.payload.ProcessInfo;
@@ -107,7 +107,7 @@ public class ElasticsearchRestClientInstrumentationIT_RealReporter {
     private static final String BAR = "bar";
     private static final String BAZ = "baz";
 
-    private static ElasticApmTracer tracer;
+    private static AtatusApmTracer tracer;
     private static Reporter realReporter;
 
     /**
@@ -149,11 +149,11 @@ public class ElasticsearchRestClientInstrumentationIT_RealReporter {
             apmServerClient);
         realReporter = new ApmServerReporter(true, reporterConfiguration, configurationRegistry.getConfig(CoreConfiguration.class), v2handler);
 
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(configurationRegistry)
             .reporter(realReporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @AfterClass

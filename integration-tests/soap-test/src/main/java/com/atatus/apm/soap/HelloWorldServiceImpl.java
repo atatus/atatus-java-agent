@@ -26,7 +26,7 @@ package com.atatus.apm.soap;
 
 import javax.jws.WebService;
 
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 
 @WebService(serviceName = "HelloWorldService", portName = "HelloWorld", name = "HelloWorld",
     endpointInterface = "com.atatus.apm.soap.HelloWorldService",
@@ -34,6 +34,6 @@ import com.atatus.apm.api.ElasticApm;
 public class HelloWorldServiceImpl implements HelloWorldService {
     @Override
     public String sayHello() {
-        return ElasticApm.currentTransaction().getTraceId();
+        return AtatusApm.currentTransaction().getTraceId();
     }
 }

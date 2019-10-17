@@ -33,10 +33,10 @@ import io.opentracing.propagation.TextMap;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class ElasticApmTracer implements io.opentracing.Tracer {
+public class AtatusApmTracer implements io.opentracing.Tracer {
     private final ApmScopeManager scopeManager;
 
-    public ElasticApmTracer() {
+    public AtatusApmTracer() {
         this.scopeManager = new ApmScopeManager();
     }
 
@@ -87,6 +87,6 @@ public class ElasticApmTracer implements io.opentracing.Tracer {
         if (active != null) {
             active.close();
         }
-        // com.atatus.apm.agent.opentracing.impl.ElasticApmTracerInstrumentation#close
+        // com.atatus.apm.agent.opentracing.impl.AtatusApmTracerInstrumentation#close
     }
 }

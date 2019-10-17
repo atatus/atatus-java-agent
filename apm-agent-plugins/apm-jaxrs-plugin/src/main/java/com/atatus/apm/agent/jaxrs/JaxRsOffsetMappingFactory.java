@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -36,7 +36,7 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -49,7 +49,7 @@ public class JaxRsOffsetMappingFactory implements Advice.OffsetMapping.Factory<J
 
     public static boolean useAnnotationValueForTransactionName;
 
-    public JaxRsOffsetMappingFactory(ElasticApmTracer tracer) {
+    public JaxRsOffsetMappingFactory(AtatusApmTracer tracer) {
         useAnnotationValueForTransactionName = tracer.getConfig(JaxRsConfiguration.class).isUseJaxRsPathForTransactionName();
     }
 

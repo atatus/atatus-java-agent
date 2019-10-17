@@ -21,7 +21,7 @@ Currently, this does not work in combination with OSGi containers (which include
 The symptom is that there will be a lot of exceptions like this: `java.lang.NoClassDefFoundError: co/elastic/apm/agent/servlet/ServletApiAdvice`.
 
 There can only be one agent instance with one configuration per JVM.
-So if you deploy multiple web applications to the same application server and call `ElasticApmAttacher.attach()` in each application,
+So if you deploy multiple web applications to the same application server and call `AtatusApmAttacher.attach()` in each application,
 the first `attach()` wins and the second one will be ignored.
 That also means that if you are configuring the agent with `elasticapm.properties`,
 the application which attaches first gets to decide the configuration.
@@ -44,20 +44,20 @@ Declare a dependency to the link:https://search.maven.org/search?q=g:com.atatus.
 ----
 
 
-Call `ElasticApmAttacher.attach()` in the first line of your `public static void main(String[] args)` method.
+Call `AtatusApmAttacher.attach()` in the first line of your `public static void main(String[] args)` method.
 
 This example demonstrates the the usage of the `attach` API with a simple Spring Boot application:
 
 [source,java]
 .MyApplication.java
 ----
-import com.atatus.apm.attach.ElasticApmAttacher;
+import com.atatus.apm.attach.AtatusApmAttacher;
 import org.springframework.boot.SpringApplication;
 
 @SpringBootApplication
 public class MyApplication {
     public static void main(String[] args) {
-        ElasticApmAttacher.attach();
+        AtatusApmAttacher.attach();
         SpringApplication.run(MyApplication.class, args);
     }
 }

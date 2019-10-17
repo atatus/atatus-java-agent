@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +32,7 @@ import org.jctools.queues.atomic.AtomicQueueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 import com.atatus.apm.agent.objectpool.Allocator;
@@ -54,11 +54,11 @@ public class ElasticsearchRestClientInstrumentationHelperImpl implements Elastic
     public static final String ELASTICSEARCH = "elasticsearch";
     public static final String SPAN_ACTION = "request";
     private static final int MAX_POOLED_ELEMENTS = 256;
-    private final ElasticApmTracer tracer;
+    private final AtatusApmTracer tracer;
 
     private final ObjectPool<ResponseListenerWrapper> responseListenerObjectPool;
 
-    public ElasticsearchRestClientInstrumentationHelperImpl(ElasticApmTracer tracer) {
+    public ElasticsearchRestClientInstrumentationHelperImpl(AtatusApmTracer tracer) {
         this.tracer = tracer;
         responseListenerObjectPool = QueueBasedObjectPool.ofRecyclable(
             AtomicQueueFactory.<ResponseListenerWrapper>newQueue(createBoundedMpmc(MAX_POOLED_ELEMENTS)),

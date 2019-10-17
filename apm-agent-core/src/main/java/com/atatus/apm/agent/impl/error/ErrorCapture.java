@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.impl.error;
 
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.TransactionContext;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.Span;
@@ -68,10 +68,10 @@ public class ErrorCapture implements Recyclable {
      */
     private TransactionInfo transactionInfo = new TransactionInfo();
 
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private final StringBuilder culprit = new StringBuilder();
 
-    public ErrorCapture(ElasticApmTracer tracer) {
+    public ErrorCapture(AtatusApmTracer tracer) {
         this.tracer = tracer;
         traceContext = TraceContext.with128BitId(this.tracer);
     }

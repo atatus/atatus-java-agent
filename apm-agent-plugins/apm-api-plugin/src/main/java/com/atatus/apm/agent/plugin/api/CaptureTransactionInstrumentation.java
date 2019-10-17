@@ -33,11 +33,11 @@ import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.bci.bytebuddy.AnnotationValueOffsetMappingFactory.AnnotationValueExtractor;
 import com.atatus.apm.agent.bci.bytebuddy.SimpleMethodSignatureOffsetMappingFactory.SimpleMethodSignature;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.Transaction;
@@ -50,19 +50,19 @@ import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.classLoad
 import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.isInAnyPackage;
 import static com.atatus.apm.agent.impl.transaction.AbstractSpan.PRIO_METHOD_SIGNATURE;
 import static com.atatus.apm.agent.impl.transaction.AbstractSpan.PRIO_USER_SUPPLIED;
-import static com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation.PUBLIC_API_INSTRUMENTATION_GROUP;
+import static com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation.PUBLIC_API_INSTRUMENTATION_GROUP;
 import static net.bytebuddy.matcher.ElementMatchers.declaresMethod;
 import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
-public class CaptureTransactionInstrumentation extends ElasticApmInstrumentation {
+public class CaptureTransactionInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     public static final Logger logger = LoggerFactory.getLogger(CaptureTransactionInstrumentation.class);
 
     private final StacktraceConfiguration config;
 
-    public CaptureTransactionInstrumentation(ElasticApmTracer tracer) {
+    public CaptureTransactionInstrumentation(AtatusApmTracer tracer) {
         config = tracer.getConfig(StacktraceConfiguration.class);
     }
 

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.jmx.JmxConfiguration;
 import com.atatus.apm.agent.jmx.JmxMetric;
@@ -59,7 +59,7 @@ class JmxMetricTrackerTest {
 
     @BeforeEach
     void setUp() {
-        ElasticApmTracer tracer = MockTracer.createRealTracer();
+        AtatusApmTracer tracer = MockTracer.createRealTracer();
         metricRegistry = tracer.getMetricRegistry();
         config = tracer.getConfig(JmxConfiguration.class);
         logger = mock(Logger.class);

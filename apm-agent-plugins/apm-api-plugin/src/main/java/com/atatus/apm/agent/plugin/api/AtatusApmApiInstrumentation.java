@@ -40,20 +40,20 @@ import java.util.Iterator;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
- * Injects the actual implementation of the public API class com.atatus.apm.api.ElasticApm.
+ * Injects the actual implementation of the public API class com.atatus.apm.api.AtatusApm.
  */
-public class ElasticApmApiInstrumentation extends ApiInstrumentation {
+public class AtatusApmApiInstrumentation extends ApiInstrumentation {
 
     static final String PUBLIC_API_INSTRUMENTATION_GROUP = "public-api";
     private final ElementMatcher<? super MethodDescription> methodMatcher;
 
-    ElasticApmApiInstrumentation(ElementMatcher<? super MethodDescription> methodMatcher) {
+    AtatusApmApiInstrumentation(ElementMatcher<? super MethodDescription> methodMatcher) {
         this.methodMatcher = methodMatcher;
     }
 
     @Override
     public ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return named("com.atatus.apm.api.ElasticApm");
+        return named("com.atatus.apm.api.AtatusApm");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ElasticApmApiInstrumentation extends ApiInstrumentation {
         return methodMatcher;
     }
 
-    public static class StartTransactionInstrumentation extends ElasticApmApiInstrumentation {
+    public static class StartTransactionInstrumentation extends AtatusApmApiInstrumentation {
         public StartTransactionInstrumentation() {
             super(named("doStartTransaction"));
         }
@@ -75,7 +75,7 @@ public class ElasticApmApiInstrumentation extends ApiInstrumentation {
         }
     }
 
-    public static class StartTransactionWithRemoteParentInstrumentation extends ElasticApmApiInstrumentation {
+    public static class StartTransactionWithRemoteParentInstrumentation extends AtatusApmApiInstrumentation {
 
         public StartTransactionWithRemoteParentInstrumentation() {
             super(named("doStartTransactionWithRemoteParentFunction"));
@@ -108,7 +108,7 @@ public class ElasticApmApiInstrumentation extends ApiInstrumentation {
         }
     }
 
-    public static class CurrentTransactionInstrumentation extends ElasticApmApiInstrumentation {
+    public static class CurrentTransactionInstrumentation extends AtatusApmApiInstrumentation {
         public CurrentTransactionInstrumentation() {
             super(named("doGetCurrentTransaction"));
         }
@@ -122,7 +122,7 @@ public class ElasticApmApiInstrumentation extends ApiInstrumentation {
         }
     }
 
-    public static class CurrentSpanInstrumentation extends ElasticApmApiInstrumentation {
+    public static class CurrentSpanInstrumentation extends AtatusApmApiInstrumentation {
         public CurrentSpanInstrumentation() {
             super(named("doGetCurrentSpan"));
         }
@@ -136,7 +136,7 @@ public class ElasticApmApiInstrumentation extends ApiInstrumentation {
         }
     }
 
-    public static class CaptureExceptionInstrumentation extends ElasticApmApiInstrumentation {
+    public static class CaptureExceptionInstrumentation extends AtatusApmApiInstrumentation {
         public CaptureExceptionInstrumentation() {
             super(named("captureException"));
         }

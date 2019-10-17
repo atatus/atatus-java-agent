@@ -29,7 +29,7 @@ import com.atatus.apm.agent.TransactionUtils;
 
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.error.ErrorPayload;
 import com.atatus.apm.agent.impl.payload.Agent;
 import com.atatus.apm.agent.impl.payload.ProcessInfo;

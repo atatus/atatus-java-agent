@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -37,8 +37,8 @@ import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.runner.RunnerException;
 
 import com.atatus.apm.agent.benchmark.AbstractBenchmark;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.objectpool.impl.MixedObjectPool;
 import com.atatus.apm.agent.objectpool.impl.QueueBasedObjectPool;
@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class ObjectPoolBenchmark extends AbstractBenchmark {
 
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private QueueBasedObjectPool<Transaction> blockingQueueObjectPool;
     private QueueBasedObjectPool<Transaction> agronaQueueObjectPool;
     private MixedObjectPool<Transaction> mixedObjectPool;
@@ -65,7 +65,7 @@ public class ObjectPoolBenchmark extends AbstractBenchmark {
 
     @Setup
     public void setUp() {
-        tracer = new ElasticApmTracerBuilder().build();
+        tracer = new AtatusApmTracerBuilder().build();
         blockingQueueObjectPool = QueueBasedObjectPool.ofRecyclable(new ArrayBlockingQueue<>(256), true, () -> new Transaction(tracer));
         jctoolsQueueObjectPool = QueueBasedObjectPool.ofRecyclable(new MpmcArrayQueue<>(256), true, () -> new Transaction(tracer));
         jctoolsAtomicQueueObjectPool = QueueBasedObjectPool.ofRecyclable(new MpmcAtomicArrayQueue<>(256), true, () -> new Transaction(tracer));

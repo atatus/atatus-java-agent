@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.logging.JulBridgeLogger;
 
 import java.util.ResourceBundle;
@@ -56,7 +56,7 @@ class JulBridgeLoggerTest {
     @BeforeEach
     void setUp() {
         // initializes and configures logging
-        new ElasticApmTracerBuilder();
+        new AtatusApmTracerBuilder();
         slf4jLogger = mock(Logger.class);
         julLogger = new JulBridgeLogger(slf4jLogger);
         e = new Exception("This exception is used to test exception logging");

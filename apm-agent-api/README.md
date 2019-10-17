@@ -6,7 +6,7 @@ Use this to add custom data to transactions for example.
 If the application is started without the Elastic APM `-javaagent` set,
 this API acts as a noop implementation.
 If the agent is enabled,
-it injects the actual implementation when the `com.atatus.apm.api.ElasticApm` class is loaded.
+it injects the actual implementation when the `com.atatus.apm.api.AtatusApm` class is loaded.
 
 If the agent should be disabled (e.g. because of a problem or because this environment should not be monitored),
 the application just has to be (re-)started without the `-javaagent` flag.

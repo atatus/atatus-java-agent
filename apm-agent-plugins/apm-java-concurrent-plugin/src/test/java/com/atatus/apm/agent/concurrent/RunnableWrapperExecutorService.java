@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.concurrent;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.Callable;
@@ -35,13 +35,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RunnableWrapperExecutorService extends ExecutorServiceWrapper {
 
-    private final ElasticApmTracer tracer;
+    private final AtatusApmTracer tracer;
 
-    public static RunnableWrapperExecutorService wrap(ExecutorService delegate, ElasticApmTracer tracer) {
+    public static RunnableWrapperExecutorService wrap(ExecutorService delegate, AtatusApmTracer tracer) {
         return new RunnableWrapperExecutorService(delegate, tracer);
     }
 
-    private RunnableWrapperExecutorService(ExecutorService delegate, ElasticApmTracer tracer) {
+    private RunnableWrapperExecutorService(ExecutorService delegate, AtatusApmTracer tracer) {
         super(delegate);
         this.tracer = tracer;
     }

@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.servlet.ServletTransactionHelper;
@@ -53,7 +53,7 @@ class ServletTransactionHelperTest {
     void setUp() {
         ConfigurationRegistry config = SpyConfiguration.createSpyConfig();
         webConfig = config.getConfig(WebConfiguration.class);
-        servletTransactionHelper = new ServletTransactionHelper(new ElasticApmTracerBuilder()
+        servletTransactionHelper = new ServletTransactionHelper(new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(new MockReporter())
             .build());

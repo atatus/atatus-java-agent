@@ -36,7 +36,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.hibernate.search.query.hibernate.impl.FullTextQueryImpl;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.hibernate.search.HibernateSearchConstants;
 import com.atatus.apm.agent.hibernate.search.HibernateSearchHelper;
 import com.atatus.apm.agent.impl.transaction.Span;
@@ -49,7 +49,7 @@ import static net.bytebuddy.matcher.ElementMatchers.nameContains;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public class HibernateSearch5Instrumentation extends ElasticApmInstrumentation {
+public class HibernateSearch5Instrumentation extends AtatusApmInstrumentation {
 
     @Override
     public Class<?> getAdviceClass() {

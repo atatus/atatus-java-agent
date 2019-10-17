@@ -66,7 +66,7 @@ public class AgentMain {
     }
 
     public synchronized static void init(String agentArguments, Instrumentation instrumentation) {
-        if (Boolean.getBoolean("ElasticApm.attached")) {
+        if (Boolean.getBoolean("AtatusApm.attached")) {
             // agent is already attached; don't attach twice
             // don't fail as this is a valid case
             // for example, Spring Boot restarts the application in dev mode
@@ -80,10 +80,10 @@ public class AgentMain {
             }
             // invoking via reflection to make sure the class is not loaded by the system classloader,
             // but only from the bootstrap classloader
-            Class.forName("com.atatus.apm.agent.bci.ElasticApmAgent", true, null)
+            Class.forName("com.atatus.apm.agent.bci.AtatusApmAgent", true, null)
                 .getMethod("initialize", String.class, Instrumentation.class, File.class)
                 .invoke(null, agentArguments, instrumentation, agentJarFile);
-            System.setProperty("ElasticApm.attached", Boolean.TRUE.toString());
+            System.setProperty("AtatusApm.attached", Boolean.TRUE.toString());
         } catch (Exception e) {
             System.err.println("Failed to start agent");
             e.printStackTrace();

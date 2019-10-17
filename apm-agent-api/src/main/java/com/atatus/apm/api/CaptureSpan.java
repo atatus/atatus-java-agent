@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotating a method with {@code @}{@link CaptureSpan} creates a {@link Span} as the child of the currently active span or transaction
- * ({@link ElasticApm#currentSpan()}).
+ * ({@link AtatusApm#currentSpan()}).
  * <p>
  * When there is no current span,
  * no span will be created.
@@ -53,7 +53,7 @@ public @interface CaptureSpan {
     /**
      * <p>
      * Sets the general type of the captured span, used to group similar spans together, for example: `db`. Though there are no naming
-     * restrictions for the general types, the following are standardized across all Elastic APM agents: `app`, `db`, `cache`,
+     * restrictions for the general types, the following are standardized across all Atatus APM agents: `app`, `db`, `cache`,
      * `template`, and `ext`.
      * </p>
      * <p>

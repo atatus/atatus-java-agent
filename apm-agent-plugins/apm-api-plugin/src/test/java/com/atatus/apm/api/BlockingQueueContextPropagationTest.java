@@ -30,7 +30,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 import com.atatus.apm.api.Scope;
 import com.atatus.apm.api.Span;
 import com.atatus.apm.api.Transaction;
@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlockingQueueContextPropagationTest extends AbstractInstrumentationTest {
 
-    private static BlockingQueue<ElasticApmQueueElementWrapper<CompletableFuture<String>>> blockingQueue;
+    private static BlockingQueue<AtatusApmQueueElementWrapper<CompletableFuture<String>>> blockingQueue;
     private static ExecutorService executorService;
     private static final long nanoTimeOffsetToEpoch = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) - System.nanoTime();
 
@@ -58,7 +58,7 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
         executorService.execute(() -> {
             while (true) {
                 try {
-                    ElasticApmQueueElementWrapper<CompletableFuture<String>> element = blockingQueue.take();
+                    AtatusApmQueueElementWrapper<CompletableFuture<String>> element = blockingQueue.take();
                     Thread.sleep(110);
                     final Span span = element.getSpan();
                     if (!(span instanceof Transaction)) {
@@ -66,7 +66,7 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
                     }
                     final CompletableFuture<String> result = element.getWrappedObject();
                     try (Scope scope = span.activate()) {
-                        String spanId = ElasticApm.currentSpan().getId();
+                        String spanId = AtatusApm.currentSpan().getId();
                         Thread.sleep(20);
                         span.end();
                         result.complete(spanId);
@@ -91,12 +91,12 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
 
     @Test
     public void testAsyncTransactionDelegation() throws ExecutionException, InterruptedException {
-        Transaction transaction = ElasticApm.startTransaction();
+        Transaction transaction = AtatusApm.startTransaction();
         long startTime = TimeUnit.NANOSECONDS.toMicros(nanoTimeOffsetToEpoch + System.nanoTime());
         transaction.setStartTimestamp(startTime);
         final CompletableFuture<String> result = new CompletableFuture<>();
         try (Scope scope = transaction.activate()) {
-            blockingQueue.offer(new ElasticApmQueueElementWrapper<>(result, transaction));
+            blockingQueue.offer(new AtatusApmQueueElementWrapper<>(result, transaction));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,15 +117,15 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
 
     @Test
     public void testAsyncSpanDelegation() throws ExecutionException, InterruptedException {
-        Transaction transaction = ElasticApm.startTransaction();
+        Transaction transaction = AtatusApm.startTransaction();
         long startTime = TimeUnit.NANOSECONDS.toMicros(nanoTimeOffsetToEpoch + System.nanoTime());
         transaction.setStartTimestamp(startTime);
         final CompletableFuture<String> result = new CompletableFuture<>();
         String asyncSpanId = null;
         try (Scope scope = transaction.activate()) {
-            final Span asyncSpan = ElasticApm.currentSpan().startSpan("async", "blocking-queue", null);
+            final Span asyncSpan = AtatusApm.currentSpan().startSpan("async", "blocking-queue", null);
             asyncSpanId = asyncSpan.getId();
-            blockingQueue.offer(new ElasticApmQueueElementWrapper<>(result, asyncSpan));
+            blockingQueue.offer(new AtatusApmQueueElementWrapper<>(result, asyncSpan));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -154,11 +154,11 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
         );
     }
 
-    public static class ElasticApmQueueElementWrapper<T> {
+    public static class AtatusApmQueueElementWrapper<T> {
         private final T wrappedObject;
         private final Span span;
 
-        private ElasticApmQueueElementWrapper(T wrappedObject, Span span) {
+        private AtatusApmQueueElementWrapper(T wrappedObject, Span span) {
             this.wrappedObject = wrappedObject;
             this.span = span;
         }

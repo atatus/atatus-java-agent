@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.web.BodyProcessor;
@@ -44,7 +44,7 @@ class BodyProcessorTest {
 
     private BodyProcessor bodyProcessor;
     private WebConfiguration config;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
 
     @BeforeEach
     void setUp() {

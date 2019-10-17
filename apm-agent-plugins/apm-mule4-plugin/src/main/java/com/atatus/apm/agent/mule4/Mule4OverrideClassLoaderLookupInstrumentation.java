@@ -32,7 +32,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 import org.mule.runtime.module.artifact.api.classloader.DelegateOnlyLookupStrategy;
 import org.mule.runtime.module.artifact.api.classloader.LookupStrategy;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -45,7 +45,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class Mule4OverrideClassLoaderLookupInstrumentation extends ElasticApmInstrumentation {
+public class Mule4OverrideClassLoaderLookupInstrumentation extends AtatusApmInstrumentation {
 
     @Override
     public ElementMatcher<? super NamedElement> getTypeMatcherPreFilter() {

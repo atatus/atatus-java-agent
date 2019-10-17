@@ -25,8 +25,8 @@
 package com.atatus.apm.agent.report;
 
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.util.Version;
 
 import com.atatus.apm.agent.report.ApmServerClient;
@@ -66,7 +66,7 @@ public class ApmServerClientTest {
     public WireMockRule apmServer2 = new WireMockRule(WireMockConfiguration.wireMockConfig().dynamicPort());
     private ApmServerClient apmServerClient;
     private ConfigurationRegistry config;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private ReporterConfiguration reporterConfiguration;
 
     @Before
@@ -85,7 +85,7 @@ public class ApmServerClientTest {
         config = SpyConfiguration.createSpyConfig();
         reporterConfiguration = config.getConfig(ReporterConfiguration.class);
         doReturn(List.of(url1, url2)).when(reporterConfiguration).getServerUrls();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .build();
 

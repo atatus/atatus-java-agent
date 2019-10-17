@@ -38,12 +38,12 @@ import java.lang.invoke.MethodHandle;
  * Use this API to set a custom transaction name,
  * for example:
  * <pre>{@code
- * ElasticApm.currentTransaction().setName("SuchController#muchMethod");
+ * AtatusApm.currentTransaction().setName("SuchController#muchMethod");
  * }</pre>
  */
-public class ElasticApm {
+public class AtatusApm {
 
-    ElasticApm() {
+    AtatusApm() {
         // do not instantiate
     }
 
@@ -59,7 +59,7 @@ public class ElasticApm {
      * Example:
      * </p>
      * <pre>
-     * Transaction transaction = ElasticApm.startTransaction();
+     * Transaction transaction = AtatusApm.startTransaction();
      * try {
      *     transaction.setName("MyController#myAction");
      *     transaction.setType(Transaction.TYPE_REQUEST);
@@ -85,12 +85,12 @@ public class ElasticApm {
     }
 
     private static Object doStartTransaction() {
-        // com.atatus.apm.api.ElasticApmInstrumentation.StartTransactionInstrumentation.doStartTransaction
+        // com.atatus.apm.api.AtatusApmInstrumentation.StartTransactionInstrumentation.doStartTransaction
         return null;
     }
 
     /**
-     * Similar to {@link ElasticApm#startTransaction()} but creates this transaction as the child of a remote parent.
+     * Similar to {@link AtatusApm#startTransaction()} but creates this transaction as the child of a remote parent.
      *
      * <p>
      * Example:
@@ -99,7 +99,7 @@ public class ElasticApm {
      * // Hook into a callback provided by the framework that is called on incoming requests
      * public Response onIncomingRequest(Request request) throws Exception {
      *     // creates a transaction representing the server-side handling of the request
-     *     Transaction transaction = ElasticApm.startTransactionWithRemoteParent(key -&gt; request.getHeader(key));
+     *     Transaction transaction = AtatusApm.startTransactionWithRemoteParent(key -&gt; request.getHeader(key));
      *     try (final Scope scope = transaction.activate()) {
      *         String name = "a useful name like ClassName#methodName where the request is handled";
      *         transaction.setName(name);
@@ -127,7 +127,7 @@ public class ElasticApm {
     }
 
     /**
-     * Similar to {@link ElasticApm#startTransaction()} but creates this transaction as the child of a remote parent.
+     * Similar to {@link AtatusApm#startTransaction()} but creates this transaction as the child of a remote parent.
      *
      * <p>
      * Example:
@@ -136,7 +136,7 @@ public class ElasticApm {
      * // Hook into a callback provided by the framework that is called on incoming requests
      * public Response onIncomingRequest(Request request) throws Exception {
      *     // creates a transaction representing the server-side handling of the request
-     *     Transaction transaction = ElasticApm.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
+     *     Transaction transaction = AtatusApm.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
      *     try (final Scope scope = transaction.activate()) {
      *         String name = "a useful name like ClassName#methodName where the request is handled";
      *         transaction.setName(name);
@@ -169,7 +169,7 @@ public class ElasticApm {
 
     private static Object doStartTransactionWithRemoteParentFunction(MethodHandle getFirstHeader, HeaderExtractor headerExtractor,
                                                                      MethodHandle getAllHeaders, HeadersExtractor headersExtractor) {
-        // com.atatus.apm.agent.plugin.api.ElasticApmApiInstrumentation.StartTransactionWithRemoteParentInstrumentation
+        // com.atatus.apm.agent.plugin.api.AtatusApmApiInstrumentation.StartTransactionWithRemoteParentInstrumentation
         return null;
     }
 
@@ -193,7 +193,7 @@ public class ElasticApm {
     }
 
     private static Object doGetCurrentTransaction() {
-        // com.atatus.apm.api.ElasticApmInstrumentation.CurrentTransactionInstrumentation.doGetCurrentTransaction
+        // com.atatus.apm.api.AtatusApmInstrumentation.CurrentTransactionInstrumentation.doGetCurrentTransaction
         return null;
     }
 
@@ -223,7 +223,7 @@ public class ElasticApm {
     }
 
     private static Object doGetCurrentSpan() {
-        // com.atatus.apm.api.ElasticApmApiInstrumentation.CurrentSpanInstrumentation.doGetCurrentSpan
+        // com.atatus.apm.api.AtatusApmApiInstrumentation.CurrentSpanInstrumentation.doGetCurrentSpan
         return null;
     }
 
@@ -235,7 +235,7 @@ public class ElasticApm {
      */
     @Deprecated
     public static void captureException(@Nullable Throwable e) {
-        // com.atatus.apm.api.ElasticApmInstrumentation.CaptureExceptionInstrumentation.captureException
+        // com.atatus.apm.api.AtatusApmInstrumentation.CaptureExceptionInstrumentation.captureException
     }
 
 }

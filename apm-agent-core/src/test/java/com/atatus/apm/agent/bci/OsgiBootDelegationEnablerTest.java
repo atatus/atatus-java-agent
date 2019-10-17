@@ -32,14 +32,14 @@ import org.junit.jupiter.api.Test;
 
 import com.atatus.apm.agent.bci.OsgiBootDelegationEnabler;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class OsgiBootDelegationEnablerTest {
 
-    private final ElasticApmTracer tracer = MockTracer.create();
+    private final AtatusApmTracer tracer = MockTracer.create();
     private final OsgiBootDelegationEnabler osgiBootDelegationEnabler = new OsgiBootDelegationEnabler();
 
     @BeforeEach
@@ -78,7 +78,7 @@ class OsgiBootDelegationEnablerTest {
     @Test
     void testEmptyBootdelegationWithExistingProperty() {
         CoreConfiguration coreConfiguration = mock(CoreConfiguration.class);
-        ElasticApmTracer elasticApmTracer = mock(ElasticApmTracer.class);
+        AtatusApmTracer elasticApmTracer = mock(AtatusApmTracer.class);
         when(elasticApmTracer.getConfig(CoreConfiguration.class)).thenReturn(coreConfiguration);
         when(coreConfiguration.getPackagesToAppendToBootdelegationProperty()).thenReturn(null);
         System.setProperty("org.osgi.framework.bootdelegation", "foo.bar");

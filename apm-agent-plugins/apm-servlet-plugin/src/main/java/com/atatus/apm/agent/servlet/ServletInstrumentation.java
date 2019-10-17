@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,8 +32,8 @@ import net.bytebuddy.matcher.ElementMatcher;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
 import static net.bytebuddy.matcher.ElementMatchers.isInterface;
@@ -52,11 +52,11 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
  * this makes sure to record a transaction in that case.
  * </p>
  */
-public class ServletInstrumentation extends ElasticApmInstrumentation {
+public class ServletInstrumentation extends AtatusApmInstrumentation {
 
     static final String SERVLET_API = "servlet-api";
 
-    public ServletInstrumentation(ElasticApmTracer tracer) {
+    public ServletInstrumentation(AtatusApmTracer tracer) {
         ServletApiAdvice.init(tracer);
     }
 

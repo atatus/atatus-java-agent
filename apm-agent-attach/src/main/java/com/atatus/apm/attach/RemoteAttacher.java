@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
  * Copyright (C) 2018 - 2019 Elastic and contributors
  * %%
@@ -42,7 +42,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * Attaches the Elastic APM Java agent to a JVM with a specific PID or runs continuously and attaches to all running and starting JVMs which match.
+ * Attaches the Atatus APM Java agent to a JVM with a specific PID or runs continuously and attaches to all running and starting JVMs which match.
  */
 public class RemoteAttacher {
 
@@ -79,8 +79,8 @@ public class RemoteAttacher {
                 System.out.println(jvm);
             }
         } else if (arguments.getPid() != null) {
-            log("INFO", "Attaching the Elastic APM agent to %s", arguments.getPid());
-            ElasticApmAttacher.attach(arguments.getPid(), arguments.getConfig());
+            log("INFO", "Attaching the Atatus APM agent to %s", arguments.getPid());
+            AtatusApmAttacher.attach(arguments.getPid(), arguments.getConfig());
             log("INFO", "Done");
         } else {
             do {
@@ -122,19 +122,19 @@ public class RemoteAttacher {
         if (isIncluded(jvmInfo) && !isExcluded(jvmInfo)) {
             try {
                 final String agentArgs = getAgentArgs(jvmInfo);
-                log("INFO", "Attaching the Elastic APM agent to %s with arguments %s", jvmInfo, agentArgs);
-                ElasticApmAttacher.attach(jvmInfo.pid, agentArgs);
+                log("INFO", "Attaching the Atatus APM agent to %s with arguments %s", jvmInfo, agentArgs);
+                AtatusApmAttacher.attach(jvmInfo.pid, agentArgs);
                 log("INFO", "Done");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            log("DEBUG", "Not attaching the Elastic APM agent to %s, because it is not included or excluded.", jvmInfo);
+            log("DEBUG", "Not attaching the Atatus APM agent to %s, because it is not included or excluded.", jvmInfo);
         }
     }
 
     private String getAgentArgs(JvmInfo jvmInfo) throws IOException, InterruptedException {
-        return arguments.getArgsProvider() != null ? getArgsProviderOutput(jvmInfo) : ElasticApmAttacher.toAgentArgs(arguments.getConfig());
+        return arguments.getArgsProvider() != null ? getArgsProviderOutput(jvmInfo) : AtatusApmAttacher.toAgentArgs(arguments.getConfig());
     }
 
     private String getArgsProviderOutput(JvmInfo jvmInfo) throws IOException, InterruptedException {
@@ -142,7 +142,7 @@ public class RemoteAttacher {
         if (argsProvider.waitFor() == 0) {
             return toString(argsProvider.getInputStream());
         } else {
-            log("INFO", "Not attaching the Elastic APM agent to %s, " +
+            log("INFO", "Not attaching the Atatus APM agent to %s, " +
                 "because the '--args-provider %s' script ended with a non-zero status code.", jvmInfo, arguments.argsProvider);
             throw new IllegalStateException(toString(argsProvider.getErrorStream()));
         }
@@ -298,7 +298,7 @@ public class RemoteAttacher {
             out.println("    java -jar apm-agent-attach.jar (--list | --help)");
             out.println();
             out.println("DESCRIPTION");
-            out.println("    Attaches the Elastic APM Java agent to a JVM with a specific PID or runs continuously and attaches to all running and starting JVMs which match the filters.");
+            out.println("    Attaches the Atatus APM Java agent to a JVM with a specific PID or runs continuously and attaches to all running and starting JVMs which match the filters.");
             out.println();
             out.println("OPTIONS");
             out.println("    -l, --list");

@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.concurrent;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentSet;
@@ -52,7 +52,7 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
-public abstract class ExecutorInstrumentation extends ElasticApmInstrumentation {
+public abstract class ExecutorInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     public static final WeakConcurrentSet<Executor> excluded = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.THREAD);

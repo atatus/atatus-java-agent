@@ -25,10 +25,10 @@
 package com.atatus.apm.agent.servlet;
 
 import com.atatus.apm.agent.AbstractServletTest;
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.web.WebConfiguration;
 import net.bytebuddy.agent.ByteBuddyAgent;
@@ -67,7 +67,7 @@ class ServletInstrumentationTest extends AbstractServletTest {
     static void initInstrumentation() {
         config = SpyConfiguration.createSpyConfig();
         when(config.getConfig(WebConfiguration.class).getIgnoreUrls()).thenReturn(List.of(WildcardMatcher.valueOf("/init")));
-        ElasticApmAgent.initInstrumentation(new ElasticApmTracerBuilder()
+        AtatusApmAgent.initInstrumentation(new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build(), ByteBuddyAgent.install());
@@ -75,7 +75,7 @@ class ServletInstrumentationTest extends AbstractServletTest {
 
     @AfterAll
     static void afterAll() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @BeforeEach

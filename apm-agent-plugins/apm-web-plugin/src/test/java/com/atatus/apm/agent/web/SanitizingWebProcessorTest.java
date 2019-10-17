@@ -30,7 +30,7 @@ import com.atatus.apm.agent.configuration.SpyConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.TransactionContext;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.transaction.Transaction;
@@ -60,7 +60,7 @@ class SanitizingWebProcessorTest {
 
     @Test
     void processErrors() {
-        final ErrorCapture errorCapture = new ErrorCapture(mock(ElasticApmTracer.class));
+        final ErrorCapture errorCapture = new ErrorCapture(mock(AtatusApmTracer.class));
         fillContext(errorCapture.getContext());
 
         processor.processBeforeReport(errorCapture);

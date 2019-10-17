@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.bci.bytebuddy.MatcherTimer;
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,16 +38,16 @@ public class MatcherTimerLifecycleListener implements LifecycleListener {
     private static final Logger logger = LoggerFactory.getLogger(MatcherTimerLifecycleListener.class);
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
     }
 
     @Override
     public void stop() {
         if (logger.isDebugEnabled()) {
-            final ArrayList<MatcherTimer> matcherTimers = new ArrayList<>(ElasticApmAgent.getMatcherTimers());
+            final ArrayList<MatcherTimer> matcherTimers = new ArrayList<>(AtatusApmAgent.getMatcherTimers());
             Collections.sort(matcherTimers);
             StringBuilder sb = new StringBuilder()
-                .append("Total time spent matching: ").append(String.format("%,d", ElasticApmAgent.getTotalMatcherTime())).append("ns")
+                .append("Total time spent matching: ").append(String.format("%,d", AtatusApmAgent.getTotalMatcherTime())).append("ns")
                 .append('\n')
                 .append(MatcherTimer.getTableHeader())
                 .append('\n');

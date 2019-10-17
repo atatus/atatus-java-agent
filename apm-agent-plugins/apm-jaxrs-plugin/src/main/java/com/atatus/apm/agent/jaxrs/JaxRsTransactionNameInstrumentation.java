@@ -33,9 +33,9 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.bytebuddy.SimpleMethodSignatureOffsetMappingFactory.SimpleMethodSignature;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.jaxrs.JaxRsOffsetMappingFactory.JaxRsPath;
@@ -55,14 +55,14 @@ import static net.bytebuddy.matcher.ElementMatchers.isInterface;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public class JaxRsTransactionNameInstrumentation extends ElasticApmInstrumentation {
+public class JaxRsTransactionNameInstrumentation extends AtatusApmInstrumentation {
 
     public static boolean useAnnotationValueForTransactionName;
 
     private final Collection<String> applicationPackages;
     private final JaxRsConfiguration configuration;
 
-    public JaxRsTransactionNameInstrumentation(ElasticApmTracer tracer) {
+    public JaxRsTransactionNameInstrumentation(AtatusApmTracer tracer) {
         applicationPackages = tracer.getConfig(StacktraceConfiguration.class).getApplicationPackages();
         configuration = tracer.getConfig(JaxRsConfiguration.class);
         useAnnotationValueForTransactionName = configuration.isUseJaxRsPathForTransactionName();

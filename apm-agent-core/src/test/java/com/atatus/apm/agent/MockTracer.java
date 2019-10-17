@@ -25,8 +25,8 @@
 package com.atatus.apm.agent;
 
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.report.Reporter;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
@@ -40,7 +40,7 @@ public class MockTracer {
      * Creates a real tracer with a noop reporter and a mock configuration which returns default values which can be customized by mocking
      * the configuration.
      */
-    public static ElasticApmTracer createRealTracer() {
+    public static AtatusApmTracer createRealTracer() {
         return createRealTracer(mock(Reporter.class));
     }
 
@@ -48,7 +48,7 @@ public class MockTracer {
      * Creates a real tracer with a given reporter and a mock configuration which returns default values which can be customized by mocking
      * the configuration.
      */
-    public static ElasticApmTracer createRealTracer(Reporter reporter) {
+    public static AtatusApmTracer createRealTracer(Reporter reporter) {
         return createRealTracer(reporter, SpyConfiguration.createSpyConfig());
     }
 
@@ -56,8 +56,8 @@ public class MockTracer {
      * Creates a real tracer with a given reporter and a mock configuration which returns default values which can be customized by mocking
      * the configuration.
      */
-    public static ElasticApmTracer createRealTracer(Reporter reporter, ConfigurationRegistry config) {
-        return new ElasticApmTracerBuilder()
+    public static AtatusApmTracer createRealTracer(Reporter reporter, ConfigurationRegistry config) {
+        return new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
@@ -68,7 +68,7 @@ public class MockTracer {
      *
      * @return a mock tracer with a mocked ConfigurationRegistry
      */
-    public static ElasticApmTracer create() {
+    public static AtatusApmTracer create() {
         return create(SpyConfiguration.createSpyConfig());
     }
 
@@ -78,8 +78,8 @@ public class MockTracer {
      *
      * @return a mock tracer with the given configurationRegistry
      */
-    public static ElasticApmTracer create(ConfigurationRegistry configurationRegistry) {
-        final ElasticApmTracer tracer = mock(ElasticApmTracer.class);
+    public static AtatusApmTracer create(ConfigurationRegistry configurationRegistry) {
+        final AtatusApmTracer tracer = mock(AtatusApmTracer.class);
         when(tracer.getConfigurationRegistry()).thenReturn(configurationRegistry);
         when(tracer.getConfig(any())).thenAnswer(invocation -> configurationRegistry.getConfig(invocation.getArgument(0)));
         return tracer;

@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -33,7 +33,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
 import java.security.ProtectionDomain;
@@ -49,27 +49,27 @@ import static net.bytebuddy.matcher.ElementMatchers.any;
  * which are annotated by {@link net.bytebuddy.asm.Advice.OnMethodEnter} or {@link net.bytebuddy.asm.Advice.OnMethodExit}.
  * </p>
  * <p>
- * The constructor can optionally have a {@link ElasticApmTracer} parameter.
+ * The constructor can optionally have a {@link AtatusApmTracer} parameter.
  * </p>
  */
-public abstract class ElasticApmInstrumentation {
+public abstract class AtatusApmInstrumentation {
 
     @Nullable
     @VisibleForAdvice
-    public static ElasticApmTracer tracer;
+    public static AtatusApmTracer tracer;
 
     /**
-     * Initializes the advice with the {@link ElasticApmTracer}
+     * Initializes the advice with the {@link AtatusApmTracer}
      * <p>
-     * This enables tests to register a custom instance with a {@link com.atatus.apm.agent.impl.ElasticApmTracerBuilder#configurationRegistry}
-     * and {@link com.atatus.apm.agent.impl.ElasticApmTracerBuilder#reporter} which is specific to a particular test or test class.
+     * This enables tests to register a custom instance with a {@link com.atatus.apm.agent.impl.AtatusApmTracerBuilder#configurationRegistry}
+     * and {@link com.atatus.apm.agent.impl.AtatusApmTracerBuilder#reporter} which is specific to a particular test or test class.
      * </p>
      *
      * @param tracer the tracer to use for this advice.
      */
-    static void staticInit(ElasticApmTracer tracer) {
+    static void staticInit(AtatusApmTracer tracer) {
         // allow re-init with a different tracer
-        ElasticApmInstrumentation.tracer = tracer;
+        AtatusApmInstrumentation.tracer = tracer;
     }
 
     @Nullable

@@ -28,7 +28,7 @@ package com.atatus.apm.agent.impl.async;
 import javax.annotation.Nullable;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.AbstractSpan;
 import com.atatus.apm.agent.objectpool.Recyclable;
 
@@ -40,7 +40,7 @@ public class SpanInScopeRunnableWrapper extends SpanInScopeBaseWrapper implement
     @Nullable
     private volatile AbstractSpan<?> span;
 
-    public SpanInScopeRunnableWrapper(ElasticApmTracer tracer) {
+    public SpanInScopeRunnableWrapper(AtatusApmTracer tracer) {
         super(tracer);
     }
 

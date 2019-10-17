@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.impl.transaction;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.sampling.Sampler;
 import com.atatus.apm.agent.util.HexUtils;
 import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
@@ -79,9 +79,9 @@ public class TraceContext extends TraceContextHolder {
         }
     };
 
-    private static final ChildContextCreator<ElasticApmTracer> FROM_ACTIVE = new ChildContextCreator<ElasticApmTracer>() {
+    private static final ChildContextCreator<AtatusApmTracer> FROM_ACTIVE = new ChildContextCreator<AtatusApmTracer>() {
         @Override
-        public boolean asChildOf(TraceContext child, ElasticApmTracer tracer) {
+        public boolean asChildOf(TraceContext child, AtatusApmTracer tracer) {
             final TraceContextHolder active = tracer.getActive();
             if (active != null) {
                 return fromParent().asChildOf(child, active.getTraceContext());
@@ -120,7 +120,7 @@ public class TraceContext extends TraceContextHolder {
     @Nullable
     private String serviceName;
 
-    private TraceContext(ElasticApmTracer tracer, Id id) {
+    private TraceContext(AtatusApmTracer tracer, Id id) {
         super(tracer);
         this.id = id;
     }
@@ -132,7 +132,7 @@ public class TraceContext extends TraceContextHolder {
      * </p>
      * @param tracer
      */
-    public static TraceContext with64BitId(ElasticApmTracer tracer) {
+    public static TraceContext with64BitId(AtatusApmTracer tracer) {
         return new TraceContext(tracer, Id.new64BitId());
     }
 
@@ -142,7 +142,7 @@ public class TraceContext extends TraceContextHolder {
      * as those might not have a trace reference and therefore require a larger id in order to be globally unique.
      * @param tracer
      */
-    public static TraceContext with128BitId(ElasticApmTracer tracer) {
+    public static TraceContext with128BitId(AtatusApmTracer tracer) {
         return new TraceContext(tracer, Id.new128BitId());
     }
 
@@ -150,7 +150,7 @@ public class TraceContext extends TraceContextHolder {
         return FROM_TRACEPARENT_HEADER;
     }
 
-    public static ChildContextCreator<ElasticApmTracer> fromActive() {
+    public static ChildContextCreator<AtatusApmTracer> fromActive() {
         return FROM_ACTIVE;
     }
 

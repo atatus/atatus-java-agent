@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.AbstractContext;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.objectpool.Recyclable;
@@ -122,7 +122,7 @@ public abstract class AbstractSpan<T extends AbstractSpan> extends TraceContextH
         }
     }
 
-    public AbstractSpan(ElasticApmTracer tracer) {
+    public AbstractSpan(AtatusApmTracer tracer) {
         super(tracer);
         traceContext = TraceContext.with64BitId(this.tracer);
         boolean selfTimeCollectionEnabled = !WildcardMatcher.isAnyMatch(tracer.getConfig(ReporterConfiguration.class).getDisableMetrics(), "span.self_time");

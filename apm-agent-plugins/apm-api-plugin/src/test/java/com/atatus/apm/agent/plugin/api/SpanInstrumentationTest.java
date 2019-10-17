@@ -26,7 +26,7 @@ package com.atatus.apm.agent.plugin.api;
 
 import com.atatus.apm.agent.AbstractInstrumentationTest;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 import com.atatus.apm.api.Scope;
 import com.atatus.apm.api.Span;
 import com.atatus.apm.api.Transaction;
@@ -44,7 +44,7 @@ class SpanInstrumentationTest extends AbstractInstrumentationTest {
 
     @BeforeEach
     void setUp() {
-        transaction = ElasticApm.startTransaction();
+        transaction = AtatusApm.startTransaction();
     }
 
     @Test
@@ -95,10 +95,10 @@ class SpanInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testScope() {
         Span span = transaction.startSpan();
-        assertThat(ElasticApm.currentSpan().getId()).isNotEqualTo(span.getId());
+        assertThat(AtatusApm.currentSpan().getId()).isNotEqualTo(span.getId());
         try (final Scope scope = span.activate()) {
-            assertThat(ElasticApm.currentSpan().getId()).isEqualTo(span.getId());
-            ElasticApm.currentSpan().startSpan().end();
+            assertThat(AtatusApm.currentSpan().getId()).isEqualTo(span.getId());
+            AtatusApm.currentSpan().startSpan().end();
         }
         span.end();
         transaction.end();
@@ -110,17 +110,17 @@ class SpanInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testSampled() {
-        assertThat(ElasticApm.currentSpan().isSampled()).isFalse();
-        assertThat(ElasticApm.currentTransaction().isSampled()).isFalse();
-        final Transaction transaction = ElasticApm.startTransaction();
+        assertThat(AtatusApm.currentSpan().isSampled()).isFalse();
+        assertThat(AtatusApm.currentTransaction().isSampled()).isFalse();
+        final Transaction transaction = AtatusApm.startTransaction();
         assertThat(transaction.isSampled()).isTrue();
         assertThat(transaction.startSpan().isSampled()).isTrue();
     }
 
     @Test
     void testTraceHeadersNoop() {
-        assertContainsNoTracingHeaders(ElasticApm.currentSpan());
-        assertContainsNoTracingHeaders(ElasticApm.currentTransaction());
+        assertContainsNoTracingHeaders(AtatusApm.currentSpan());
+        assertContainsNoTracingHeaders(AtatusApm.currentTransaction());
     }
 
     @Test

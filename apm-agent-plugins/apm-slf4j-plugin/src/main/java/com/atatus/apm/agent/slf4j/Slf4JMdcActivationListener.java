@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.atatus.apm.agent.cache.WeakKeySoftValueLoadingCache;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.impl.ActivationListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 import com.atatus.apm.agent.logging.LoggingConfiguration;
@@ -82,9 +82,9 @@ public class Slf4JMdcActivationListener implements ActivationListener {
         });
     private final LoggingConfiguration loggingConfiguration;
     private final CoreConfiguration coreConfiguration;
-    private final ElasticApmTracer tracer;
+    private final AtatusApmTracer tracer;
 
-    public Slf4JMdcActivationListener(ElasticApmTracer tracer) {
+    public Slf4JMdcActivationListener(AtatusApmTracer tracer) {
         this.tracer = tracer;
         this.loggingConfiguration = tracer.getConfig(LoggingConfiguration.class);
         this.coreConfiguration = tracer.getConfig(CoreConfiguration.class);

@@ -1014,16 +1014,16 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
 
     private void serializeStackTraceArrayElements(StackTraceElement[] stacktrace) {
 
-        boolean topMostElasticApmPackagesSkipped = false;
+        boolean topMostAtatusApmPackagesSkipped = false;
         int collectedStackFrames = 0;
         int stackTraceLimit = stacktraceConfiguration.getStackTraceLimit();
         for (int i = 0; i < stacktrace.length && collectedStackFrames < stackTraceLimit; i++) {
             StackTraceElement stackTraceElement = stacktrace[i];
             // only skip the top most apm stack frames
-            if (!topMostElasticApmPackagesSkipped && stackTraceElement.getClassName().startsWith("com.atatus.apm")) {
+            if (!topMostAtatusApmPackagesSkipped && stackTraceElement.getClassName().startsWith("com.atatus.apm")) {
                 continue;
             }
-            topMostElasticApmPackagesSkipped = true;
+            topMostAtatusApmPackagesSkipped = true;
 
             if (isExcluded(stackTraceElement)) {
                 continue;

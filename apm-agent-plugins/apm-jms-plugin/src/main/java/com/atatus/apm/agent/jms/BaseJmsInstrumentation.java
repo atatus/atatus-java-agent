@@ -31,10 +31,10 @@ import javax.jms.Destination;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,14 +43,14 @@ import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.classLoad
 import static net.bytebuddy.matcher.ElementMatchers.isBootstrapClassLoader;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public abstract class BaseJmsInstrumentation extends ElasticApmInstrumentation {
+public abstract class BaseJmsInstrumentation extends AtatusApmInstrumentation {
     @SuppressWarnings("WeakerAccess")
     @Nullable
     @VisibleForAdvice
     // Referencing JMS classes is legal due to type erasure. The field must be public in order for it to be accessible from injected code
     public static HelperClassManager<JmsInstrumentationHelper<Destination, Message, MessageListener>> jmsInstrHelperManager;
 
-    private synchronized static void init(ElasticApmTracer tracer) {
+    private synchronized static void init(AtatusApmTracer tracer) {
         if (jmsInstrHelperManager == null) {
             jmsInstrHelperManager = HelperClassManager.ForAnyClassLoader.of(tracer,
                 "com.atatus.apm.agent.jms.JmsInstrumentationHelperImpl",
@@ -58,7 +58,7 @@ public abstract class BaseJmsInstrumentation extends ElasticApmInstrumentation {
         }
     }
 
-    BaseJmsInstrumentation(ElasticApmTracer tracer) {
+    BaseJmsInstrumentation(AtatusApmTracer tracer) {
         init(tracer);
     }
 

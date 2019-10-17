@@ -25,7 +25,7 @@
 package org.example.stacktrace;
 
 import com.atatus.apm.agent.MockTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
@@ -58,7 +58,7 @@ class StacktraceSerializationTest {
     private StacktraceConfiguration stacktraceConfiguration;
     private DslJsonSerializer serializer;
     private ObjectMapper objectMapper;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
 
     @BeforeEach
     void setUp() throws IOException {

@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 
 import javax.annotation.Nullable;
@@ -63,7 +63,7 @@ public abstract class JmsMessageProducerInstrumentation extends BaseJmsInstrumen
     @SuppressWarnings("WeakerAccess")
     public static final Logger logger = LoggerFactory.getLogger(JmsMessageProducerInstrumentation.class);
 
-    JmsMessageProducerInstrumentation(ElasticApmTracer tracer) {
+    JmsMessageProducerInstrumentation(AtatusApmTracer tracer) {
         super(tracer);
     }
 
@@ -82,7 +82,7 @@ public abstract class JmsMessageProducerInstrumentation extends BaseJmsInstrumen
 
     public static class JmsMessageProducerNoDestinationInstrumentation extends JmsMessageProducerInstrumentation {
 
-        public JmsMessageProducerNoDestinationInstrumentation(ElasticApmTracer tracer) {
+        public JmsMessageProducerNoDestinationInstrumentation(AtatusApmTracer tracer) {
             super(tracer);
         }
 
@@ -130,7 +130,7 @@ public abstract class JmsMessageProducerInstrumentation extends BaseJmsInstrumen
 
     public static class JmsMessageProducerWithDestinationInstrumentation extends JmsMessageProducerInstrumentation {
 
-        public JmsMessageProducerWithDestinationInstrumentation(ElasticApmTracer tracer) {
+        public JmsMessageProducerWithDestinationInstrumentation(AtatusApmTracer tracer) {
             super(tracer);
         }
 

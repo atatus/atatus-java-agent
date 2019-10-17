@@ -33,8 +33,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 
 import static com.atatus.apm.agent.bci.bytebuddy.CustomElementMatchers.isInAnyPackage;
@@ -43,13 +43,13 @@ import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class JobTransactionNameInstrumentation extends ElasticApmInstrumentation {
+public class JobTransactionNameInstrumentation extends AtatusApmInstrumentation {
     public static final String TRANSACTION_TYPE = "scheduled";
     public static final String INSTRUMENTATION_TYPE = "quartz";
 
     private final Collection<String> applicationPackages;
 
-    public JobTransactionNameInstrumentation(ElasticApmTracer tracer) {
+    public JobTransactionNameInstrumentation(AtatusApmTracer tracer) {
         applicationPackages = tracer.getConfig(StacktraceConfiguration.class).getApplicationPackages();
     }
 

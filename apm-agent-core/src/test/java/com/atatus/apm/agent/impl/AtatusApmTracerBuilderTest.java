@@ -30,7 +30,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +39,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ElasticApmTracerBuilderTest {
+class AtatusApmTracerBuilderTest {
 
     @AfterEach
     void tearDown() {
@@ -52,7 +52,7 @@ class ElasticApmTracerBuilderTest {
         Files.write(file, List.of("instrument=false"));
         System.setProperty("atatus." + CoreConfiguration.CONFIG_FILE, file.toString());
 
-        ConfigurationRegistry configurationRegistry = new ElasticApmTracerBuilder().build().getConfigurationRegistry();
+        ConfigurationRegistry configurationRegistry = new AtatusApmTracerBuilder().build().getConfigurationRegistry();
         CoreConfiguration config = configurationRegistry.getConfig(CoreConfiguration.class);
 
         // tests that changing non-dynamic properties also works
@@ -66,7 +66,7 @@ class ElasticApmTracerBuilderTest {
         Path file = Files.createFile(tempDir.resolve("elstcapm.tmp"));
         Files.write(file, List.of("instrument=false"));
 
-        ConfigurationRegistry configurationRegistry = new ElasticApmTracerBuilder("c=" + file.toAbsolutePath()).build().getConfigurationRegistry();
+        ConfigurationRegistry configurationRegistry = new AtatusApmTracerBuilder("c=" + file.toAbsolutePath()).build().getConfigurationRegistry();
         CoreConfiguration config = configurationRegistry.getConfig(CoreConfiguration.class);
         assertThat(config.isInstrument()).isFalse();
     }

@@ -57,10 +57,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class ElasticApmTracerBuilder {
+public class AtatusApmTracerBuilder {
 
     /**
-     * See {@link com.atatus.apm.attach.ElasticApmAttacher#TEMP_PROPERTIES_FILE_KEY}
+     * See {@link com.atatus.apm.attach.AtatusApmAttacher#TEMP_PROPERTIES_FILE_KEY}
      */
     private static final String TEMP_PROPERTIES_FILE_KEY = "c";
     private final Logger logger;
@@ -73,38 +73,38 @@ public class ElasticApmTracerBuilder {
     @Nullable
     private final String agentArguments;
 
-    public ElasticApmTracerBuilder() {
+    public AtatusApmTracerBuilder() {
         this(null);
     }
 
-    public ElasticApmTracerBuilder(@Nullable String agentArguments) {
+    public AtatusApmTracerBuilder(@Nullable String agentArguments) {
         this.agentArguments = agentArguments;
         final List<ConfigurationSource> configSources = getConfigSources(this.agentArguments);
         LoggingConfiguration.init(configSources);
         logger = LoggerFactory.getLogger(getClass());
     }
 
-    public ElasticApmTracerBuilder configurationRegistry(ConfigurationRegistry configurationRegistry) {
+    public AtatusApmTracerBuilder configurationRegistry(ConfigurationRegistry configurationRegistry) {
         this.configurationRegistry = configurationRegistry;
         return this;
     }
 
-    public ElasticApmTracerBuilder reporter(Reporter reporter) {
+    public AtatusApmTracerBuilder reporter(Reporter reporter) {
         this.reporter = reporter;
         return this;
     }
 
-    public ElasticApmTracerBuilder lifecycleListeners(List<LifecycleListener> lifecycleListeners) {
+    public AtatusApmTracerBuilder lifecycleListeners(List<LifecycleListener> lifecycleListeners) {
         this.lifecycleListeners.addAll(lifecycleListeners);
         return this;
     }
 
-    public ElasticApmTracerBuilder withConfig(String key, String value) {
+    public AtatusApmTracerBuilder withConfig(String key, String value) {
         inlineConfig.put(key, value);
         return this;
     }
 
-    public ElasticApmTracer build() {
+    public AtatusApmTracer build() {
         boolean addApmServerConfigSource = false;
         if (configurationRegistry == null) {
             addApmServerConfigSource = true;
@@ -128,7 +128,7 @@ public class ElasticApmTracerBuilder {
             }
             lifecycleListeners.addAll(DependencyInjectingServiceLoader.load(LifecycleListener.class));
         }
-        return new ElasticApmTracer(configurationRegistry, reporter, lifecycleListeners);
+        return new AtatusApmTracer(configurationRegistry, reporter, lifecycleListeners);
     }
 
     private ConfigurationRegistry getDefaultConfigurationRegistry(List<ConfigurationSource> configSources) {
@@ -192,7 +192,7 @@ public class ElasticApmTracerBuilder {
     }
 
     /**
-     * Loads the configuration from the temporary properties file created by ElasticApmAttacher
+     * Loads the configuration from the temporary properties file created by AtatusApmAttacher
      */
     @Nullable
     private ConfigurationSource getAttachmentArguments(@Nullable String configFileLocation) {

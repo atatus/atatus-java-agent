@@ -51,8 +51,8 @@ import com.atatus.apm.agent.bci.bytebuddy.SoftlyReferencingTypePoolCache;
 import com.atatus.apm.agent.bci.methodmatching.MethodMatcher;
 import com.atatus.apm.agent.bci.methodmatching.TraceMethodInstrumentation;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.util.DependencyInjectingServiceLoader;
 
@@ -76,10 +76,10 @@ import static net.bytebuddy.matcher.ElementMatchers.nameEndsWith;
 import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public class ElasticApmAgent {
+public class AtatusApmAgent {
 
     // Don't init logger as a static field, logging needs to be initialized first see also issue #593
-    // private static final Logger doNotUseThisLogger = LoggerFactory.getLogger(ElasticApmAgent.class);
+    // private static final Logger doNotUseThisLogger = LoggerFactory.getLogger(AtatusApmAgent.class);
 
     private static final ConcurrentMap<String, MatcherTimer> matcherTimers = new ConcurrentHashMap<>();
     @Nullable
@@ -96,17 +96,17 @@ public class ElasticApmAgent {
      * @param agentJarFile    a reference to the agent jar on the file system
      */
     public static void initialize(String agentArguments, Instrumentation instrumentation, File agentJarFile) {
-        ElasticApmAgent.agentJarFile = agentJarFile;
-        initInstrumentation(new ElasticApmTracerBuilder(agentArguments).build(), instrumentation);
+        AtatusApmAgent.agentJarFile = agentJarFile;
+        initInstrumentation(new AtatusApmTracerBuilder(agentArguments).build(), instrumentation);
     }
 
-    public static void initInstrumentation(ElasticApmTracer tracer, Instrumentation instrumentation) {
+    public static void initInstrumentation(AtatusApmTracer tracer, Instrumentation instrumentation) {
         initInstrumentation(tracer, instrumentation, loadInstrumentations(tracer));
     }
 
     @Nonnull
-    private static Iterable<ElasticApmInstrumentation> loadInstrumentations(ElasticApmTracer tracer) {
-        final List<ElasticApmInstrumentation> instrumentations = DependencyInjectingServiceLoader.load(ElasticApmInstrumentation.class, tracer);
+    private static Iterable<AtatusApmInstrumentation> loadInstrumentations(AtatusApmTracer tracer) {
+        final List<AtatusApmInstrumentation> instrumentations = DependencyInjectingServiceLoader.load(AtatusApmInstrumentation.class, tracer);
         for (MethodMatcher traceMethod : tracer.getConfig(CoreConfiguration.class).getTraceMethods()) {
             instrumentations.add(new TraceMethodInstrumentation(tracer, traceMethod));
         }
@@ -114,8 +114,8 @@ public class ElasticApmAgent {
         return instrumentations;
     }
 
-    public static void initInstrumentation(final ElasticApmTracer tracer, Instrumentation instrumentation,
-                                           Iterable<ElasticApmInstrumentation> instrumentations) {
+    public static void initInstrumentation(final AtatusApmTracer tracer, Instrumentation instrumentation,
+                                           Iterable<AtatusApmInstrumentation> instrumentations) {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
@@ -124,20 +124,20 @@ public class ElasticApmAgent {
             }
         });
         matcherTimers.clear();
-        final Logger logger = LoggerFactory.getLogger(ElasticApmAgent.class);
-        if (ElasticApmAgent.instrumentation != null) {
+        final Logger logger = LoggerFactory.getLogger(AtatusApmAgent.class);
+        if (AtatusApmAgent.instrumentation != null) {
             logger.warn("Instrumentation has already been initialized");
             return;
         }
-        ElasticApmInstrumentation.staticInit(tracer);
+        AtatusApmInstrumentation.staticInit(tracer);
         final CoreConfiguration coreConfiguration = tracer.getConfig(CoreConfiguration.class);
-        ElasticApmAgent.instrumentation = instrumentation;
+        AtatusApmAgent.instrumentation = instrumentation;
         final ByteBuddy byteBuddy = new ByteBuddy()
             .with(TypeValidation.of(logger.isDebugEnabled()))
             .with(FailSafeDeclaredMethodsCompiler.INSTANCE);
         AgentBuilder agentBuilder = getAgentBuilder(byteBuddy, coreConfiguration, logger);
         int numberOfAdvices = 0;
-        for (final ElasticApmInstrumentation advice : instrumentations) {
+        for (final AtatusApmInstrumentation advice : instrumentations) {
             if (isIncluded(advice, coreConfiguration)) {
                 numberOfAdvices++;
                 agentBuilder = applyAdvice(tracer, agentBuilder, advice);
@@ -145,10 +145,10 @@ public class ElasticApmAgent {
         }
         logger.debug("Applied {} advices", numberOfAdvices);
 
-        resettableClassFileTransformer = agentBuilder.installOn(ElasticApmAgent.instrumentation);
+        resettableClassFileTransformer = agentBuilder.installOn(AtatusApmAgent.instrumentation);
     }
 
-    private static boolean isIncluded(ElasticApmInstrumentation advice, CoreConfiguration coreConfiguration) {
+    private static boolean isIncluded(AtatusApmInstrumentation advice, CoreConfiguration coreConfiguration) {
         final Collection<String> disabledInstrumentations = coreConfiguration.getDisabledInstrumentations();
         return !isGroupDisabled(disabledInstrumentations, advice.getInstrumentationGroupNames()) && isInstrumentationEnabled(advice, coreConfiguration);
     }
@@ -162,13 +162,13 @@ public class ElasticApmAgent {
         return false;
     }
 
-    private static boolean isInstrumentationEnabled(ElasticApmInstrumentation advice, CoreConfiguration coreConfiguration) {
+    private static boolean isInstrumentationEnabled(AtatusApmInstrumentation advice, CoreConfiguration coreConfiguration) {
         return advice.includeWhenInstrumentationIsDisabled() || coreConfiguration.isInstrument();
     }
 
-    private static AgentBuilder applyAdvice(final ElasticApmTracer tracer, final AgentBuilder agentBuilder,
-                                            final ElasticApmInstrumentation instrumentation) {
-        final Logger logger = LoggerFactory.getLogger(ElasticApmAgent.class);
+    private static AgentBuilder applyAdvice(final AtatusApmTracer tracer, final AgentBuilder agentBuilder,
+                                            final AtatusApmInstrumentation instrumentation) {
+        final Logger logger = LoggerFactory.getLogger(AtatusApmAgent.class);
         logger.debug("Applying instrumentation {}", instrumentation.getClass().getName());
         final boolean classLoadingMatchingPreFilter = tracer.getConfig(CoreConfiguration.class).isClassLoadingMatchingPreFilter();
         final boolean typeMatchingWithNamePreFilter = tracer.getConfig(CoreConfiguration.class).isTypeMatchingWithNamePreFilter();
@@ -219,7 +219,7 @@ public class ElasticApmAgent {
             });
     }
 
-    private static AgentBuilder.Transformer.ForAdvice getTransformer(final ElasticApmTracer tracer, final ElasticApmInstrumentation instrumentation, final Logger logger, final ElementMatcher<? super MethodDescription> methodMatcher) {
+    private static AgentBuilder.Transformer.ForAdvice getTransformer(final AtatusApmTracer tracer, final AtatusApmInstrumentation instrumentation, final Logger logger, final ElementMatcher<? super MethodDescription> methodMatcher) {
         Advice.WithCustomMapping withCustomMapping = Advice
             .withCustomMapping()
             .bind(new SimpleMethodSignatureOffsetMappingFactory())
@@ -255,7 +255,7 @@ public class ElasticApmAgent {
             .withExceptionHandler(PRINTING);
     }
 
-    private static MatcherTimer getOrCreateTimer(Class<? extends ElasticApmInstrumentation> adviceClass) {
+    private static MatcherTimer getOrCreateTimer(Class<? extends AtatusApmInstrumentation> adviceClass) {
         final String name = adviceClass.getName();
         MatcherTimer timer = matcherTimers.get(name);
         if (timer == null) {
@@ -279,7 +279,7 @@ public class ElasticApmAgent {
     }
 
     // may help to debug classloading problems
-    private static void logClassLoaderHierarchy(@Nullable ClassLoader classLoader, Logger logger, ElasticApmInstrumentation advice) {
+    private static void logClassLoaderHierarchy(@Nullable ClassLoader classLoader, Logger logger, AtatusApmInstrumentation advice) {
         logger.trace("Advice {} is loaded by {}", advice.getClass().getName(), advice.getClass().getClassLoader());
         if (classLoader != null) {
             boolean canLoadAgent = false;

@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,10 +32,10 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.bytebuddy.SimpleMethodSignatureOffsetMappingFactory;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.AbstractSpan;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
@@ -59,13 +59,13 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
-public class TraceMethodInstrumentation extends ElasticApmInstrumentation {
+public class TraceMethodInstrumentation extends AtatusApmInstrumentation {
 
     public static long traceMethodThresholdMicros;
 
     protected final MethodMatcher methodMatcher;
 
-    public TraceMethodInstrumentation(ElasticApmTracer tracer, MethodMatcher methodMatcher) {
+    public TraceMethodInstrumentation(AtatusApmTracer tracer, MethodMatcher methodMatcher) {
         this.methodMatcher = methodMatcher;
         traceMethodThresholdMicros = tracer.getConfig(CoreConfiguration.class).getTraceMethodsDurationThreshold().getMillis() * 1000;
     }

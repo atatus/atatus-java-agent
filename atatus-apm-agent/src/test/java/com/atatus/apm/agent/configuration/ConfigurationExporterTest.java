@@ -25,7 +25,7 @@
 package com.atatus.apm.agent.configuration;
 
 import com.atatus.apm.agent.MockTracer;
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.util.DependencyInjectingServiceLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -126,7 +126,7 @@ class ConfigurationExporterTest {
     public static String getAllInstrumentationGroupNames() {
         Set<String> instrumentationGroupNames = new TreeSet<>();
         instrumentationGroupNames.add("incubating");
-        for (ElasticApmInstrumentation instrumentation : DependencyInjectingServiceLoader.load(ElasticApmInstrumentation.class, MockTracer.create())) {
+        for (AtatusApmInstrumentation instrumentation : DependencyInjectingServiceLoader.load(AtatusApmInstrumentation.class, MockTracer.create())) {
             instrumentationGroupNames.addAll(instrumentation.getInstrumentationGroupNames());
         }
 

@@ -32,8 +32,8 @@ import org.junit.jupiter.api.Test;
 
 import com.atatus.apm.agent.bci.methodmatching.MethodMatcher;
 import com.atatus.apm.agent.bci.methodmatching.TraceMethodInstrumentation;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 
 import java.lang.reflect.Method;
 
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MethodMatcherInstrumentationTest {
 
-    private static final ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+    private static final AtatusApmTracer tracer = new AtatusApmTracerBuilder()
         .configurationRegistry(SpyConfiguration.createSpyConfig())
         .reporter(new MockReporter())
         .build();

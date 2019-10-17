@@ -26,7 +26,7 @@ package com.atatus.apm.attach;
 
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.attach.ElasticApmAttacher;
+import com.atatus.apm.attach.AtatusApmAttacher;
 
 import wiremock.org.apache.commons.codec.digest.DigestUtils;
 
@@ -37,17 +37,17 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ElasticApmAttacherTest {
+class AtatusApmAttacherTest {
 
     @Test
     void testHash() throws Exception {
-        assertThat(ElasticApmAttacher.md5Hash(getClass().getResourceAsStream(ElasticApmAttacher.class.getSimpleName() + ".class")))
-            .isEqualTo(DigestUtils.md5Hex(getClass().getResourceAsStream(ElasticApmAttacher.class.getSimpleName() + ".class")));
+        assertThat(AtatusApmAttacher.md5Hash(getClass().getResourceAsStream(AtatusApmAttacher.class.getSimpleName() + ".class")))
+            .isEqualTo(DigestUtils.md5Hex(getClass().getResourceAsStream(AtatusApmAttacher.class.getSimpleName() + ".class")));
     }
 
     @Test
     void testCreateTempProperties() throws Exception {
-        File tempProperties = ElasticApmAttacher.createTempProperties(Map.of("foo", "bär"));
+        File tempProperties = AtatusApmAttacher.createTempProperties(Map.of("foo", "bär"));
         assertThat(tempProperties).isNotNull();
         tempProperties.deleteOnExit();
         Properties properties = new Properties();

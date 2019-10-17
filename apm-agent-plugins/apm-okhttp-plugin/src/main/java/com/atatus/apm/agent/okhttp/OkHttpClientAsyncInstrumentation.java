@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -24,11 +24,11 @@
  */
 package com.atatus.apm.agent.okhttp;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.http.client.HttpClientHelper;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
@@ -52,7 +52,7 @@ import java.util.Collection;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 
-public class OkHttpClientAsyncInstrumentation extends ElasticApmInstrumentation {
+public class OkHttpClientAsyncInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     public static final Logger logger = LoggerFactory.getLogger(OkHttpClientAsyncInstrumentation.class);
@@ -66,7 +66,7 @@ public class OkHttpClientAsyncInstrumentation extends ElasticApmInstrumentation 
     @VisibleForAdvice
     public static HelperClassManager<WrapperCreator<Callback>> callbackWrapperCreator;
 
-    public OkHttpClientAsyncInstrumentation(ElasticApmTracer tracer) {
+    public OkHttpClientAsyncInstrumentation(AtatusApmTracer tracer) {
         callbackWrapperCreator = HelperClassManager.ForAnyClassLoader.of(tracer,
             OkHttpClientAsyncInstrumentation.class.getName() + "$CallbackWrapperCreator",
             OkHttpClientAsyncInstrumentation.class.getName() + "$CallbackWrapperCreator$CallbackWrapper");

@@ -28,7 +28,7 @@ import org.HdrHistogram.WriterReaderPhaser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.TransactionContext;
 import com.atatus.apm.agent.impl.sampling.Sampler;
 import com.atatus.apm.agent.metrics.Labels;
@@ -92,7 +92,7 @@ public class Transaction extends AbstractSpan<Transaction> {
     @Nullable
     private volatile String type;
 
-    public Transaction(ElasticApmTracer tracer) {
+    public Transaction(AtatusApmTracer tracer) {
         super(tracer);
     }
 

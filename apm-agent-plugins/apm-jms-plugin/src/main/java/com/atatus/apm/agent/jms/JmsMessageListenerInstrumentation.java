@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 
@@ -58,7 +58,7 @@ public class JmsMessageListenerInstrumentation extends BaseJmsInstrumentation {
     @SuppressWarnings("WeakerAccess")
     public static final Logger logger = LoggerFactory.getLogger(JmsMessageListenerInstrumentation.class);
 
-    public JmsMessageListenerInstrumentation(ElasticApmTracer tracer) {
+    public JmsMessageListenerInstrumentation(AtatusApmTracer tracer) {
         super(tracer);
     }
 

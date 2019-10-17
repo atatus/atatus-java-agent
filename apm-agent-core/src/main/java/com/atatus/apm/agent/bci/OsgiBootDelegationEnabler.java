@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 /**
  * Required in OSGi environments like Equinox, which is used in WebSphere.
@@ -49,7 +49,7 @@ public class OsgiBootDelegationEnabler implements LifecycleListener {
         "com.icl.saxon.*,javax.servlet,javax.servlet.*,com.sun.xml.bind.*";
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         // may be problematic as it could override the defaults in a properties file
         String packagesToAppendToBootdelegationProperty = tracer.getConfig(CoreConfiguration.class).getPackagesToAppendToBootdelegationProperty();
         if (packagesToAppendToBootdelegationProperty != null) {

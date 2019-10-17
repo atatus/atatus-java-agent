@@ -34,12 +34,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
 import com.atatus.apm.agent.bci.methodmatching.MethodMatcher;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.converter.TimeDuration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 
 import java.lang.annotation.Retention;
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.when;
 class TraceMethodInstrumentationTest {
 
     private MockReporter reporter;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private CoreConfiguration coreConfiguration;
 
     @BeforeEach
@@ -78,16 +78,16 @@ class TraceMethodInstrumentationTest {
             when(coreConfiguration.getTraceMethodsDurationThreshold()).thenReturn(TimeDuration.of(tags.iterator().next()));
         }
 
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @AfterEach
     void tearDown() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Test
@@ -242,9 +242,9 @@ class TraceMethodInstrumentationTest {
     }
 
     public static class TestDiscardableMethods {
-        private final ElasticApmTracer tracer;
+        private final AtatusApmTracer tracer;
 
-        TestDiscardableMethods(ElasticApmTracer tracer) {
+        TestDiscardableMethods(AtatusApmTracer tracer) {
             this.tracer = tracer;
         }
 

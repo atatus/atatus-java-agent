@@ -27,7 +27,7 @@ package com.atatus.apm.agent.metrics.builtin;
 import org.stagemonitor.util.StringUtils;
 
 import com.atatus.apm.agent.context.LifecycleListener;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.metrics.DoubleSupplier;
 import com.atatus.apm.agent.metrics.Labels;
@@ -107,7 +107,7 @@ public class SystemMetrics implements LifecycleListener {
     }
 
     @Override
-    public void start(ElasticApmTracer tracer) {
+    public void start(AtatusApmTracer tracer) {
         bindTo(tracer.getMetricRegistry());
     }
 

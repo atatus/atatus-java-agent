@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -22,27 +22,31 @@
  * under the License.
  * #L%
  */
-package com.atatus.apm.agent.benchmark;
+package com.atatus.apm.agent.opentracing.impl;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.runner.RunnerException;
+import net.bytebuddy.asm.Advice;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.matcher.ElementMatcher;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
-public class ElasticApmActiveContinuousBenchmark extends ElasticApmContinuousBenchmark {
+public class AtatusApmTracerInstrumentation extends OpenTracingBridgeInstrumentation {
 
-    public ElasticApmActiveContinuousBenchmark() {
-        super(true);
+    @Advice.OnMethodExit(suppress = Throwable.class, inline = false)
+    public static void close() {
+        if (tracer != null) {
+            tracer.stop();
+        }
     }
 
-    public static void main(String[] args) throws RunnerException {
-        run(ElasticApmActiveContinuousBenchmark.class);
+    @Override
+    public ElementMatcher<? super TypeDescription> getTypeMatcher() {
+        return named("com.atatus.apm.opentracing.AtatusApmTracer");
     }
 
-    @Benchmark
-    public int benchmarkWithApm(RequestState requestState) throws IOException, ServletException {
-        httpServlet.service(requestState.request, requestState.response);
-        return requestState.response.getStatus();
+    @Override
+    public ElementMatcher<? super MethodDescription> getMethodMatcher() {
+        return named("close");
     }
 }

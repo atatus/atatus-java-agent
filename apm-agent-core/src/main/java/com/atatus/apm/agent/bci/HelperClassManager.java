@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.bci;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
@@ -81,11 +81,11 @@ import java.util.WeakHashMap;
 public abstract class HelperClassManager<T> {
     private static final Logger logger = LoggerFactory.getLogger(HelperClassManager.class);
 
-    protected final ElasticApmTracer tracer;
+    protected final AtatusApmTracer tracer;
     protected final String implementation;
     protected final String[] additionalHelpers;
 
-    protected HelperClassManager(ElasticApmTracer tracer, String implementation, String[] additionalHelpers) {
+    protected HelperClassManager(AtatusApmTracer tracer, String implementation, String[] additionalHelpers) {
         this.tracer = tracer;
         this.implementation = implementation;
         this.additionalHelpers = additionalHelpers;
@@ -151,14 +151,14 @@ public abstract class HelperClassManager<T> {
         // No need to make volatile - at worst we will fail more than once, but avoid volatile cache invalidations for all the rest
         private boolean failed;
 
-        private ForSingleClassLoader(ElasticApmTracer tracer, String implementation, String... additionalHelpers) {
+        private ForSingleClassLoader(AtatusApmTracer tracer, String implementation, String... additionalHelpers) {
             super(tracer, implementation, additionalHelpers);
         }
 
         /**
          * Not loading and instantiating helper class yet, just prepares the manager
          */
-        public static <T> ForSingleClassLoader<T> of(ElasticApmTracer tracer, String implementation, String... additionalHelpers) {
+        public static <T> ForSingleClassLoader<T> of(AtatusApmTracer tracer, String implementation, String... additionalHelpers) {
             return new ForSingleClassLoader<>(tracer, implementation, additionalHelpers);
         }
 
@@ -207,7 +207,7 @@ public abstract class HelperClassManager<T> {
 
         final WeakConcurrentMap<ClassLoader, WeakReference<T>> clId2helperMap;
 
-        private ForAnyClassLoader(ElasticApmTracer tracer, String implementation, String... additionalHelpers) {
+        private ForAnyClassLoader(AtatusApmTracer tracer, String implementation, String... additionalHelpers) {
             super(tracer, implementation, additionalHelpers);
             clId2helperMap = new WeakConcurrentMap<>(false);
         }
@@ -215,7 +215,7 @@ public abstract class HelperClassManager<T> {
         /**
          * Not loading and instantiating helper class yet, just prepares the manager
          */
-        public static <T> ForAnyClassLoader<T> of(ElasticApmTracer tracer, String implementation, String... additionalHelpers) {
+        public static <T> ForAnyClassLoader<T> of(AtatusApmTracer tracer, String implementation, String... additionalHelpers) {
             return new ForAnyClassLoader<>(tracer, implementation, additionalHelpers);
         }
 
@@ -295,7 +295,7 @@ public abstract class HelperClassManager<T> {
         return classInjector.inject(typeMap).values().iterator().next();
     }
 
-    private static <T> T createHelper(@Nullable ClassLoader targetClassLoader, ElasticApmTracer tracer, String implementation,
+    private static <T> T createHelper(@Nullable ClassLoader targetClassLoader, AtatusApmTracer tracer, String implementation,
                                       String... additionalHelpers) {
         try {
             final Map<String, byte[]> typeDefinitions = getTypeDefinitions(asList(implementation, additionalHelpers));
@@ -306,11 +306,11 @@ public abstract class HelperClassManager<T> {
                 // in the unit tests, the agent is not added to the bootstrap class loader
                 helperClass = loadHelperClass(ClassLoader.getSystemClassLoader(), implementation, typeDefinitions);
             }
-            // the helper class may have a no-arg or a ElasticApmTracer constructor
+            // the helper class may have a no-arg or a AtatusApmTracer constructor
             // this is preferable to a init method,
             // as it allows the tracer instance variable to be non-null
             try {
-                return helperClass.getDeclaredConstructor(ElasticApmTracer.class).newInstance(tracer);
+                return helperClass.getDeclaredConstructor(AtatusApmTracer.class).newInstance(tracer);
             } catch (NoSuchMethodException e) {
                 return helperClass.getDeclaredConstructor().newInstance();
             }

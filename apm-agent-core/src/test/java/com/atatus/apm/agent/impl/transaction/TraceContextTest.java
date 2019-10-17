@@ -26,7 +26,7 @@ package com.atatus.apm.agent.impl.transaction;
 
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.sampling.ConstantSampler;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 
@@ -37,7 +37,7 @@ class TraceContextTest {
 
     @Test
     void parseFromTraceParentHeaderNotRecorded() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         final String header = "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-00";
         assertThat(traceContext.asChildOf(header)).isTrue();
         assertThat(traceContext.isSampled()).isFalse();
@@ -46,7 +46,7 @@ class TraceContextTest {
 
     @Test
     void parseFromTraceParentHeaderRecorded() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         final String header = "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01";
         assertThat(traceContext.asChildOf(header)).isTrue();
         assertThat(traceContext.isSampled()).isTrue();
@@ -55,7 +55,7 @@ class TraceContextTest {
 
     @Test
     void parseFromTraceParentHeaderUnsupportedFlag() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         final String header = "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-03";
         assertThat(traceContext.asChildOf(header)).isTrue();
         assertThat(traceContext.isSampled()).isTrue();
@@ -64,7 +64,7 @@ class TraceContextTest {
 
     @Test
     void outgoingHeader() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         final String header = "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-03";
         assertThat(traceContext.asChildOf(header)).isTrue();
         assertThat(traceContext.getOutgoingTraceParentHeader().toString())
@@ -73,7 +73,7 @@ class TraceContextTest {
 
     @Test
     void outgoingHeaderRootSpan() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         traceContext.asRootSpan(ConstantSampler.of(true));
         assertThat(traceContext.isSampled()).isTrue();
         assertThat(traceContext.getOutgoingTraceParentHeader().toString()).hasSize(55);
@@ -83,7 +83,7 @@ class TraceContextTest {
 
     @Test
     void parseFromTraceParentHeader_notSampled() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         final String header = "00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-00";
         assertThat(traceContext.asChildOf(header)).isTrue();
         assertThat(traceContext.isSampled()).isFalse();
@@ -92,7 +92,7 @@ class TraceContextTest {
 
     @Test
     void testResetState() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         traceContext.asChildOf("00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-00");
         traceContext.resetState();
         assertThat(traceContext.getIncomingTraceParentHeader()).isEqualTo("00-00000000000000000000000000000000-0000000000000000-00");
@@ -100,7 +100,7 @@ class TraceContextTest {
 
     @Test
     void testResetOutgoingHeader() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         String traceParentHeader = traceContext.getOutgoingTraceParentHeader().toString();
         traceContext.asChildOf("00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-00");
         assertThat(traceContext.getOutgoingTraceParentHeader().toString()).isNotEqualTo(traceParentHeader);
@@ -108,7 +108,7 @@ class TraceContextTest {
 
     @Test
     void testRandomValue() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         traceContext.asRootSpan(ConstantSampler.of(true));
         assertThat(traceContext.getTraceId().isEmpty()).isFalse();
         assertThat(traceContext.getParentId().isEmpty()).isTrue();
@@ -117,7 +117,7 @@ class TraceContextTest {
 
     @Test
     void testSetSampled() {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         traceContext.asRootSpan(ConstantSampler.of(false));
         assertThat(traceContext.isSampled()).isFalse();
         traceContext.setRecorded(true);
@@ -128,10 +128,10 @@ class TraceContextTest {
 
     @Test
     void testPropagateTransactionIdForUnsampledSpan() {
-        final TraceContext rootContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext rootContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         rootContext.asRootSpan(ConstantSampler.of(false));
 
-        final TraceContext childContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext childContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         childContext.asChildOf(rootContext);
 
         assertThat(childContext.getOutgoingTraceParentHeader().toString()).doesNotContain(childContext.getId().toString());
@@ -181,12 +181,12 @@ class TraceContextTest {
     }
 
     private void assertInvalid(String s) {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         assertThat(traceContext.asChildOf(s)).isFalse();
     }
 
     private void assertValid(String s) {
-        final TraceContext traceContext = TraceContext.with64BitId(mock(ElasticApmTracer.class));
+        final TraceContext traceContext = TraceContext.with64BitId(mock(AtatusApmTracer.class));
         assertThat(traceContext.asChildOf(s)).isTrue();
     }
 }

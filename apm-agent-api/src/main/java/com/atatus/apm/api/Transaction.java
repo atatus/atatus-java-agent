@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
  * A transaction is the data captured by an agent representing an event occurring in a monitored service
  * and groups multiple spans in a logical group.
  * <p>
- * To get a reference to the current transaction, call {@link ElasticApm#currentTransaction()}.
+ * To get a reference to the current transaction, call {@link AtatusApm#currentTransaction()}.
  * </p>
  */
 public interface Transaction extends Span {
@@ -198,7 +198,7 @@ public interface Transaction extends Span {
      * </p>
      * <p>
      * To enable the JavaScript RUM agent when using an HTML templating language like Freemarker,
-     * add {@code ElasticApm.currentTransaction()} with the key {@code "transaction"} to the model.
+     * add {@code AtatusApm.currentTransaction()} with the key {@code "transaction"} to the model.
      * </p>
      * <p>
      * Also, add a snippet similar to this to the body of your HTML pages,
@@ -238,8 +238,8 @@ public interface Transaction extends Span {
      * This method should always be used within a try-with-resources statement:
      * </p>
      * <pre>
-     * Transaction transaction = ElasticApm.startTransaction();
-     * // within the try block the transaction is available on the current thread via {@link ElasticApm#currentTransaction()}
+     * Transaction transaction = AtatusApm.startTransaction();
+     * // within the try block the transaction is available on the current thread via {@link AtatusApm#currentTransaction()}
      * // this is also true for methods called within the try block
      * try (final Scope scope = transaction.activate()) {
      *     transaction.setName("MyController#myAction");

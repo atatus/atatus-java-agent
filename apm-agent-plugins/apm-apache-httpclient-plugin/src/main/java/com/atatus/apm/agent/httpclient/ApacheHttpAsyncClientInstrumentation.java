@@ -33,10 +33,10 @@ import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.protocol.HttpContext;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.http.client.HttpClientHelper;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
@@ -53,7 +53,7 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
-public class ApacheHttpAsyncClientInstrumentation extends ElasticApmInstrumentation {
+public class ApacheHttpAsyncClientInstrumentation extends AtatusApmInstrumentation {
 
     // Referencing specific Apache HTTP client classes are allowed due to type erasure
     public static HelperClassManager<ApacheHttpAsyncClientHelper<HttpAsyncRequestProducer, FutureCallback<?>, HttpContext>> helperManager;
@@ -102,7 +102,7 @@ public class ApacheHttpAsyncClientInstrumentation extends ElasticApmInstrumentat
         }
     }
 
-    public ApacheHttpAsyncClientInstrumentation(ElasticApmTracer tracer) {
+    public ApacheHttpAsyncClientInstrumentation(AtatusApmTracer tracer) {
         helperManager = HelperClassManager.ForAnyClassLoader.of(tracer,
             "com.atatus.apm.agent.httpclient.ApacheHttpAsyncClientHelperImpl",
             "com.atatus.apm.agent.httpclient.HttpAsyncRequestProducerWrapper",

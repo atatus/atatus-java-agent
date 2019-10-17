@@ -34,8 +34,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ScopeManagementTest {
 
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
     private MockReporter reporter;
     private ConfigurationRegistry config;
 
@@ -53,7 +53,7 @@ class ScopeManagementTest {
     void setUp() {
         reporter = new MockReporter();
         config = SpyConfiguration.createSpyConfig();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
@@ -65,7 +65,7 @@ class ScopeManagementTest {
     }
 
     /**
-     * Disables assertions in {@link ElasticApmTracer}, runs the test and restores original setting
+     * Disables assertions in {@link AtatusApmTracer}, runs the test and restores original setting
      */
     void runTestWithAssertionsDisabled(Runnable test) {
         boolean assertionsEnabled = tracer.assertionsEnabled;

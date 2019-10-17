@@ -25,7 +25,7 @@
 package com.atatus.apm.opentracing;
 
 import com.atatus.apm.agent.AbstractInstrumentationTest;
-import com.atatus.apm.opentracing.ElasticApmTracer;
+import com.atatus.apm.opentracing.AtatusApmTracer;
 
 import io.opentracing.Span;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OpenTracingBridgeCloseTest extends AbstractInstrumentationTest {
-    private ElasticApmTracer apmTracer = new ElasticApmTracer();
+    private AtatusApmTracer apmTracer = new AtatusApmTracer();
 
     @BeforeEach
     void setUp() {

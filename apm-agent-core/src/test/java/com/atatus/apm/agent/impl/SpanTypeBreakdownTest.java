@@ -40,7 +40,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.stagemonitor.configuration.source.SimpleSource;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.when;
 class SpanTypeBreakdownTest {
 
     private MockReporter reporter;
-    private ElasticApmTracer tracer;
+    private AtatusApmTracer tracer;
 
     @BeforeEach
     void setUp() {

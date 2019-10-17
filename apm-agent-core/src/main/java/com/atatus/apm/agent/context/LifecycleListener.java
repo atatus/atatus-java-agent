@@ -24,10 +24,10 @@
  */
 package com.atatus.apm.agent.context;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 
 /**
- * A {@link LifecycleListener} notifies about the start and stop event of the {@link ElasticApmTracer}.
+ * A {@link LifecycleListener} notifies about the start and stop event of the {@link AtatusApmTracer}.
  * <p>
  * Implement this interface and register it as a {@linkplain java.util.ServiceLoader service} under
  * {@code src/main/resources/META-INF/services/com.atatus.apm.agent.context.LifecycleListener}.
@@ -36,14 +36,14 @@ import com.atatus.apm.agent.impl.ElasticApmTracer;
 public interface LifecycleListener {
 
     /**
-     * Callback for when the {@link ElasticApmTracer} starts.
+     * Callback for when the {@link AtatusApmTracer} starts.
      *
      * @param tracer The tracer.
      */
-    void start(ElasticApmTracer tracer);
+    void start(AtatusApmTracer tracer);
 
     /**
-     * Callback for when {@link ElasticApmTracer#stop()} has been called.
+     * Callback for when {@link AtatusApmTracer#stop()} has been called.
      * <p>
      * Typically, this method is used to clean up resources like thread pools
      * so that there are no class loader leaks when a webapp is redeployed in an application server.

@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +32,7 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.apache.http.HttpRequest;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 
 import javax.annotation.Nullable;
@@ -48,7 +48,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 /**
  * In versions 4.0.1 or lower, the headers are not automatically copied to redirected HttpRequests, so this copies them over
  */
-public class ApacheHttpAsyncClientRedirectInstrumentation extends ElasticApmInstrumentation {
+public class ApacheHttpAsyncClientRedirectInstrumentation extends AtatusApmInstrumentation {
 
     private static class ApacheHttpAsyncClientRedirectAdvice {
         @Advice.OnMethodExit(suppress = Throwable.class)

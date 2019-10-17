@@ -27,10 +27,10 @@ package com.atatus.apm.agent.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.Request;
 import com.atatus.apm.agent.impl.context.Response;
 import com.atatus.apm.agent.impl.context.TransactionContext;
@@ -74,12 +74,12 @@ public class ServletTransactionHelper {
     private final Logger logger = LoggerFactory.getLogger(ServletTransactionHelper.class);
 
     private final Set<String> METHODS_WITH_BODY = new HashSet<>(Arrays.asList("POST", "PUT", "PATCH", "DELETE"));
-    private final ElasticApmTracer tracer;
+    private final AtatusApmTracer tracer;
     private final CoreConfiguration coreConfiguration;
     private final WebConfiguration webConfiguration;
 
     @VisibleForAdvice
-    public ServletTransactionHelper(ElasticApmTracer tracer) {
+    public ServletTransactionHelper(AtatusApmTracer tracer) {
         this.tracer = tracer;
         this.coreConfiguration = tracer.getConfig(CoreConfiguration.class);
         this.webConfiguration = tracer.getConfig(WebConfiguration.class);
@@ -89,7 +89,7 @@ public class ServletTransactionHelper {
 
     @VisibleForAdvice
     public static void determineServiceName(@Nullable String servletContextName, ClassLoader servletContextClassLoader, @Nullable String contextPath) {
-        if (ElasticApmInstrumentation.tracer == null || !nameInitialized.add(contextPath == null ? "null" : contextPath)) {
+        if (AtatusApmInstrumentation.tracer == null || !nameInitialized.add(contextPath == null ? "null" : contextPath)) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class ServletTransactionHelper {
             serviceName = contextPath.substring(1);
         }
         if (serviceName != null) {
-            ElasticApmInstrumentation.tracer.overrideServiceNameForClassLoader(servletContextClassLoader, serviceName);
+            AtatusApmInstrumentation.tracer.overrideServiceNameForClassLoader(servletContextClassLoader, serviceName);
         }
     }
 
@@ -123,7 +123,7 @@ public class ServletTransactionHelper {
      * because the creating the context is handled in one central place.
      *
      * Furthermore, it is not trivial to create an error context at an arbitrary location
-     * (when the user calls ElasticApm.captureException()),
+     * (when the user calls AtatusApm.captureException()),
      * as we don't necessarily have access to the framework's request and response objects.
      *
      * Additionally, we only have access to the classes of the instrumented classes inside advice methods.

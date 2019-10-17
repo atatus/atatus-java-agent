@@ -44,9 +44,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.servlet.ServletInstrumentation;
 import com.atatus.apm.agent.spring.webmvc.ExceptionHandlerInstrumentation;
 
@@ -61,7 +61,7 @@ import static org.junit.Assert.assertEquals;
 public abstract class AbstractExceptionHandlerInstrumentationTest {
 
     protected static MockReporter reporter;
-    protected static ElasticApmTracer tracer;
+    protected static AtatusApmTracer tracer;
     protected MockMvc mockMvc;
 
     @Autowired
@@ -71,18 +71,18 @@ public abstract class AbstractExceptionHandlerInstrumentationTest {
     @BeforeAll
     public static void setUpAll() {
         reporter = new MockReporter();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(SpyConfiguration.createSpyConfig())
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install(),
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install(),
             Arrays.asList(new ServletInstrumentation(tracer), new ExceptionHandlerInstrumentation()));
     }
 
     @AfterClass
     @AfterAll
     public static void afterAll() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Before

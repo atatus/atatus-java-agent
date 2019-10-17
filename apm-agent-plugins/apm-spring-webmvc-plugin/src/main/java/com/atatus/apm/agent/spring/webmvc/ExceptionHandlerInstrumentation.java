@@ -31,7 +31,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +40,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class ExceptionHandlerInstrumentation extends ElasticApmInstrumentation {
+public class ExceptionHandlerInstrumentation extends AtatusApmInstrumentation {
 
     @Override
     public Class<?> getAdviceClass() {

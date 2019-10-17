@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -33,7 +33,7 @@ import redis.clients.jedis.Protocol;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
@@ -49,7 +49,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
  * it would otherwise be set to the {@link redis.clients.jedis.Jedis} client method name.
  * This is good enough as a default but we want all Redis clients to produce the same span names.
  */
-public class JedisSpanNameInstrumentation extends ElasticApmInstrumentation {
+public class JedisSpanNameInstrumentation extends AtatusApmInstrumentation {
 
     @Advice.OnMethodEnter
     private static void setSpanNameToRedisProtocolCommand(@Advice.Argument(1) Object command) {

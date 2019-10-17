@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  * and the type will hold information about the database type.
  * </p>
  * <p>
- * Call {@link ElasticApm#currentSpan()} to get a reference of the current span.
+ * Call {@link AtatusApm#currentSpan()} to get a reference of the current span.
  * </p>
  * <p>
  * Note: Calling any methods after {@link #end()} has been called is illegal.
@@ -58,7 +58,7 @@ public interface Span {
     /**
      * NOTE: THIS METHOD IS DEPRECATED AND WILL BE REMOVED IN VERSION 2.0.
      * Instead, setting the span type can be done when starting a new span through {@link #startSpan(String, String, String)}.
-     * 
+     *
      * @param type the type of the span
      */
     @Nonnull
@@ -206,7 +206,7 @@ public interface Span {
      * }
      * </pre>
      * <p>
-     * NOTE: Spans created via this method can not be retrieved by calling {@link ElasticApm#currentSpan()}.
+     * NOTE: Spans created via this method can not be retrieved by calling {@link AtatusApm#currentSpan()}.
      * See {@link #activate()} on how to achieve that.
      * </p>
      * <p>
@@ -251,7 +251,7 @@ public interface Span {
      * }
      * </pre>
      * <p>
-     * NOTE: Spans created via this method can not be retrieved by calling {@link ElasticApm#currentSpan()}.
+     * NOTE: Spans created via this method can not be retrieved by calling {@link AtatusApm#currentSpan()}.
      * See {@link #activate()} on how to achieve that.
      * </p>
      *
@@ -299,7 +299,7 @@ public interface Span {
      * Returns the id of this trace (never {@code null})
      * <p>
      * The trace-ID is consistent across all transactions and spans which belong to the same logical trace,
-     * even for spans which happened in another service (given this service is also monitored by Elastic APM).
+     * even for spans which happened in another service (given this service is also monitored by Atatus APM).
      * </p>
      * <p>
      * If this span represents a noop,
@@ -323,7 +323,7 @@ public interface Span {
      * </p>
      * <pre>
      * Span span = parent.startSpan();
-     * // within the try block the span is available on the current thread via {@link ElasticApm#currentSpan()}
+     * // within the try block the span is available on the current thread via {@link AtatusApm#currentSpan()}
      * // this is also true for methods called within the try block
      * try (final Scope scope = span.activate()) {
      *     span.setName("SELECT FROM customer");
@@ -364,7 +364,7 @@ public interface Span {
      * // Hook into a callback provided by the RPC framework that is called on outgoing requests
      * public Response onOutgoingRequest(Request request) throws Exception {
      *     // creates a span representing the external call
-     *     Span span = ElasticApm.currentSpan()
+     *     Span span = AtatusApm.currentSpan()
      *             .startSpan("external", "http", null)
      *             .setName(request.getMethod() + " " + request.getHost());
      *     try (final Scope scope = transaction.activate()) {

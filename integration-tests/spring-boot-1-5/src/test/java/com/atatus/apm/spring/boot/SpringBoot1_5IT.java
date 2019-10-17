@@ -44,9 +44,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.report.ReporterConfiguration;
 import com.atatus.apm.agent.web.WebConfiguration;
 
@@ -71,18 +71,18 @@ public class SpringBoot1_5IT {
         config = SpyConfiguration.createSpyConfig();
         when(config.getConfig(ReporterConfiguration.class).isReportSynchronously()).thenReturn(true);
         reporter = new MockReporter();
-        ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+        AtatusApmTracer tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
         restTemplate = new TestRestTemplate(new RestTemplateBuilder().setConnectTimeout(0).setReadTimeout(0));
         reporter.reset();
     }
 
     @After
     public void tearDown() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Test

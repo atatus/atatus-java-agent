@@ -35,10 +35,10 @@ import javax.servlet.AsyncContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 
 import java.util.Arrays;
@@ -64,7 +64,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
  * (see {@link StartAsyncInstrumentation.StartAsyncAdvice#onExitStartAsync(AsyncContext)}
  * and {@link AsyncContextInstrumentation.AsyncContextStartAdvice#onEnterAsyncContextStart(Runnable)}).
  */
-public abstract class AsyncInstrumentation extends ElasticApmInstrumentation {
+public abstract class AsyncInstrumentation extends AtatusApmInstrumentation {
 
     private static final String SERVLET_API_ASYNC_GROUP_NAME = "servlet-api-async";
     @Nullable
@@ -72,7 +72,7 @@ public abstract class AsyncInstrumentation extends ElasticApmInstrumentation {
     // referring to AsyncContext is legal because of type erasure
     public static HelperClassManager<AsyncContextAdviceHelper<AsyncContext>> asyncHelperManager;
 
-    public AsyncInstrumentation(ElasticApmTracer tracer) {
+    public AsyncInstrumentation(AtatusApmTracer tracer) {
         asyncHelperManager = HelperClassManager.ForSingleClassLoader.of(tracer,
             "com.atatus.apm.agent.servlet.helper.AsyncContextAdviceHelperImpl",
             "com.atatus.apm.agent.servlet.helper.AsyncContextAdviceHelperImpl$ApmAsyncListenerAllocator",
@@ -89,7 +89,7 @@ public abstract class AsyncInstrumentation extends ElasticApmInstrumentation {
     }
 
     public static class StartAsyncInstrumentation extends AsyncInstrumentation {
-        public StartAsyncInstrumentation(ElasticApmTracer tracer) {
+        public StartAsyncInstrumentation(AtatusApmTracer tracer) {
             super(tracer);
         }
 
@@ -147,7 +147,7 @@ public abstract class AsyncInstrumentation extends ElasticApmInstrumentation {
     }
 
     public static class AsyncContextInstrumentation extends AsyncInstrumentation {
-        public AsyncContextInstrumentation(ElasticApmTracer tracer) {
+        public AsyncContextInstrumentation(AtatusApmTracer tracer) {
             super(tracer);
         }
 

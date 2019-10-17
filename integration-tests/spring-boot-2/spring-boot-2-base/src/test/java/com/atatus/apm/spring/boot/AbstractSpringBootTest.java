@@ -53,13 +53,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.report.ReporterConfiguration;
 import com.atatus.apm.agent.web.WebConfiguration;
-import com.atatus.apm.api.ElasticApm;
+import com.atatus.apm.api.AtatusApm;
 
 import java.util.Collections;
 
@@ -81,11 +81,11 @@ public abstract class AbstractSpringBootTest {
     public static void beforeClass() {
         config = SpyConfiguration.createSpyConfig();
         reporter = new MockReporter();
-        ElasticApmTracer tracer = new ElasticApmTracerBuilder()
+        AtatusApmTracer tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @Before
@@ -100,7 +100,7 @@ public abstract class AbstractSpringBootTest {
 
     @AfterClass
     public static void tearDown() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     @Test
@@ -138,7 +138,7 @@ public abstract class AbstractSpringBootTest {
 
         @GetMapping("/")
         public String greeting() {
-            ElasticApm.currentTransaction().setUser("id", "email", "username");
+            AtatusApm.currentTransaction().setUser("id", "email", "username");
             return "Hello World";
         }
 

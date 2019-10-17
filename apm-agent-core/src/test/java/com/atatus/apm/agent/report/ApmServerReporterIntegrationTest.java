@@ -27,7 +27,7 @@ package com.atatus.apm.agent.report;
 import com.atatus.apm.agent.MockTracer;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.configuration.SpyConfiguration;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.payload.ProcessInfo;
@@ -67,7 +67,7 @@ class ApmServerReporterIntegrationTest {
     private static int port;
     private static AtomicInteger receivedIntakeApiCalls = new AtomicInteger();
     private static HttpHandler handler;
-    private final ElasticApmTracer tracer = MockTracer.create();
+    private final AtatusApmTracer tracer = MockTracer.create();
     private ReporterConfiguration reporterConfiguration;
     private ApmServerReporter reporter;
     private ConfigurationRegistry config;

@@ -36,14 +36,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.stagemonitor.configuration.ConfigurationRegistry;
 
-import com.atatus.apm.agent.bci.ElasticApmAgent;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.bci.AtatusApmAgent;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractInstrumentationTest {
-    protected static ElasticApmTracer tracer;
+    protected static AtatusApmTracer tracer;
     protected static MockReporter reporter;
     protected static ConfigurationRegistry config;
 
@@ -52,17 +52,17 @@ public abstract class AbstractInstrumentationTest {
     public static void beforeAll() {
         reporter = new MockReporter();
         config = SpyConfiguration.createSpyConfig();
-        tracer = new ElasticApmTracerBuilder()
+        tracer = new AtatusApmTracerBuilder()
             .configurationRegistry(config)
             .reporter(reporter)
             .build();
-        ElasticApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
+        AtatusApmAgent.initInstrumentation(tracer, ByteBuddyAgent.install());
     }
 
     @AfterAll
     @AfterClass
     public static void afterAll() {
-        ElasticApmAgent.reset();
+        AtatusApmAgent.reset();
     }
 
     public static void reset() {
@@ -70,7 +70,7 @@ public abstract class AbstractInstrumentationTest {
         reporter.reset();
     }
 
-    public static ElasticApmTracer getTracer() {
+    public static AtatusApmTracer getTracer() {
         return tracer;
     }
 

@@ -170,7 +170,7 @@
  * Support async calls made by OkHttp client (`Call#enqueue`)
  * Added support for providing config options on agent attach.
    * CLI example: `--config server_urls=http://localhost:8200,http://localhost:8201`
-   * API example: `ElasticApmAttacher.attach(Map.of("server_urls", "http://localhost:8200,http://localhost:8201"));`
+   * API example: `AtatusApmAttacher.attach(Map.of("server_urls", "http://localhost:8200,http://localhost:8201"));`
 
 ## Bug Fixes
  * Logging integration through MDC is not working properly - [#499](https://github.com/elastic/apm-agent-java/issues/499)
@@ -212,7 +212,7 @@
 
 ## Features
  * The agent now collects system and JVM metrics ([#360](https://github.com/elastic/apm-agent-java/pull/360))
- * Add API methods `ElasticApm#startTransactionWithRemoteParent` and `Span#injectTraceHeaders` to allow for manual context propagation ([#396](https://github.com/elastic/apm-agent-java/pull/396)).
+ * Add API methods `AtatusApm#startTransactionWithRemoteParent` and `Span#injectTraceHeaders` to allow for manual context propagation ([#396](https://github.com/elastic/apm-agent-java/pull/396)).
  * Added `trace_methods` configuration option which lets you define which methods in your project or 3rd party libraries should be traced.
    To create spans for all `public` methods of classes whose name ends in `Service` which are in a sub-package of `org.example.services` use this matcher:
    `public org.example.services.*.*Service#*` ([#398](https://github.com/elastic/apm-agent-java/pull/398))
@@ -271,7 +271,7 @@
    Note that it is required to configure the `application_packages` for this to work.
    See the [documentation](https://www.elastic.co/guide/en/apm/agent/java/master/public-api.html#api-annotation) for more information.
  * The public API now supports to activate a span on the current thread.
-   This makes the span available via `ElasticApm#currentSpan()`
+   This makes the span available via `AtatusApm#currentSpan()`
    Refer to the [documentation](https://www.elastic.co/guide/en/apm/agent/java/master/public-api.html#api-span-activate) for more details.
  * Capturing of Elasticsearch RestClient 5.0.2+ calls.
    Currently, the `*Async` methods are not supported, only their synchronous counterparts.
@@ -297,7 +297,7 @@
    Note that it is required to configure the `application_packages` for this to work.
    See the [documentation](https://www.elastic.co/guide/en/apm/agent/java/master/public-api.html#api-annotation) for more information.
  * The public API now supports to activate a span on the current thread.
-   This makes the span available via `ElasticApm#currentSpan()`
+   This makes the span available via `AtatusApm#currentSpan()`
    Refer to the [documentation](https://www.elastic.co/guide/en/apm/agent/java/master/public-api.html#api-span-activate) for more details.
  * Capturing of Elasticsearch RestClient 5.0.2+ calls.
    Currently, the `*Async` methods are not supported, only their synchronous counterparts.
@@ -324,14 +324,14 @@
 # 0.7.0
 
 ## Breaking changes
- * Removed `ElasticApm.startSpan`. Spans can now only be created from their transactions via `Transaction#createSpan`.
- * `ElasticApm.startTransaction` and `Transaction#createSpan` don't activate the transaction and spans
-   and are thus not available via `ElasticApm.activeTransaction` and `ElasticApm.activeSpan`.
+ * Removed `AtatusApm.startSpan`. Spans can now only be created from their transactions via `Transaction#createSpan`.
+ * `AtatusApm.startTransaction` and `Transaction#createSpan` don't activate the transaction and spans
+   and are thus not available via `AtatusApm.activeTransaction` and `AtatusApm.activeSpan`.
 
 ## Features
  * Public API
     * Add `Span#captureException` and `Transaction#captureException` to public API.
-      `ElasticApm.captureException` is deprecated now. Use `ElasticApm.currentSpan().captureException(exception)` instead.
+      `AtatusApm.captureException` is deprecated now. Use `AtatusApm.currentSpan().captureException(exception)` instead.
     * Added `Transaction.getId` and `Span.getId` methods
  * Added support for async servlet requests
  * Added support for Payara/Glassfish

@@ -24,7 +24,7 @@
  */
 package com.atatus.apm.agent.asynchttpclient;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.http.client.HttpClientHelper;
 import com.atatus.apm.agent.impl.transaction.Span;
@@ -51,7 +51,7 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
-public abstract class AbstractAsyncHttpClientInstrumentation extends ElasticApmInstrumentation {
+public abstract class AbstractAsyncHttpClientInstrumentation extends AtatusApmInstrumentation {
 
     @VisibleForAdvice
     public static final WeakConcurrentMap<AsyncHandler<?>, Span> handlerSpanMap = new WeakConcurrentMap.WithInlinedExpunction<>();

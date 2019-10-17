@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +32,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import javax.annotation.Nullable;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 import com.atatus.apm.agent.impl.transaction.Transaction;
@@ -56,7 +56,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
  * Instruments javax.faces.lifecycle.Lifecycle#execute and javax.faces.lifecycle.Lifecycle#render.
  * Code is duplicated because it is injected inline
  */
-public abstract class JsfLifecycleInstrumentation extends ElasticApmInstrumentation {
+public abstract class JsfLifecycleInstrumentation extends AtatusApmInstrumentation {
     private static final String SPAN_TYPE = "template";
     private static final String SPAN_SUBTYPE = "jsf";
 

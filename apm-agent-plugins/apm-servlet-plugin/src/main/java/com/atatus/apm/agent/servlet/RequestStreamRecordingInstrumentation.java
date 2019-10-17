@@ -33,10 +33,10 @@ import net.bytebuddy.matcher.ElementMatcher;
 import javax.annotation.Nullable;
 import javax.servlet.ServletInputStream;
 
-import com.atatus.apm.agent.bci.ElasticApmInstrumentation;
+import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.HelperClassManager;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.context.Request;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 
@@ -51,14 +51,14 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 
-public class RequestStreamRecordingInstrumentation extends ElasticApmInstrumentation {
+public class RequestStreamRecordingInstrumentation extends AtatusApmInstrumentation {
 
     @Nullable
     @VisibleForAdvice
     // referring to InputStreamWrapperFactory is legal because of type erasure
     public static HelperClassManager<InputStreamWrapperFactory> wrapperHelperClassManager;
 
-    public RequestStreamRecordingInstrumentation(ElasticApmTracer tracer) {
+    public RequestStreamRecordingInstrumentation(AtatusApmTracer tracer) {
         wrapperHelperClassManager = HelperClassManager.ForSingleClassLoader.of(tracer,
             "com.atatus.apm.agent.servlet.helper.InputStreamFactoryHelperImpl",
             "com.atatus.apm.agent.servlet.helper.RecordingServletInputStreamWrapper");

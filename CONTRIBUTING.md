@@ -1,4 +1,4 @@
-# Contributing to the Elastic APM Java agent
+# Contributing to the Atatus APM Java agent
 
 The APM Agent is open source and we love to receive contributions from our community — you!
 

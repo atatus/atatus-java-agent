@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,8 +26,8 @@ package com.atatus.apm.agent.benchmark;
 
 import org.ehcache.sizeof.SizeOf;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
-import com.atatus.apm.agent.impl.ElasticApmTracerBuilder;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.error.ErrorCapture;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.Transaction;
@@ -38,7 +38,7 @@ public class SizeOfSpan {
 
     public static void main(String[] args) {
         final SizeOf sizeOf = SizeOf.newInstance();
-        ElasticApmTracer tracer = new ElasticApmTracerBuilder().build();
+        AtatusApmTracer tracer = new AtatusApmTracerBuilder().build();
         final long sizeOfSpan = sizeOf.deepSizeOf(new Span(tracer));
         final long sizeOfTransaction = sizeOf.deepSizeOf(new Transaction(tracer));
         final long sizeOfError = sizeOf.deepSizeOf(new ErrorCapture(tracer));

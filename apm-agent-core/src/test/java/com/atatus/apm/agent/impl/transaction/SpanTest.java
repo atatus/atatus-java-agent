@@ -28,7 +28,7 @@ import com.atatus.apm.agent.MockTracer;
 
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.agent.impl.ElasticApmTracer;
+import com.atatus.apm.agent.impl.AtatusApmTracer;
 import com.atatus.apm.agent.impl.transaction.Span;
 
 import static org.assertj.core.api.Assertions.assertThat;
