@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -28,7 +28,10 @@ package com.atatus.apm.agent.impl.payload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atatus.apm.agent.collector.util.LinuxSystemInfo;
+
 import javax.annotation.Nullable;
+
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
@@ -59,9 +62,29 @@ public class SystemInfo {
      */
     private final String hostname;
     /**
+     * Name of the system OS the agent is running on.
+     */
+    private final String os;
+    /**
+     * Name of the system OS version the agent is running on.
+     */
+    private final String version;
+    /**
      * Name of the system platform the agent is running on.
      */
-    private final String platform;
+    private String platform;
+    /**
+     * Name of the system kernel version the agent is running on.
+     */
+    private String kernel;
+    /**
+     * Boot Id of the system platform the agent is running on.
+     */
+    private String bootId;
+    /**
+     * Product Id of the system platform the agent is running on.
+     */
+    private String productId;
 
     /**
      * Info about the container the agent is running on, where applies
@@ -75,16 +98,58 @@ public class SystemInfo {
     @Nullable
     private Kubernetes kubernetes;
 
-    public SystemInfo(String architecture, String hostname, String platform) {
-        this(architecture, hostname, platform, null, null);
+    /**
+     * Total Physical memory of the system the agent is running on.
+     */
+    private long totalMem = 0;
+
+    /**
+     * CPU Count of the system the agent is running on.
+     */
+    private int cpuCount = 0;
+
+    /**
+     * CPU Frequency MHz of the system the agent is running on.
+     */
+    private double cpuFrequencyInMHz;
+
+    /**
+     * CPU Model name of the system the agent is running on.
+     */
+    private String cpuModelName;
+
+    /**
+     * Java and JVM info
+     */
+    private String javaVersion;
+    private String javaVendor;
+    private String javaVMName;
+    private String javaVMVersion;
+
+    private LinuxSystemInfo linuxSystemInfo;
+
+
+    public SystemInfo(String architecture, String hostname, String os) {
+        this(architecture, hostname, os, null, null, null, null);
     }
 
-    SystemInfo(String architecture, String hostname, String platform, @Nullable Container container, @Nullable Kubernetes kubernetes) {
+    public SystemInfo(String architecture, String hostname, String os, String version) {
+        this(architecture, hostname, os, version, null, null, null);
+    }
+
+    SystemInfo(String architecture, String hostname, String os, String version,
+    		@Nullable String platform,  @Nullable Container container, @Nullable Kubernetes kubernetes) {
         this.architecture = architecture;
         this.hostname = hostname;
+        this.os = os;
+        this.version = version;
         this.platform = platform;
         this.container = container;
         this.kubernetes = kubernetes;
+
+        if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
+        	linuxSystemInfo = new LinuxSystemInfo();
+        }
     }
 
     public static SystemInfo create(@Nullable String hostname) {
@@ -92,9 +157,13 @@ public class SystemInfo {
         if (reportedHostname == null || reportedHostname.equals("")) {
             reportedHostname = getNameOfLocalHost();
         }
-        return new SystemInfo(System.getProperty("os.arch"), reportedHostname, System.getProperty("os.name")).findContainerDetails();
+
+        return new SystemInfo(System.getProperty("os.arch"), reportedHostname,
+				System.getProperty("os.name"), System.getProperty("os.version"))
+				.findContainerDetails().findBootId().findProductId()
+				.findMemoryInfo().findCPUInfo().findOSDistribution().findJavaInfo();
     }
-    
+
     public static SystemInfo create() {
         return create(null);
     }
@@ -106,6 +175,41 @@ public class SystemInfo {
             return getHostNameFromEnv();
         }
     }
+
+    SystemInfo findBootId() {
+        try {
+            Path path = FileSystems.getDefault().getPath("/proc/sys/kernel/random/boot_id");
+            if (path.toFile().exists()) {
+                List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+                for (final String line : lines) {
+                	bootId = line.trim();
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            logger.warn("Failed to read/parse boot ID from '/proc/sys/kernel/random/boot_id'", e);
+        }
+
+        return this;
+    }
+
+    SystemInfo findProductId() {
+        try {
+            Path path = FileSystems.getDefault().getPath("/sys/class/dmi/id/product_uuid");
+            if (path.toFile().exists()) {
+                List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+                for (final String line : lines) {
+                	productId = line.trim();
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            logger.warn("Failed to read/parse product ID from '/sys/class/dmi/id/product_uuid'", e);
+        }
+
+        return this;
+    }
+
 
     /**
      * Finding the container ID based on the {@code /proc/self/cgroup} file.
@@ -226,6 +330,51 @@ public class SystemInfo {
         return host;
     }
 
+    private SystemInfo findMemoryInfo() {
+    	try {
+	    	if (linuxSystemInfo != null) {
+	    		totalMem = linuxSystemInfo.getTotalMemory();
+	    	}
+    	} catch (Throwable e) {
+            logger.warn("Failed to read system memory", e);
+        }
+
+    	return this;
+    }
+
+    private SystemInfo findCPUInfo() {
+    	try {
+	    	if (linuxSystemInfo != null) {
+	    		cpuCount =  linuxSystemInfo.getNumCPUs();
+	    		cpuFrequencyInMHz = linuxSystemInfo.getCPUFrequencyInMHz();
+	    		cpuModelName = linuxSystemInfo.getCPUModelName();
+	    	}
+		} catch (Throwable e) {
+	        logger.warn("Failed to read system cpu information", e);
+	    }
+    	return this;
+    }
+
+    private SystemInfo findOSDistribution() {
+    	try {
+	    	if (linuxSystemInfo != null) {
+	    		platform = linuxSystemInfo.getOSDistribution();
+	    	}
+		} catch (Throwable e) {
+	        logger.warn("Failed to read system os distribution", e);
+	    }
+    	return this;
+    }
+
+    private SystemInfo findJavaInfo() {
+    	javaVersion = System.getProperty("java.version");
+    	javaVendor = System.getProperty("java.vendor");
+    	javaVMName = System.getProperty("java.vm.name");
+    	javaVMVersion = System.getProperty("java.vm.version");
+    	return this;
+    }
+
+
     /**
      * Architecture of the system the agent is running on.
      */
@@ -241,10 +390,121 @@ public class SystemInfo {
     }
 
     /**
+     * Name of the system OS the agent is running on.
+     */
+    public String getOS() {
+        return os;
+    }
+
+    /**
+     * Name of the system OS version the agent is running on.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
      * Name of the system platform the agent is running on.
      */
     public String getPlatform() {
+    	if (platform == null) {
+    		return os;
+    	}
         return platform;
+    }
+
+    /**
+     * Name of the system kernel verison the agent is running on.
+     */
+    public String getKernel() {
+        return kernel;
+    }
+
+    /**
+     * Boot Id of the system platform the agent is running on.
+     */
+    public String getBootId() {
+        return bootId;
+    }
+
+    /**
+     * Product Id of the system platform the agent is running on.
+     */
+    public String getProductId() {
+        return productId;
+    }
+
+    /**
+     * Host Id of the system platform the agent is running on.
+     */
+    public String getHostId() {
+    	if (bootId != null && !bootId.isEmpty()) {
+    		return bootId;
+    	}
+
+    	if (productId != null && !productId.isEmpty()) {
+    		return productId;
+    	}
+
+        return hostname;
+    }
+
+
+    /**
+     * Total physical memory of the system the agent is running on.
+     */
+    public long getTotalMem() {
+		return totalMem;
+	}
+
+    /**
+     * CPU Count of the system the agent is running on.
+     */
+	public int getCpuCount() {
+		return cpuCount;
+	}
+
+    /**
+     * CPU Frequency MHZ of the system the agent is running on.
+     */
+	public double getCpuFrequencyInMHz() {
+		return cpuFrequencyInMHz;
+	}
+
+    /**
+     * CPU Model name of the system the agent is running on.
+     */
+	public String getCpuModelName() {
+		return cpuModelName;
+	}
+
+	public String getJavaVersion() {
+		return javaVersion;
+	}
+
+	public String getJavaVendor() {
+		return javaVendor;
+	}
+
+	public String getJavaVMName() {
+		return javaVMName;
+	}
+
+	public String getJavaVMVersion() {
+		return javaVMVersion;
+	}
+
+	/**
+     * Container Id of the system platform the agent is running on.
+     *
+     * @return container info
+     */
+    public String getContainerId() {
+    	if (container != null) {
+    		return container.getId();
+    	} else {
+    		return null;
+    	}
     }
 
     /**

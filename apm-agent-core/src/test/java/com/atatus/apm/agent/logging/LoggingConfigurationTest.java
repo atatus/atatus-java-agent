@@ -40,7 +40,7 @@ class LoggingConfigurationTest {
     @Test
     void testSetLogLevel() {
         LoggingConfiguration.init(Collections.singletonList(new SimpleSource().add("log_level", "DEBUG")));
-        assertThat(System.getProperty(SimpleLogger.LOG_KEY_PREFIX + "co.elastic.apm")).isEqualTo("DEBUG");
+        assertThat(System.getProperty(SimpleLogger.LOG_KEY_PREFIX + "com.atatus.apm")).isEqualTo("DEBUG");
     }
 
     @Test

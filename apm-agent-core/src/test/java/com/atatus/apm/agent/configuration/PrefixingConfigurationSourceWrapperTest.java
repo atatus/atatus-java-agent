@@ -38,12 +38,12 @@ class PrefixingConfigurationSourceWrapperTest {
 
     @BeforeEach
     void setUp() {
-        sourceWrapper = new PrefixingConfigurationSourceWrapper(new SystemPropertyConfigurationSource(), "elastic.apm.");
+        sourceWrapper = new PrefixingConfigurationSourceWrapper(new SystemPropertyConfigurationSource(), "atatus.");
     }
 
     @Test
     void getValue() {
-        System.setProperty("elastic.apm.foo", "bar");
+        System.setProperty("atatus.foo", "bar");
         assertThat(sourceWrapper.getValue("foo")).isEqualTo("bar");
     }
 

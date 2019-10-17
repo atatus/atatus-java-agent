@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -40,36 +40,46 @@ public class MetricRegistrySerializer {
     private static final byte NEW_LINE = '\n';
 
     public static void serialize(Map<? extends Labels, MetricSet> metricSets, StringBuilder replaceBuilder, JsonWriter jw) {
-        final long timestamp = System.currentTimeMillis() * 1000;
+
+    	final long timestamp = System.currentTimeMillis();
+        DslJsonSerializer.writeFieldName("timestamp", jw);
+        NumberConverter.serialize(timestamp, jw);
+        jw.writeByte(JsonWriter.COMMA);
+
+        int i = 0;
         for (MetricSet metricSet : metricSets.values()) {
+        	if (i > 0) {
+        		jw.writeByte(JsonWriter.COMMA);
+        	}
             if (metricSet.hasContent()) {
                 serializeMetricSet(metricSet, timestamp, replaceBuilder, jw);
                 metricSet.onAfterReport();
-                jw.writeByte(NEW_LINE);
+                // jw.writeByte(NEW_LINE);
+                i++;
             }
         }
     }
 
-    static void serializeMetricSet(MetricSet metricSet, long epochMicros, StringBuilder replaceBuilder, JsonWriter jw) {
-        jw.writeByte(JsonWriter.OBJECT_START);
+    static void serializeMetricSet(MetricSet metricSet, long timestamp, StringBuilder replaceBuilder, JsonWriter jw) {
+        // jw.writeByte(JsonWriter.OBJECT_START);
         {
-            DslJsonSerializer.writeFieldName("metricset", jw);
-            jw.writeByte(JsonWriter.OBJECT_START);
+            // DslJsonSerializer.writeFieldName("metricset", jw);
+            // jw.writeByte(JsonWriter.OBJECT_START);
             {
-                DslJsonSerializer.writeFieldName("timestamp", jw);
-                NumberConverter.serialize(epochMicros, jw);
-                jw.writeByte(JsonWriter.COMMA);
+                // DslJsonSerializer.writeFieldName("timestamp", jw);
+                // NumberConverter.serialize(timestamp, jw);
+                // jw.writeByte(JsonWriter.COMMA);
                 DslJsonSerializer.serializeLabels(metricSet.getLabels(), replaceBuilder, jw);
-                DslJsonSerializer.writeFieldName("samples", jw);
-                jw.writeByte(JsonWriter.OBJECT_START);
+                // DslJsonSerializer.writeFieldName("samples", jw);
+                // jw.writeByte(JsonWriter.OBJECT_START);
                 boolean hasSamples = serializeGauges(metricSet.getGauges(), jw);
                 hasSamples |= serializeTimers(metricSet.getTimers(), hasSamples, jw);
                 serializeCounters(metricSet.getCounters(), hasSamples, jw);
-                jw.writeByte(JsonWriter.OBJECT_END);
+                // jw.writeByte(JsonWriter.OBJECT_END);
             }
-            jw.writeByte(JsonWriter.OBJECT_END);
+            // jw.writeByte(JsonWriter.OBJECT_END);
         }
-        jw.writeByte(JsonWriter.OBJECT_END);
+        // jw.writeByte(JsonWriter.OBJECT_END);
     }
 
     private static boolean serializeGauges(Map<String, DoubleSupplier> gauges, JsonWriter jw) {
@@ -166,7 +176,7 @@ public class MetricRegistrySerializer {
     private static void serializeCounter(String key, AtomicLong value, JsonWriter jw) {
         serializeValueStart(key, "", jw);
         NumberConverter.serialize(value.get(), jw);
-        jw.writeByte(JsonWriter.OBJECT_END);
+        // jw.writeByte(JsonWriter.OBJECT_END);
         value.set(0);
     }
 
@@ -188,13 +198,13 @@ public class MetricRegistrySerializer {
     private static void serializeValue(String key, String suffix, double value, JsonWriter jw) {
         serializeValueStart(key, suffix, jw);
         NumberConverter.serialize(value, jw);
-        jw.writeByte(JsonWriter.OBJECT_END);
+        // jw.writeByte(JsonWriter.OBJECT_END);
     }
 
     private static void serializeValue(String key, String suffix, long value, JsonWriter jw) {
         serializeValueStart(key, suffix, jw);
         NumberConverter.serialize(value, jw);
-        jw.writeByte(JsonWriter.OBJECT_END);
+        // jw.writeByte(JsonWriter.OBJECT_END);
     }
 
     private static void serializeValueStart(String key, String suffix, JsonWriter jw) {
@@ -203,10 +213,10 @@ public class MetricRegistrySerializer {
         jw.writeAscii(suffix);
         jw.writeByte(JsonWriter.QUOTE);
         jw.writeByte(JsonWriter.SEMI);
-        jw.writeByte(JsonWriter.OBJECT_START);
-        jw.writeByte(JsonWriter.QUOTE);
-        jw.writeAscii("value");
-        jw.writeByte(JsonWriter.QUOTE);
-        jw.writeByte(JsonWriter.SEMI);
+        // jw.writeByte(JsonWriter.OBJECT_START);
+        // jw.writeByte(JsonWriter.QUOTE);
+        // jw.writeAscii("value");
+        // jw.writeByte(JsonWriter.QUOTE);
+        // jw.writeByte(JsonWriter.SEMI);
     }
 }

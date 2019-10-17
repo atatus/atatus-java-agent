@@ -77,7 +77,7 @@ public class ElasticApmAttacher {
     private static Map<String, String> loadProperties() {
         Map<String, String> propertyMap = new HashMap<>();
         final Properties props = new Properties();
-        try (InputStream resourceStream = ElasticApmAttacher.class.getClassLoader().getResourceAsStream("elasticapm.properties")) {
+        try (InputStream resourceStream = ElasticApmAttacher.class.getClassLoader().getResourceAsStream("atatus.properties")) {
             if (resourceStream != null) {
                 props.load(resourceStream);
                 for (String propertyName : props.stringPropertyNames()) {

@@ -43,14 +43,14 @@ class ElasticApmTracerBuilderTest {
 
     @AfterEach
     void tearDown() {
-        System.clearProperty("elastic.apm." + CoreConfiguration.CONFIG_FILE);
+        System.clearProperty("atatus." + CoreConfiguration.CONFIG_FILE);
     }
 
     @Test
     void testConfigFileLocation(@TempDir Path tempDir) throws IOException {
         Path file = Files.createFile(tempDir.resolve("elastic-apm-test.properties"));
         Files.write(file, List.of("instrument=false"));
-        System.setProperty("elastic.apm." + CoreConfiguration.CONFIG_FILE, file.toString());
+        System.setProperty("atatus." + CoreConfiguration.CONFIG_FILE, file.toString());
 
         ConfigurationRegistry configurationRegistry = new ElasticApmTracerBuilder().build().getConfigurationRegistry();
         CoreConfiguration config = configurationRegistry.getConfig(CoreConfiguration.class);

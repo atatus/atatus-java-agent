@@ -50,7 +50,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * This class intentionally is not inside the co.elastic.apm package. This is to test the library_frame feature.
+ * This class intentionally is not inside the com.atatus.apm package. This is to test the library_frame feature.
  */
 class StacktraceSerializationTest {
 
@@ -75,7 +75,7 @@ class StacktraceSerializationTest {
     void fillStackTrace() {
         assertThat(stacktrace).isNotEmpty();
         // even though the stacktrace is captured within our tracer class, the first method should be getStackTrace
-        assertThat(stacktrace.get(0).get("module").textValue()).doesNotStartWith("co.elastic");
+        assertThat(stacktrace.get(0).get("module").textValue()).doesNotStartWith("com.atatus");
         assertThat(stacktrace.get(0).get("function").textValue()).isEqualTo("getStackTrace");
         assertThat(stacktrace.stream().filter(st -> st.get("filename").textValue().equals("StacktraceSerializationTest.java"))).isNotEmpty();
     }
@@ -115,9 +115,9 @@ class StacktraceSerializationTest {
 
     @Test
     void testStackTraceElementSerialization() throws IOException {
-        when(stacktraceConfiguration.getApplicationPackages()).thenReturn(Collections.singletonList("co.elastic.apm"));
+        when(stacktraceConfiguration.getApplicationPackages()).thenReturn(Collections.singletonList("com.atatus.apm"));
 
-        StackTraceElement stackTraceElement = new StackTraceElement("co.elastic.apm.test.TestClass",
+        StackTraceElement stackTraceElement = new StackTraceElement("com.atatus.apm.test.TestClass",
             "testMethod", "TestClass.java", 34);
         String json = serializer.toJsonString(stackTraceElement);
         JsonNode stackTraceElementParsed = objectMapper.readTree(json);
@@ -125,14 +125,14 @@ class StacktraceSerializationTest {
         assertThat(stackTraceElementParsed.get("function").textValue()).isEqualTo("testMethod");
         assertThat(stackTraceElementParsed.get("library_frame").booleanValue()).isFalse();
         assertThat(stackTraceElementParsed.get("lineno").intValue()).isEqualTo(34);
-        assertThat(stackTraceElementParsed.get("module").textValue()).isEqualTo("co.elastic.apm.test");
+        assertThat(stackTraceElementParsed.get("module").textValue()).isEqualTo("com.atatus.apm.test");
 
-        stackTraceElement = new StackTraceElement("co.elastic.TestClass",
+        stackTraceElement = new StackTraceElement("com.atatus.TestClass",
             "testMethod", "TestClass.java", 34);
         json = serializer.toJsonString(stackTraceElement);
         stackTraceElementParsed = objectMapper.readTree(json);
         assertThat(stackTraceElementParsed.get("library_frame").booleanValue()).isTrue();
-        assertThat(stackTraceElementParsed.get("module").textValue()).isEqualTo("co.elastic");
+        assertThat(stackTraceElementParsed.get("module").textValue()).isEqualTo("com.atatus");
 
         stackTraceElement = new StackTraceElement(".TestClass",
             "testMethod", "TestClass.java", 34);

@@ -1,5 +1,5 @@
-<%@ page import="co.elastic.webapp.TestDAO" %>
-<%@ page import="co.elastic.webapp.Constants" %>
+<%@ page import="com.atatus.webapp.TestDAO" %>
+<%@ page import="com.atatus.webapp.Constants" %>
 <%@ page import="java.io.IOException" %>
 <%@ page import="java.sql.SQLException" %>
 <html>

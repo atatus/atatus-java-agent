@@ -35,7 +35,7 @@ The symptom is that there will be a lot of exceptions like this: `java.lang.NoCl
 ==== Download
 
 You can download the attach program from maven central:
-link:https://search.maven.org/search?q=g:co.elastic.apm%20AND%20a:apm-agent-attach[maven central]
+link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:apm-agent-attach[maven central]
 
 NOTE: As of version 1.9.0, you will have to download the `standalone` jar instead of the normal jar distribution.
 

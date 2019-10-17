@@ -1,12 +1,3 @@
 ---
-1.1.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.1.0/atatus-apm-agent-1.1.0.jar
-1.2.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.2.0/atatus-apm-agent-1.2.0.jar
-1.3.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.3.0/atatus-apm-agent-1.3.0.jar
-1.4.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.4.0/atatus-apm-agent-1.4.0.jar
-1.5.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.5.0/atatus-apm-agent-1.5.0.jar
-1.6.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.6.0/atatus-apm-agent-1.6.0.jar
-1.6.1: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.6.1/atatus-apm-agent-1.6.1.jar
-1.7.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.7.0/atatus-apm-agent-1.7.0.jar
-1.8.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.8.0/atatus-apm-agent-1.8.0.jar
-1.9.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.9.0/atatus-apm-agent-1.9.0.jar
-1.10.0: https://repo1.maven.org/maven2/co/elastic/apm/atatus-apm-agent/1.10.0/atatus-apm-agent-1.10.0.jar
+1.0.0: https://repo1.maven.org/maven2/co/atatus/apm/atatus-java-agent/1.0.0/atatus-java-agent-1.0.0.jar
+

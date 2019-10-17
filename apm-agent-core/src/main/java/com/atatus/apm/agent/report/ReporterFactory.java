@@ -24,13 +24,13 @@
  */
 package com.atatus.apm.agent.report;
 
-import org.stagemonitor.configuration.ConfigurationRegistry;
-
+import com.atatus.apm.agent.collector.Aggregator;
+import com.atatus.apm.agent.collector.serialize.JsonSerializer;
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.impl.MetaData;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.report.processor.ProcessorEventHandler;
-import com.atatus.apm.agent.report.serialize.DslJsonSerializer;
+import org.stagemonitor.configuration.ConfigurationRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -44,13 +44,22 @@ public class ReporterFactory {
         return new ApmServerReporter(true, reporterConfiguration, coreConfiguration, reportingEventHandler);
     }
 
+//    @Nonnull
+//    private ReportingEventHandler getReportingEventHandler(ConfigurationRegistry configurationRegistry,
+//                                                           ReporterConfiguration reporterConfiguration, MetaData metaData, ApmServerClient apmServerClient) {
+//
+//        final DslJsonSerializer payloadSerializer = new DslJsonSerializer(configurationRegistry.getConfig(StacktraceConfiguration.class), apmServerClient);
+//        final ProcessorEventHandler processorEventHandler = ProcessorEventHandler.loadProcessors(configurationRegistry);
+//        return new IntakeV2ReportingEventHandler(reporterConfiguration, processorEventHandler, payloadSerializer, metaData, apmServerClient);
+//    }
+
     @Nonnull
     private ReportingEventHandler getReportingEventHandler(ConfigurationRegistry configurationRegistry,
                                                            ReporterConfiguration reporterConfiguration, MetaData metaData, ApmServerClient apmServerClient) {
 
-        final DslJsonSerializer payloadSerializer = new DslJsonSerializer(configurationRegistry.getConfig(StacktraceConfiguration.class), apmServerClient);
+        final JsonSerializer payloadSerializer = new JsonSerializer(configurationRegistry.getConfig(StacktraceConfiguration.class), apmServerClient);
         final ProcessorEventHandler processorEventHandler = ProcessorEventHandler.loadProcessors(configurationRegistry);
-        return new IntakeV2ReportingEventHandler(reporterConfiguration, processorEventHandler, payloadSerializer, metaData, apmServerClient);
+        return new Aggregator(reporterConfiguration, processorEventHandler, payloadSerializer, metaData, apmServerClient);
     }
 
 }

@@ -31,7 +31,7 @@ See the default value description of the <<config-service-name>> configuration o
 [[setup-attach-api-usage]]
 ==== Usage
 
-Declare a dependency to the link:https://search.maven.org/search?q=g:co.elastic.apm%20AND%20a:apm-agent-attach[`apm-agent-attach`] artifact.
+Declare a dependency to the link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:apm-agent-attach[`apm-agent-attach`] artifact.
 
 [source,xml]
 .pom.xml

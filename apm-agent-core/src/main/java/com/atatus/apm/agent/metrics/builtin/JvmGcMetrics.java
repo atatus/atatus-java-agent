@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -47,14 +47,21 @@ public class JvmGcMetrics implements LifecycleListener {
 
     void bindTo(final MetricRegistry registry) {
         for (final GarbageCollectorMXBean garbageCollectorMXBean : garbageCollectorMXBeans) {
-            final Labels tags = Labels.Mutable.of("name", garbageCollectorMXBean.getName());
-            registry.addUnlessNegative("jvm.gc.count", tags, new DoubleSupplier() {
+            // final Labels tags = Labels.Mutable.of("name", garbageCollectorMXBean.getName());
+        	final Labels tags = Labels.EMPTY;
+        	String suffix = garbageCollectorMXBean.getName();
+        	if (suffix != null && !suffix.isEmpty()) {
+        		suffix = "." + suffix.replaceAll("\\s", "").toLowerCase();
+        	} else {
+        		suffix = "";
+        	}
+            registry.addUnlessNegative("jvm.gc.count" + suffix, tags, new DoubleSupplier() {
                 @Override
                 public double get() {
                     return garbageCollectorMXBean.getCollectionCount();
                 }
             });
-            registry.addUnlessNegative("jvm.gc.time", tags, new DoubleSupplier() {
+            registry.addUnlessNegative("jvm.gc.time" + suffix, tags, new DoubleSupplier() {
                 @Override
                 public double get() {
                     return garbageCollectorMXBean.getCollectionTime();

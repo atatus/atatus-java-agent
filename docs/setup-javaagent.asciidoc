@@ -6,7 +6,7 @@
 ==== Download the Java agent
 
 The first step in getting started with the Elastic APM Java agent is to download the latest release of the agent jar file from
-link:https://search.maven.org/search?q=g:co.elastic.apm%20AND%20a:atatus-apm-agent[maven central].
+link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:atatus-apm-agent[maven central].
 
 NOTE: Don't declare a dependency to the agent in your application.
 

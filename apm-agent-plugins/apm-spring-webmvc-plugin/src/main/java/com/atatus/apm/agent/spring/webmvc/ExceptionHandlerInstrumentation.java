@@ -53,7 +53,7 @@ public class ExceptionHandlerInstrumentation extends ElasticApmInstrumentation {
         public static void captureException(@Advice.Argument(0) HttpServletRequest request,
                                             @Advice.Argument(3) Exception e) {
             if (request != null && e != null) {
-                request.setAttribute("co.elastic.apm.exception", e);
+                request.setAttribute("com.atatus.apm.exception", e);
             }
         }
     }

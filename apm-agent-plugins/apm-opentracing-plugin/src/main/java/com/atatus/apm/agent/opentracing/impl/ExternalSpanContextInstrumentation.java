@@ -53,7 +53,7 @@ public class ExternalSpanContextInstrumentation extends OpenTracingBridgeInstrum
 
     @Override
     public ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return named("co.elastic.apm.opentracing.ExternalProcessSpanContext");
+        return named("com.atatus.apm.opentracing.ExternalProcessSpanContext");
     }
 
     @Override

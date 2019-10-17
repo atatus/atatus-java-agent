@@ -67,7 +67,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ApmServerClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ApmServerClient.class);
-    private static final String USER_AGENT = "elasticapm-java/" + VersionUtils.getAgentVersion();
+    private static final String USER_AGENT = "atatus-java-agent/" + VersionUtils.getAgentVersion();
     private static final Version APM_SERVER_NON_STRING_LABEL_SUPPORT = new Version("6.7.0");
     private final ReporterConfiguration reporterConfiguration;
     private volatile List<URL> serverUrls;

@@ -59,7 +59,7 @@ public class CoreConfiguration extends ConfigurationOptionProvider {
     public static final String SERVICE_NODE_NAME = "service_node_name";
     public static final String SAMPLE_RATE = "transaction_sample_rate";
     private static final String CORE_CATEGORY = "Core";
-    private static final String DEFAULT_CONFIG_FILE = AGENT_HOME_PLACEHOLDER + "/elasticapm.properties";
+    private static final String DEFAULT_CONFIG_FILE = AGENT_HOME_PLACEHOLDER + "/atatus.properties";
     public static final String CONFIG_FILE = "config_file";
 
     private final ConfigurationOption<Boolean> active = ConfigurationOption.booleanOption()

@@ -24,10 +24,10 @@
  */
 package com.atatus.apm.agent.impl.payload;
 
-import javax.annotation.Nullable;
-
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.util.VersionUtils;
+
+import javax.annotation.Nullable;
 
 public class ServiceFactory {
 
@@ -36,7 +36,7 @@ public class ServiceFactory {
             .withName(coreConfiguration.getServiceName())
             .withVersion(coreConfiguration.getServiceVersion())
             .withEnvironment(coreConfiguration.getEnvironment())
-            .withAgent(new Agent("java", getAgentVersion()))
+            .withAgent(new Agent("Java", getAgentVersion()))
             .withRuntime(new RuntimeInfo("Java", System.getProperty("java.version")))
             .withLanguage(new Language("Java", System.getProperty("java.version")))
             .withNode(new Node(coreConfiguration.getServiceNodeName()));
@@ -47,7 +47,7 @@ public class ServiceFactory {
     }
 
     private String getAgentVersion() {
-        String version = VersionUtils.getVersionFromPomProperties(ServiceFactory.class, "co.elastic.apm", "atatus-apm-agent");
+        String version = VersionUtils.getVersionFromPomProperties(ServiceFactory.class, "com.atatus.apm", "atatus-apm-agent");
         if (version == null) {
             return "unknown";
         }

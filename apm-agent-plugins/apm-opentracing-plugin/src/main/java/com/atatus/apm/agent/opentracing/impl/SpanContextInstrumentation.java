@@ -54,7 +54,7 @@ public class SpanContextInstrumentation extends OpenTracingBridgeInstrumentation
 
     @Override
     public ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return named("co.elastic.apm.opentracing.TraceContextSpanContext");
+        return named("com.atatus.apm.opentracing.TraceContextSpanContext");
     }
 
     @Override

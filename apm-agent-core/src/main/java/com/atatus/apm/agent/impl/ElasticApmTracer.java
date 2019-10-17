@@ -365,7 +365,8 @@ public class ElasticApmTracer {
             error.setException(e);
             Transaction currentTransaction = currentTransaction();
             if (currentTransaction != null) {
-                error.setTransactionType(currentTransaction.getType());
+                error.setTransactionName(currentTransaction.getNameAsString());
+            	error.setTransactionType(currentTransaction.getType());
                 error.setTransactionSampled(currentTransaction.isSampled());
             }
             if (parent != null) {

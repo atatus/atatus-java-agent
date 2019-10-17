@@ -32,7 +32,7 @@ import java.util.Properties;
 public final class VersionUtils {
 
     @Nullable
-    private static final String AGENT_VERSION = getVersionFromPomProperties(VersionUtils.class, "co.elastic.apm", "atatus-apm-agent");
+    private static final String AGENT_VERSION = getVersionFromPomProperties(VersionUtils.class, "com.atatus.apm", "atatus-apm-agent");
 
     private VersionUtils() {
     }

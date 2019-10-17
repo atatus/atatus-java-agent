@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -52,7 +52,7 @@ import java.util.concurrent.Callable;
  */
 public class TraceContext extends TraceContextHolder {
 
-    public static final String TRACE_PARENT_HEADER = "elastic-apm-traceparent";
+    public static final String TRACE_PARENT_HEADER = "atatus-apm-traceparent";
     private static final int EXPECTED_LENGTH = 55;
     private static final int TRACE_ID_OFFSET = 3;
     private static final int PARENT_ID_OFFSET = 36;

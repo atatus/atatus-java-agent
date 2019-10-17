@@ -26,12 +26,6 @@ package com.atatus.apm.agent.impl.payload;
 
 import com.atatus.apm.agent.MockTracer;
 import com.atatus.apm.agent.TransactionUtils;
-
-import com.atatus.apm.agent.impl.payload.Agent;
-import com.atatus.apm.agent.impl.payload.ProcessInfo;
-import com.atatus.apm.agent.impl.payload.Service;
-import com.atatus.apm.agent.impl.payload.SystemInfo;
-import com.atatus.apm.agent.impl.payload.TransactionPayload;
 import com.atatus.apm.agent.impl.sampling.ConstantSampler;
 import com.atatus.apm.agent.impl.stacktrace.StacktraceConfiguration;
 import com.atatus.apm.agent.impl.transaction.Span;
@@ -145,7 +139,7 @@ class TransactionPayloadJsonSchemaTest {
         String namespace = "/my/namespace";
         String podUID = "podUID";
         SystemInfo.Kubernetes kubernetes = new SystemInfo.Kubernetes(podName, nodeName, namespace, podUID);
-        TransactionPayload payload = createPayload(new SystemInfo("x64", "localhost", "platform", container, kubernetes));
+        TransactionPayload payload = createPayload(new SystemInfo("x64", "localhost", "os", "version", "platform", container, kubernetes));
         final String content = serializer.toJsonString(payload);
         System.out.println(content);
         JsonNode systemNode = objectMapper.readTree(content).get("system");

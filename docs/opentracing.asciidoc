@@ -65,13 +65,13 @@ The first step in getting started with the OpenTracing API bridge is to declare 
 [source,groovy]
 .build.gradle
 ----
-compile "co.elastic.apm:apm-opentracing:$elasticApmVersion"
+compile "com.atatus.apm:apm-opentracing:$elasticApmVersion"
 ----
 
 Replace the version placeholders with the
-link:https://search.maven.org/search?q=g:co.elastic.apm%20AND%20a:apm-opentracing[
+link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:apm-opentracing[
 latest version from maven central]:
-image:https://img.shields.io/maven-central/v/co.elastic.apm/apm-opentracing.svg[Maven Central]
+image:https://img.shields.io/maven-central/v/com.atatus.apm/apm-opentracing.svg[Maven Central]
 
 
 [float]

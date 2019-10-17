@@ -658,7 +658,7 @@ public class DslJsonSerializer implements PayloadSerializer, MetricRegistry.Metr
         for (int i = 0; i < stacktrace.length && collectedStackFrames < stackTraceLimit; i++) {
             StackTraceElement stackTraceElement = stacktrace[i];
             // only skip the top most apm stack frames
-            if (!topMostElasticApmPackagesSkipped && stackTraceElement.getClassName().startsWith("co.elastic.apm")) {
+            if (!topMostElasticApmPackagesSkipped && stackTraceElement.getClassName().startsWith("com.atatus.apm")) {
                 continue;
             }
             topMostElasticApmPackagesSkipped = true;

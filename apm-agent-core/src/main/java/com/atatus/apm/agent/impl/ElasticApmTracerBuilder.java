@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 public class ElasticApmTracerBuilder {
 
     /**
-     * See {@link co.elastic.apm.attach.ElasticApmAttacher#TEMP_PROPERTIES_FILE_KEY}
+     * See {@link com.atatus.apm.attach.ElasticApmAttacher#TEMP_PROPERTIES_FILE_KEY}
      */
     private static final String TEMP_PROPERTIES_FILE_KEY = "c";
     private final Logger logger;
@@ -166,8 +166,8 @@ public class ElasticApmTracerBuilder {
                 result.add(attachmentConfig);
             }
         }
-        result.add(new PrefixingConfigurationSourceWrapper(new SystemPropertyConfigurationSource(), "elastic.apm."));
-        result.add(new PrefixingConfigurationSourceWrapper(new EnvironmentVariableConfigurationSource(), "ELASTIC_APM_"));
+        result.add(new PrefixingConfigurationSourceWrapper(new SystemPropertyConfigurationSource(), "atatus."));
+        result.add(new PrefixingConfigurationSourceWrapper(new EnvironmentVariableConfigurationSource(), "ATATUS_"));
         result.add(new AbstractConfigurationSource() {
             @Override
             public String getValue(String key) {
@@ -183,10 +183,10 @@ public class ElasticApmTracerBuilder {
         if (configFileLocation != null && PropertyFileConfigurationSource.isPresent(configFileLocation)) {
             result.add(new PropertyFileConfigurationSource(configFileLocation));
         }
-        // looks if we can find a elasticapm.properties on the classpath
+        // looks if we can find a atatus.properties on the classpath
         // mainly useful for unit tests
-        if (PropertyFileConfigurationSource.isPresent("elasticapm.properties")) {
-            result.add(new PropertyFileConfigurationSource("elasticapm.properties"));
+        if (PropertyFileConfigurationSource.isPresent("atatus.properties")) {
+            result.add(new PropertyFileConfigurationSource("atatus.properties"));
         }
         return result;
     }

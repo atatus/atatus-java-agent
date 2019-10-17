@@ -9,12 +9,12 @@
     <packaging>pom</packaging>
     <inceptionYear>2018</inceptionYear>
     <organization>
-        <name>Elastic Inc.</name>
-        <url>https://www.elastic.co</url>
+        <name>Atatus Inc.</name>
+        <url>https://www.atatus.com</url>
     </organization>
 
-    <description>APM for Java applications with the Elastic stack</description>
-    <url>https://github.com/elastic/apm-agent-java</url>
+    <description>Atatus APM for Java applications</description>
+    <url>https://github.com/atatus/atatus-java-agent</url>
 
     <licenses>
         <license>
@@ -24,18 +24,18 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:elastic/apm-agent-java.git</connection>
-        <developerConnection>scm:git:git@github.com:elastic/apm-agent-java.git</developerConnection>
-        <url>https://github.com/elastic/apm-agent-java</url>
+        <connection>scm:git:git@github.com:atatus/apm-agent-java.git</connection>
+        <developerConnection>scm:git:git@github.com:atatus/atatus-java-agent.git</developerConnection>
+        <url>https://github.com/atatus/atatus-java-agent</url>
         <tag>HEAD</tag>
     </scm>
 
     <developers>
         <developer>
-            <name>Elastic</name>
-            <url>https://discuss.elastic.co/c/apm</url>
-            <organization>Elastic Inc.</organization>
-            <organizationUrl>https://www.elastic.co</organizationUrl>
+            <name>Atatus</name>
+            <url>https://www.atatus.com/contact</url>
+            <organization>Atatus Inc.</organization>
+            <organizationUrl>https://www.atatus.com</organizationUrl>
         </developer>
     </developers>
 
@@ -202,7 +202,7 @@
                             </annotationProcessorPaths>
                             <compilerArgs>
                                 <arg>-Xep:NullAway:ERROR</arg>
-                                <arg>-XepOpt:NullAway:AnnotatedPackages=co.elastic.apm</arg>
+                                <arg>-XepOpt:NullAway:AnnotatedPackages=com.atatus.apm</arg>
                             </compilerArgs>
                         </configuration>
                         <dependencies>
@@ -414,15 +414,15 @@
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
                     <failOnMissingHeader>true</failOnMissingHeader>
                     <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                    <projectName>Elastic APM Java agent</projectName>
+                    <projectName>Atatus APM Java agent</projectName>
                     <!--
-                    Elastic does actually not have the copyright of community contributions.
-                    See https://www.elastic.co/contributor-agreement
-                    "The CLA is a license agreement, which enables Elastic to distribute your code without restriction.
+                    Atatus does actually not have the copyright of community contributions.
+                    See https://www.atatus.com/contributor-agreement
+                    "The CLA is a license agreement, which enables Atatus to distribute your code without restriction.
                     It doesn't require you to assign to us any copyright you have, the ownership of which remains in full with you.
                     You cannot withdraw permission for its use at a later date."
                     -->
-                    <organizationName>Elastic and contributors</organizationName>
+                    <organizationName>Atatus and contributors</organizationName>
                     <roots>
                         <root>src/main/java</root>
                         <root>src/test/java</root>

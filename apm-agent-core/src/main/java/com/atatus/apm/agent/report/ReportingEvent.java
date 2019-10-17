@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -24,19 +24,19 @@
  */
 package com.atatus.apm.agent.report;
 
+import com.atatus.apm.agent.impl.error.ErrorCapture;
+import com.atatus.apm.agent.impl.transaction.Span;
+import com.atatus.apm.agent.impl.transaction.Transaction;
+import com.atatus.apm.agent.metrics.MetricRegistry;
+
+import javax.annotation.Nullable;
+
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.ERROR;
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.FLUSH;
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.METRICS;
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.SHUTDOWN;
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.SPAN;
 import static com.atatus.apm.agent.report.ReportingEvent.ReportingEventType.TRANSACTION;
-
-import javax.annotation.Nullable;
-
-import com.atatus.apm.agent.impl.error.ErrorCapture;
-import com.atatus.apm.agent.impl.transaction.Span;
-import com.atatus.apm.agent.impl.transaction.Transaction;
-import com.atatus.apm.agent.metrics.MetricRegistry;
 
 public class ReportingEvent {
     @Nullable
@@ -111,7 +111,7 @@ public class ReportingEvent {
         return metricRegistry;
     }
 
-    enum ReportingEventType {
+    public enum ReportingEventType {
         FLUSH, TRANSACTION, SPAN, ERROR, METRICS, SHUTDOWN
     }
 }

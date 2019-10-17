@@ -68,7 +68,7 @@ public class SpyConfiguration {
         }
         return builder
             .addConfigSource(configurationSource)
-            .addConfigSource(new PropertyFileConfigurationSource("elasticapm.properties"))
+            .addConfigSource(new PropertyFileConfigurationSource("atatus.properties"))
             .build();
     }
 

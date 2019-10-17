@@ -42,7 +42,7 @@ public class ElasticApmTracerInstrumentation extends OpenTracingBridgeInstrument
 
     @Override
     public ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return named("co.elastic.apm.opentracing.ElasticApmTracer");
+        return named("com.atatus.apm.opentracing.ElasticApmTracer");
     }
 
     @Override

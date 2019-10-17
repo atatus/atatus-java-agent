@@ -1,6 +1,6 @@
 [![Build Status](https://apm-ci.elastic.co/buildStatus/icon?job=apm-agent-java%2Fapm-agent-java-mbp%2Fmaster)](https://apm-ci.elastic.co/job/apm-agent-java/job/apm-agent-java-mbp/job/master/)
 [![codecov](https://codecov.io/gh/elastic/apm-agent-java/branch/master/graph/badge.svg)](https://codecov.io/gh/elastic/apm-agent-java)
-[![Maven Central](https://img.shields.io/maven-central/v/co.elastic.apm/apm-agent-api.svg)](https://search.maven.org/search?q=g:co.elastic.apm%20AND%20a:atatus-apm-agent)
+[![Maven Central](https://img.shields.io/maven-central/v/com.atatus.apm/apm-agent-api.svg)](https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:atatus-apm-agent)
 
 # apm-agent-java
 
@@ -32,7 +32,7 @@ See the [contributing documentation](CONTRIBUTING.md)
 ## Snapshots
 
 Download the latest snapshot from master
-[here](https://oss.sonatype.org/service/local/artifact/maven/redirect?r=snapshots&g=co.elastic.apm&a=atatus-apm-agent&v=LATEST).
+[here](https://oss.sonatype.org/service/local/artifact/maven/redirect?r=snapshots&g=com.atatus.apm&a=atatus-apm-agent&v=LATEST).
 
 ## Build form source
 

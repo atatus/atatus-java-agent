@@ -50,7 +50,7 @@ public class StartupInfo implements LifecycleListener {
     private final String elasticApmVersion;
 
     public StartupInfo() {
-        final String version = VersionUtils.getVersionFromPomProperties(getClass(), "co.elastic.apm", "atatus-apm-agent");
+        final String version = VersionUtils.getVersionFromPomProperties(getClass(), "com.atatus.apm", "atatus-apm-agent");
         if (version != null) {
             elasticApmVersion = version;
         } else {

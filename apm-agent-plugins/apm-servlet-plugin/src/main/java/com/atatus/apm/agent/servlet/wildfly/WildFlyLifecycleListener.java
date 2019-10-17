@@ -28,7 +28,7 @@ import com.atatus.apm.agent.context.LifecycleListener;
 import com.atatus.apm.agent.impl.ElasticApmTracer;
 
 /**
- * Makes the {@code co.elastic.apm} package visible from all modules
+ * Makes the {@code com.atatus.apm} package visible from all modules
  */
 public class WildFlyLifecycleListener implements LifecycleListener {
 

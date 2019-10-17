@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <properties>
-        <elastic.apm.agent>com.atatus.apm.agent.bci.AgentMain</elastic.apm.agent>
+        <atatus.apm.agent>com.atatus.apm.agent.bci.AgentMain</atatus.apm.agent>
         <apm-agent-parent.base.dir>${project.basedir}/..</apm-agent-parent.base.dir>
     </properties>
 
@@ -114,7 +114,7 @@
                                 -->
                                 <relocation>
                                     <pattern>simplelogger.properties</pattern>
-                                    <shadedPattern>elasticapmlogger.properties</shadedPattern>
+                                    <shadedPattern>atatusapmlogger.properties</shadedPattern>
                                 </relocation>
                                 <!-- See javadoc of com.atatus.apm.agent.logging.JulBridgeLogger -->
                                 <relocation>
@@ -134,8 +134,8 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Premain-Class>${elastic.apm.agent}</Premain-Class>
-                                        <Agent-Class>${elastic.apm.agent}</Agent-Class>
+                                        <Premain-Class>${atatus.apm.agent}</Premain-Class>
+                                        <Agent-Class>${atatus.apm.agent}</Agent-Class>
                                         <Can-Redefine-Classes>true</Can-Redefine-Classes>
                                         <Can-Retransform-Classes>true</Can-Retransform-Classes>
                                         <Can-Set-Native-Method-Prefix>true</Can-Set-Native-Method-Prefix>

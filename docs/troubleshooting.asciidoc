@@ -119,7 +119,7 @@ One workaround is to set the `scope` to `test`.
 [source,groovy]
 .build.gradle
 ----
-compileOnly "co.elastic.apm:atatus-apm-agent:$elasticApmVersion"
+compileOnly "com.atatus.apm:atatus-apm-agent:$elasticApmVersion"
 ----
 
 

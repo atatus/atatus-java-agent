@@ -24,37 +24,45 @@
  */
 package com.atatus.apm.agent.report;
 
-import org.stagemonitor.configuration.ConfigurationOption;
-import org.stagemonitor.configuration.ConfigurationOptionProvider;
-import org.stagemonitor.configuration.converter.ListValueConverter;
-import org.stagemonitor.configuration.converter.UrlValueConverter;
-
 import com.atatus.apm.agent.configuration.converter.ByteValue;
 import com.atatus.apm.agent.configuration.converter.ByteValueConverter;
 import com.atatus.apm.agent.configuration.converter.TimeDuration;
 import com.atatus.apm.agent.configuration.converter.TimeDurationValueConverter;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.matcher.WildcardMatcherValueConverter;
+import org.stagemonitor.configuration.ConfigurationOption;
+import org.stagemonitor.configuration.ConfigurationOptionProvider;
+import org.stagemonitor.configuration.converter.ListValueConverter;
+import org.stagemonitor.configuration.converter.UrlValueConverter;
 
 import javax.annotation.Nullable;
-
-import static com.atatus.apm.agent.configuration.validation.RangeValidator.isNotInRange;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
+import static com.atatus.apm.agent.configuration.validation.RangeValidator.isNotInRange;
+
 public class ReporterConfiguration extends ConfigurationOptionProvider {
     public static final String REPORTER_CATEGORY = "Reporter";
-    private final ConfigurationOption<String> secretToken = ConfigurationOption.stringOption()
-        .key("secret_token")
+    private final ConfigurationOption<String> licenseKey = ConfigurationOption.stringOption()
+        .key("license_key")
         .configurationCategory(REPORTER_CATEGORY)
         .description("This string is used to ensure that only your agents can send data to your APM server.\n" +
             "\n" +
-            "Both the agents and the APM server have to be configured with the same secret token.\n" +
-            "Use if APM Server requires a token.")
+            "Both the agents and the APM server have to be configured with the same license key.\n" +
+            "Use if APM Server requires a license key.")
         .sensitive()
         .build();
+
+    private final ConfigurationOption<String> appName = ConfigurationOption.stringOption()
+            .key("app_name")
+            .configurationCategory(REPORTER_CATEGORY)
+            .description("This string is used to ensure that only your agents can send data to your APM server.\n" +
+                "\n" +
+                "Both the agents and the APM server have to be configured with the same app name.\n" +
+                "Use if APM Server requires an app name.")
+            .sensitive()
+            .build();
 
     private final ConfigurationOption<List<URL>> serverUrl = ConfigurationOption.urlsOption()
         .key("server_urls")
@@ -73,7 +81,7 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
             "\n" +
             "NOTE: This configuration can only be reloaded dynamically as of 1.8.0")
         .dynamic(true)
-        .buildWithDefault(Collections.singletonList(UrlValueConverter.INSTANCE.convert("http://localhost:8200")));
+        .buildWithDefault(Collections.singletonList(UrlValueConverter.INSTANCE.convert("https://localhost:8200")));
 
     private final ConfigurationOption<TimeDuration> serverTimeout = TimeDurationValueConverter.durationOption("s")
         .key("server_timeout")
@@ -170,9 +178,17 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
         .dynamic(false)
         .buildWithDefault(Collections.<WildcardMatcher>emptyList());
 
-    @Nullable
+
     public String getSecretToken() {
-        return secretToken.get();
+        return licenseKey.get();
+    }
+
+    public String getLicenseKey() {
+        return licenseKey.get();
+    }
+
+    public String getAppName() {
+        return appName.get();
     }
 
     public List<URL> getServerUrls() {

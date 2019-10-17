@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>TestServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.TestServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.TestServlet</servlet-class>
         <!--initializes servlet eagerly so that the db initialization is not part of the transaction-->
         <load-on-startup>0</load-on-startup>
         <async-supported>true</async-supported>
@@ -19,7 +19,7 @@
 
     <servlet>
         <servlet-name>AsyncDispatchServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.AsyncDispatchTestServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.AsyncDispatchTestServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>
     </servlet>
@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>AsyncStartServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.AsyncStartTestServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.AsyncStartTestServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>
     </servlet>
@@ -41,7 +41,7 @@
 
     <servlet>
         <servlet-name>ExecutorServiceTestServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.ExecutorServiceTestServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.ExecutorServiceTestServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>
     </servlet>
@@ -52,7 +52,7 @@
 
     <servlet>
         <servlet-name>HttpUrlConnectionTestServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.HttpUrlConnectionTestServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.HttpUrlConnectionTestServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -62,7 +62,7 @@
 
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
-        <servlet-class>co.elastic.webapp.EchoServlet</servlet-class>
+        <servlet-class>com.atatus.webapp.EchoServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

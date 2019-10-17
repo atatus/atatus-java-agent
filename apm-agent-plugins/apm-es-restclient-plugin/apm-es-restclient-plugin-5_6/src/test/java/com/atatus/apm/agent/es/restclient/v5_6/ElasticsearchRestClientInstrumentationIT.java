@@ -72,7 +72,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public class ElasticsearchRestClientInstrumentationIT extends AbstractEsClientInstrumentationTest {
 
     protected static final String ELASTICSEARCH_CONTAINER_VERSION = "docker.elastic.co/elasticsearch/elasticsearch:5.6.0";
-    protected static final String USER_NAME = "elastic";
+    protected static final String USER_NAME = "atatus";
     protected static final String PASSWORD = "changeme";
 
     protected static final String DOC_TYPE = "doc";

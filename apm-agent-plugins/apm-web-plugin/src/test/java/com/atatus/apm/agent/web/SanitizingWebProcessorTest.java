@@ -74,7 +74,7 @@ class SanitizingWebProcessorTest {
         context.getRequest().addFormUrlEncodedParameter("cretidCard", "1234 1234 1234 1234");
         context.getRequest().addFormUrlEncodedParameter("non-sensitive", "foo");
         context.getRequest().addHeader("Authorization", "Basic: YWxhZGRpbjpvcGVuc2VzYW1l");
-        context.getRequest().addHeader("Referer", "elastic.co");
+        context.getRequest().addHeader("Referer", "atatus.com");
         context.getRequest().addHeader("Cookie", "JESESSIONID=CAFEBABE");
         context.getResponse().addHeader("secret-token", "foo");
         context.getResponse().addHeader("Set-Cookie", "JESESSIONID=DEADBEEF");
@@ -90,7 +90,7 @@ class SanitizingWebProcessorTest {
 
         assertThat(context.getRequest().getHeaders().get("Authorization")).isEqualTo(SanitizingWebProcessor.REDACTED);
         assertThat(context.getRequest().getHeaders().get("Cookie")).isNull();
-        assertThat(context.getRequest().getHeaders().get("Referer")).isEqualTo("elastic.co");
+        assertThat(context.getRequest().getHeaders().get("Referer")).isEqualTo("atatus.com");
 
         assertThat(context.getResponse().getHeaders().get("secret-token")).isEqualTo(SanitizingWebProcessor.REDACTED);
         assertThat(context.getResponse().getHeaders().get("Set-Cookie")).isEqualTo(SanitizingWebProcessor.REDACTED);

@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -23,8 +23,6 @@
  * #L%
  */
 package com.atatus.apm.agent.impl.error;
-
-import javax.annotation.Nullable;
 
 import com.atatus.apm.agent.configuration.CoreConfiguration;
 import com.atatus.apm.agent.impl.ElasticApmTracer;
@@ -37,6 +35,7 @@ import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.matcher.WildcardMatcher;
 import com.atatus.apm.agent.objectpool.Recyclable;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 
@@ -205,6 +204,12 @@ public class ErrorCapture implements Recyclable {
          */
         private boolean isSampled;
         /**
+         * The related Transaction name
+         */
+        @Nullable
+        private String name;
+
+        /**
          * The related TransactionInfo type
          */
         @Nullable
@@ -221,6 +226,11 @@ public class ErrorCapture implements Recyclable {
         }
 
         @Nullable
+        public String getName() {
+            return name;
+        }
+
+        @Nullable
         public String getType() {
             return type;
         }
@@ -234,7 +244,12 @@ public class ErrorCapture implements Recyclable {
         transactionInfo.isSampled = transactionSampled;
     }
 
+    public void setTransactionName(@Nullable String name) {
+        transactionInfo.name = name;
+    }
+
     public void setTransactionType(@Nullable String type) {
         transactionInfo.type = type;
     }
+
 }
