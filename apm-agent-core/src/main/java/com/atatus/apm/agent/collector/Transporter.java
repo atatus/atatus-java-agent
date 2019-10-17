@@ -90,7 +90,7 @@ public class Transporter {
 			final int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
 				String error = String.format(
-						"Error while sending %d of %d payload to the Atatus agent. Status: %d, ResponseMessage: %s",
+						"Error sending payload to the Atatus agent. Status: %d, ResponseMessage: %s",
 						responseCode, connection.getResponseMessage());
 				logger.error(error);
 
