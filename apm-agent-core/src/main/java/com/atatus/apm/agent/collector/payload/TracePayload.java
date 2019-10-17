@@ -86,9 +86,6 @@ public class TracePayload extends Payload {
 			traceSpan.setKind(Types.getCleanType(span.getType()));
 			traceSpan.setType(Types.getCleanSubType(span.getSubtype()));
 
-			// logger.info("transaction.getTimestamp() {}", transaction.getTimestamp());
-			// logger.info("span.getTimestamp() {}", span.getTimestamp());
-
 			this.functions.add(span.getNameAsString());
 			this.traceSpans.add(traceSpan);
 
@@ -113,9 +110,9 @@ public class TracePayload extends Payload {
             // traceSpan.setType(db.getType());
             // traceSpan.setDBLink(db.getDbLink());
 
-			//  logger.info("DB Type {}", db.getType());
-			//  logger.info("DB Link {}", db.getDbLink());
-			//  logger.info("DB User {}", db.getUser());
+			//  logger.info("Atatus Debug:  DB Type {}", db.getType());
+			//  logger.info("Atatus Debug:  DB Link {}", db.getDbLink());
+			//  logger.info("Atatus Debug: DB User {}", db.getUser());
         }
     }
 

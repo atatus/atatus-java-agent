@@ -155,7 +155,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         if (logger.isDebugEnabled()) {
             logger.debug("Receiving {} event (sequence {})", event.getType(), sequence);
         }
-        logger.info("Receiving {} event (sequence {})", event.getType(), sequence);
+        logger.info("Atatus Debug: Receiving {} event (sequence {})", event.getType(), sequence);
         try {
             if (!shutDown) {
 				try {
@@ -225,9 +225,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 				transactionPayload.aggregate(transaction, spanList);
 			} else {
 				transactionPayload = new TransactionPayload(transaction, frameworkName);
-				// logger.info("Adding Transaction {}", transactionName);
-				// logger.info("Checking Span {}", transactionId);
-				// logger.info("Actual Span {}", spanMap.get(transactionId));
 				transactionPayload.aggregate(transaction, spanList);
 				transactionPayloadMap.put(transactionName, transactionPayload);
 			}
@@ -249,8 +246,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         		spans = new ArrayList<Span>();
         		spans.add(span);
             	spanMap.put(transactionId, spans);
-            	// logger.info("Adding Span Name {}", span.getNameAsString());
-            	// logger.info("Adding Span Duration {}", span.getDuration());
         	} else {
         		spans.add(span);
         	}
@@ -316,7 +311,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 		try {
 
-			logger.info("Running cron job for hostinfo. ", Calendar.getInstance().get(Calendar.MINUTE));
 			// Send every one 30 minutes
 			int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
 			if (currentMinute == 0 && currentMinute == 30) {
@@ -325,11 +319,13 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			}
 
 			if (shutDown) {
-				logger.info("Shutdown already");
 				return;
 			}
 
-			logger.info("Running cron job for transaction {}", this.transactionPayloadMap.size());
+			logger.info("Atatus Debug: Processing Transaction: {}, Trace: {}, ErrorMetric: {}, Errors: {}, Metrics: {}", 
+					this.transactionPayloadMap.size(), this.tracePayloadQueue.size(), this.errorMetricPayload.size(), 
+					this.errorQueue.size(), this.metricsQueue.size());
+
 			HashMap<String, TransactionPayload> transactionPayloadMapToWrite = this.transactionPayloadMap;
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
 			if (transactionPayloadMapToWrite.size() > 0) {
@@ -338,7 +334,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 						reporterConfiguration, metaData), Transporter.TRANSACTION_PATH);
 			}
 
-			logger.info("Running cron job for trace {}", this.tracePayloadQueue.size());
 			if (this.tracePayloadQueue.size() > 0) {
 				PriorityBlockingQueue<TracePayload> tracePayloadQueueToWrite = new PriorityBlockingQueue<>(TRACE_DEFAULT_QUEUE_SIZE, new TracePayloadComparator());
 				this.tracePayloadQueue.drainTo(tracePayloadQueueToWrite);
@@ -346,8 +341,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 						reporterConfiguration, metaData), Transporter.TRACE_PATH);
 			}
 
-
-			logger.info("Running cron job for error metric");
 			if (!this.errorMetricPayload.isEmpty()) {
 				ErrorMetricPayload errorMetricPayloadToWrite = this.errorMetricPayload;
 				this.errorMetricPayload = new ErrorMetricPayload();
@@ -355,8 +348,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 						reporterConfiguration, metaData), Transporter.ERROR_METRIC_PATH);
 			}
 
-
-			logger.info("Running cron job for errors {}", this.errorQueue.size());
 			if (this.errorQueue.size() > 0) {
 				BlockingQueue<ErrorCapture> errorQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.errorQueue.drainTo(errorQueueToWrite);
@@ -364,7 +355,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 						reporterConfiguration, metaData), Transporter.ERROR_PATH);
 			}
 
-			logger.info("Running cron job for metrics {}", this.metricsQueue.size());
 			if (this.metricsQueue.size() > 0) {
 				BlockingQueue<MetricRegistry> metricsQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.metricsQueue.drainTo(metricsQueueToWrite);
@@ -374,8 +364,8 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			}
 
 		} catch (final BlockingException e) {
-			logger.debug("Failed to send hostinfo to the API: {}", e.getMessage());
-			logger.info("Failed to send hostinfo to the API: {}", e);
+			logger.debug("Atatus Debug: Failed to send payload to the Atatus: {}", e.getMessage());
+			logger.info("Atatus Debug: Failed to send payload to the Atatus: {}", e);
 
 			// Reset all queues and map
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();

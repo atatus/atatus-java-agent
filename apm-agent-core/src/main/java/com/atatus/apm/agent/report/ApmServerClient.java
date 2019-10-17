@@ -73,7 +73,7 @@ public class ApmServerClient {
     private volatile List<URL> serverUrls;
     private volatile Future<Version> apmServerVersion;
     private final AtomicInteger errorCount = new AtomicInteger();
-    private final ApmServerHealthChecker healthChecker;
+    // private final ApmServerHealthChecker healthChecker;
 
     public ApmServerClient(ReporterConfiguration reporterConfiguration) {
         this(reporterConfiguration, shuffleUrls(reporterConfiguration.getServerUrls()));
@@ -81,7 +81,7 @@ public class ApmServerClient {
 
     public ApmServerClient(ReporterConfiguration reporterConfiguration, List<URL> shuffledUrls) {
         this.reporterConfiguration = reporterConfiguration;
-        this.healthChecker = new ApmServerHealthChecker(this);
+        // this.healthChecker = new ApmServerHealthChecker(this);
         this.reporterConfiguration.getServerUrlsOption().addChangeListener(new ConfigurationOption.ChangeListener<List<URL>>() {
             @Override
             public void onChange(ConfigurationOption<?> configurationOption, List<URL> oldValue, List<URL> newValue) {
@@ -96,7 +96,7 @@ public class ApmServerClient {
 
     private void setServerUrls(List<URL> serverUrls) {
         this.serverUrls = serverUrls;
-        this.apmServerVersion = healthChecker.checkHealthAndGetMinVersion();
+        // this.apmServerVersion = healthChecker.checkHealthAndGetMinVersion();
         this.errorCount.set(0);
     }
 

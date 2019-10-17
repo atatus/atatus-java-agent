@@ -97,7 +97,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
     }
 
     /**
-     * We want to reload the configuration in intervals which are determined based on the Cache-Control header from the APM Server
+     * We want to reload the configuration in intervals which are determined based on the Cache-Control header from the Atatus Server
      * That's why we can't rely on the general {@link org.stagemonitor.configuration.ConfigurationRegistry} scheduled reload
      */
     @Override
@@ -116,7 +116,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
     }
 
     /**
-     * Continuously polls the APM Server's remote configuration endpoint
+     * Continuously polls the Atatus Server's remote configuration endpoint
      *
      * @param configurationRegistry the configuration registry which will be asked to
      *                              {@link ConfigurationRegistry#reloadDynamicConfigurationOptions()}
@@ -170,7 +170,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
 
     private String tryFetchConfig(ConfigurationRegistry configurationRegistry, HttpURLConnection connection) throws IOException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Reloading configuration from APM Server {}", connection.getURL());
+            logger.debug("Reloading configuration from Atatus Server {}", connection.getURL());
         }
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestMethod("POST");
@@ -191,7 +191,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
                 reader.startObject();
                 config = MapConverter.deserialize(reader);
                 configurationRegistry.reloadDynamicConfigurationOptions();
-                logger.info("Received new configuration from APM Server: {}", config);
+                logger.info("Received new configuration from Atatus Server: {}", config);
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     ConfigurationOption<?> conf = configurationRegistry.getConfigurationOptionByKey(entry.getKey());
                     if (conf == null) {
@@ -205,13 +205,13 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
                 logger.debug("Configuration did not change");
                 break;
             case SC_NOT_FOUND:
-                logger.debug("This APM Server does not support central configuration. Update to APM Server 7.3+");
+                logger.debug("This Atatus Server does not support central configuration. Update to Atatus Server 7.3+");
                 break;
             case SC_FORBIDDEN:
-                logger.debug("Central configuration is disabled. Set kibana.enabled: true in your APM Server configuration.");
+                logger.debug("Central configuration is disabled. Set kibana.enabled: true in your Atatus Server configuration.");
                 break;
             case SC_SERVICE_UNAVAILABLE:
-                throw new IllegalStateException("Remote configuration is not available. Check the connection between APM Server and Kibana.");
+                throw new IllegalStateException("Remote configuration is not available. Check the connection between Atatus Server and Kibana.");
             default:
                 throw new IllegalStateException("Unexpected status " + status + " while fetching configuration");
         }
@@ -225,7 +225,7 @@ public class ApmServerConfigurationSource extends AbstractConfigurationSource im
 
     @Override
     public String getName() {
-        return "APM Server";
+        return "Atatus Server";
     }
 
     @Override

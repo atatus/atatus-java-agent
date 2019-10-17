@@ -79,8 +79,11 @@ public class ErrorMetricPayload extends Payload {
 	}
 
 	public boolean isEmpty() {
-		logger.info("Error metric status code size {}", errorMetricStatusCodePayloadMap.size());
 		return errorMetricStatusCodePayloadMap.isEmpty();
 	}
 
+	public int size() {
+		return errorMetricStatusCodePayloadMap.size();
+	}
+	
 }
