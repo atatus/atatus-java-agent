@@ -1,44 +1,54 @@
-[![Build Status](https://apm-ci.elastic.co/buildStatus/icon?job=apm-agent-java%2Fapm-agent-java-mbp%2Fmaster)](https://apm-ci.elastic.co/job/apm-agent-java/job/apm-agent-java-mbp/job/master/)
-[![codecov](https://codecov.io/gh/elastic/apm-agent-java/branch/master/graph/badge.svg)](https://codecov.io/gh/elastic/apm-agent-java)
-[![Maven Central](https://img.shields.io/maven-central/v/com.atatus.apm/apm-agent-api.svg)](https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:atatus-apm-agent)
+# Readme
 
-# apm-agent-java
+## Build Agent
 
-Please fill out this survey to help us prioritizing framework support: https://docs.google.com/forms/d/e/1FAIpQLScd0RYiwZGrEuxykYkv9z8Hl3exx_LKCtjsqEo1OWx8BkLrOQ/viewform?usp=sf_link
+cd /Users/apple/development/git/atatus/atatus-java-agent/apm-agent-java
+./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true
 
-## Release announcements
+* Remove snapshot from jar
 
-To get notified about new releases, watch this repository for `Releases only`.
+    ./mvnw clean install -DremoveSnapshot -DskipTests=true -Dmaven.javadoc.skip=true
 
-## Documentation
+* Remove snapshot and set new version for jar
 
-Docs are located [here](https://www.elastic.co/guide/en/apm/agent/java/current/index.html).
+    ./mvnw clean install versions:set -DremoveSnapshot -DskipTests=true -Dmaven.javadoc.skip=true
 
-## Getting Help
 
-If you find a bug,
-please [report an issue](https://github.com/elastic/apm-agent-java/issues/new).
-For any other assistance,
-please open or add to a topic on the [APM discuss forum](https://discuss.elastic.co/c/apm).
+--------------------------------------------------------------------------------
 
-If you need help or hit an issue,
-please start by opening a topic on our discuss forums.
-Please note that we reserve GitHub tickets for confirmed bugs and enhancement requests.
+## Test
 
-## Contributing
+### Start MongoDB
 
-See the [contributing documentation](CONTRIBUTING.md)
+cd ~/development/git/atatus
+docker-compose up -d mongo
+docker exec -it mongodb bash
 
-## Snapshots
 
-Download the latest snapshot from master
-[here](https://oss.sonatype.org/service/local/artifact/maven/redirect?r=snapshots&g=com.atatus.apm&a=atatus-apm-agent&v=LATEST).
+### Start sample apps
 
-## Build form source
+cd ~/development/git/atatus/atatus-java-agent/java-test-projects/SpringBoot/spring-boot-mongodb/target
 
-Execute `./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true` to build the artifacts and to install them to your local maven repository. The build process requires JDK 9.
-The agent jar is in the folder `atatus-apm-agent/target`.
+java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.server_urls=http://localhost:8200  -Datatus.application_packages=guru.springframework -Datatus.log_level=Debug -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
 
-## License
+java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.license_key="lic_apm_0dc7f9851bc44b08ad915eca1ed05b51" -Datatus.app_name="Java APM Backend"  -Datatus.application_packages=guru.springframework -Datatus.log_level=Info -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
 
-Elastic APM Java Agent is licensed under [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+### Run in different port:
+
+cd ~/development/git/atatus/atatus-java-agent/java-test-projects/angular6-springboot-mysql-crud/springboot2-jpa-crud-example/target
+
+java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.license_key="lic_apm_42eb4423ad504909b7f9ac2f97a735a9" -Datatus.app_name="Java APM Backend"  -Datatus.application_packages=guru.springframework -Datatus.log_level=Info -Dserver.port=9090 -jar springboot2-jpa-crud-example-0.0.1-SNAPSHOT.jar
+
+
+--------------------------------------------------------------------------------
+
+### Java Tips
+
+cd test/
+jar xf atatus-apm-agent-1.0.0.jar
+rm atatus-apm-agent-1.0.0.jar
+
+jar cfm ../atatus-apm-agent-1.0.0.jar META-INF/MANIFEST.MF *
+
+--------------------------------------------------------------------------------
+
