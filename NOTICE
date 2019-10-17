@@ -1,10 +1,11 @@
-Elastic APM Java Agent
-Copyright 2018-2019 Elasticsearch B.V.
+Atatus APM Java Agent
+Copyright 2019-2019 Atatus.
 
 ###############################################################################
 
 This product includes software licensed under the Apache License 2.0 from the
 following sources:
+ - Elastic - Copyright 2018-2019 Elasticsearch B.V.
  - stagemonitor - Copyright 2014-2017 iSYS Software GmbH
  - micrometer
  - https://github.com/raphw/weak-lock-free
@@ -12,6 +13,13 @@ following sources:
  - LMAX Disruptor - Copyright 2011 LMAX Ltd.
  - Byte Buddy (https://bytebuddy.net) - Copyright Rafael Winterhalter
  - JCTools
+
+------------------------------------------------------------------------------
+
+Elastic notice:
+
+Elastic APM Java Agent
+Copyright 2018-2019 Elasticsearch B.V.
 
 ------------------------------------------------------------------------------
 
