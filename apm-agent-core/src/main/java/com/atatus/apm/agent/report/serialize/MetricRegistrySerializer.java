@@ -46,17 +46,21 @@ public class MetricRegistrySerializer {
         NumberConverter.serialize(timestamp, jw);
         jw.writeByte(JsonWriter.COMMA);
 
-        int i = 0;
+        boolean isFieldAdded = false;
         for (MetricSet metricSet : metricSets.values()) {
-        	if (i > 0) {
+        	if (isFieldAdded) {
         		jw.writeByte(JsonWriter.COMMA);
+            	isFieldAdded = false;
         	}
-            if (metricSet.hasContent()) {
+        	if (metricSet.hasContent()) {
                 serializeMetricSet(metricSet, timestamp, replaceBuilder, jw);
                 metricSet.onAfterReport();
-                // jw.writeByte(NEW_LINE);
-                i++;
+                isFieldAdded = true;
             }
+        }
+
+        if (!isFieldAdded) {
+        	serializeValue("dummy", 1, jw);
         }
     }
 

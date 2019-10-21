@@ -63,15 +63,16 @@ import com.atatus.apm.agent.report.serialize.PayloadSerializer;
 
 public class Aggregator implements ReportingEventHandler, Runnable {
 
-	/** Maximum number of transactions kept in memory */
+	/** Maximum number of errors and metrics kept in memory */
 	static final int DEFAULT_QUEUE_SIZE = 20;
+	/** Maximum number of traces kept in memory */
 	static final int TRACE_DEFAULT_QUEUE_SIZE = 10;
 	/** Flush interval for the API in seconds */
-	static final long FLUSH_TIME_SECONDS = 5;
+	static final long FLUSH_TIME_SECONDS = 60;
 	/** Maximum amount of time to await for scheduler to shutdown */
-	static final long SHUTDOWN_TIMEOUT_SECONDS = 1;
-
-	static final long TRACE_THRESHOLD_MS = 1;		// Milliseconds
+	static final long SHUTDOWN_TIMEOUT_SECONDS = 10;
+	/** Maximum response time in milliseconds to be reported as trace */
+	static final long TRACE_THRESHOLD_MS = 2000;		
 
 	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 
@@ -92,8 +93,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
     @Nullable
     private ApmServerReporter reporter;
-    private long reported = 0;
-    private long dropped = 0;
     private volatile boolean shutDown;
 
 	/** Scheduled thread pool, acting like a cron */
@@ -119,8 +118,28 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 		this.metricsQueue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 
 		shutdownCallback = new ShutdownCallback(executorService);
-		this.start();
 		Types.load();
+
+		// Check license key 
+		String licenseKey = reporterConfiguration.getLicenseKey();
+		String appName = reporterConfiguration.getAppName();
+		if ((licenseKey == null || licenseKey == "") && (appName == null || appName == "")) {
+			logger.error("License key and App name is missing!");
+			shutDown = true;
+			return;
+		}
+		if (licenseKey == null || licenseKey == "") {
+			logger.error("License key is missing!");
+			shutDown = true;
+			return;
+		}
+		if (appName == null || appName == "") {
+			logger.error("App Name is missing!");
+			shutDown = true;
+			return;
+		}
+
+		this.start();
 
 		// Send host info
 		try {
@@ -273,17 +292,18 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 	@Override
 	public void init(ApmServerReporter reporter) {
+		// FIXME: Need to remove APM Server reporter.
 		this.reporter = reporter;
 	}
 
     @Override
     public long getReported() {
-        return reported;
+        return 0;
     }
 
     @Override
     public long getDropped() {
-        return dropped;
+        return 0;
     }
 
     @Override

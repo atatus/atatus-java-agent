@@ -25,6 +25,7 @@
 package com.atatus.apm.agent.error.logging;
 
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 
 import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
+import static net.bytebuddy.matcher.ElementMatchers.nameContains;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
@@ -54,6 +56,11 @@ public class Slf4jLoggingInstrumentation extends AtatusApmInstrumentation {
             }
             tracer.getActive().captureException(exception);
         }
+    }
+
+    @Override
+    public ElementMatcher<? super NamedElement> getTypeMatcherPreFilter() {
+        return nameContains("Logger");
     }
 
     @Override

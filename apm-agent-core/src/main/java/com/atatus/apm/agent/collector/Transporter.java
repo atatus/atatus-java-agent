@@ -78,8 +78,8 @@ public class Transporter {
 	 */
 	public void send(final String payload, String path) throws BlockingException {
 		try {
-			logger.info("Atatus Debug: Sending to {} {}", APM_ENDPOINT, path);
-			logger.info("Atatus Debug: Payload: {}", payload);
+			// logger.info("Atatus Debug: Sending to {} {}", APM_ENDPOINT, path);
+			// logger.info("Atatus Debug: Payload: {}", payload);
 			final HttpURLConnection connection = createHttpConnection(path);
 
 			// Serialize payload into string and write into output stream.
@@ -114,7 +114,7 @@ public class Transporter {
 		try {
             // prints out the version info of the APM Server
             String body = HttpUtils.readToString(in);
-            logger.info("Atatus Debug: Response Body: {}", body);
+            // logger.info("Atatus Debug: Response Body: {}", body);
             JsonReader<Object> reader = dslJson.newReader(body.getBytes(UTF_8));
             reader.startObject();
 
@@ -123,7 +123,7 @@ public class Transporter {
             String errorMessage = map.get("errorMessage");
             String blockedString = map.get("blocked");
 
-            logger.info("Atatus Debug: Response Body blockedString: {}", blockedString);
+            // logger.info("Atatus Debug: Response Body blockedString: {}", blockedString);
 
             return new AtatusResponse(errorCode, errorMessage, blockedString);
 
