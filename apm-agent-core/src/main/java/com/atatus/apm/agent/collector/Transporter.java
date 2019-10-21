@@ -105,8 +105,7 @@ public class Transporter {
 		} catch (final BlockingException e) {
 			throw e;
 		} catch (final Exception e) {
-			e.printStackTrace();
-			logger.warn("Error while sending {} of {} payload to the Atatus agent.", e);
+			logger.warn("Error while sending '{}' payload to the Atatus agent.", path);
 		}
 	}
 
