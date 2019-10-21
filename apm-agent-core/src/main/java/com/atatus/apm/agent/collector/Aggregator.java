@@ -72,7 +72,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 	/** Maximum amount of time to await for scheduler to shutdown */
 	static final long SHUTDOWN_TIMEOUT_SECONDS = 10;
 	/** Maximum response time in milliseconds to be reported as trace */
-	static final long TRACE_THRESHOLD_MS = 2000;		
+	static final long TRACE_THRESHOLD_MS = 2000;
 
 	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 
@@ -120,7 +120,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 		shutdownCallback = new ShutdownCallback(executorService);
 		Types.load();
 
-		// Check license key 
+		// Check license key
 		String licenseKey = reporterConfiguration.getLicenseKey();
 		String appName = reporterConfiguration.getAppName();
 		if ((licenseKey == null || licenseKey == "") && (appName == null || appName == "")) {
@@ -174,7 +174,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         if (logger.isDebugEnabled()) {
             logger.debug("Receiving {} event (sequence {})", event.getType(), sequence);
         }
-        logger.info("Atatus Debug: Receiving {} event (sequence {})", event.getType(), sequence);
+        // logger.info("Atatus Debug: Receiving {} event (sequence {})", event.getType(), sequence);
         try {
             if (!shutDown) {
 				try {
@@ -342,9 +342,9 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 				return;
 			}
 
-			logger.info("Atatus Debug: Processing Transaction: {}, Trace: {}, ErrorMetric: {}, Errors: {}, Metrics: {}", 
-					this.transactionPayloadMap.size(), this.tracePayloadQueue.size(), this.errorMetricPayload.size(), 
-					this.errorQueue.size(), this.metricsQueue.size());
+			// logger.info("Atatus Debug: Processing Transaction: {}, Trace: {}, ErrorMetric: {}, Errors: {}, Metrics: {}",
+			//		this.transactionPayloadMap.size(), this.tracePayloadQueue.size(), this.errorMetricPayload.size(),
+			//		this.errorQueue.size(), this.metricsQueue.size());
 
 			HashMap<String, TransactionPayload> transactionPayloadMapToWrite = this.transactionPayloadMap;
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
@@ -384,8 +384,8 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			}
 
 		} catch (final BlockingException e) {
-			logger.debug("Atatus Debug: Failed to send payload to the Atatus: {}", e.getMessage());
-			logger.info("Atatus Debug: Failed to send payload to the Atatus: {}", e);
+			logger.debug("Failed to send payload to the Atatus: {}", e.getMessage());
+			// logger.info("Atatus Debug: Failed to send payload to the Atatus: {}", e);
 
 			// Reset all queues and map
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();

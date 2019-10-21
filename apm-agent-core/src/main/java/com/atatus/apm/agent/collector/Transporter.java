@@ -47,8 +47,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Transporter {
 
-	// static final String APM_ENDPOINT = "https://apm-rx.atatus.com/track/apm/";
-	static final String APM_ENDPOINT = "http://127.0.0.1:8091/track/apm/";
+	static final String APM_ENDPOINT = "https://apm-rx.atatus.com/track/apm/";
+	// static final String APM_ENDPOINT = "http://127.0.0.1:8091/track/apm/";
 	public static final String HOST_INFO_PATH = "hostinfo";
 	public static final String ERROR_PATH = "error";
 	public static final String ERROR_METRIC_PATH = "error_metric";
