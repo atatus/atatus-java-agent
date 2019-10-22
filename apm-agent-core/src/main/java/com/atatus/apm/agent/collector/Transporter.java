@@ -78,6 +78,8 @@ public class Transporter {
 	 */
 	public void send(final String payload, String path) throws BlockingException {
 		try {
+			logger.debug("Sending payload to Atatus server. {} {}", APM_ENDPOINT, path);
+
 			// logger.info("Atatus Debug: Sending to {} {}", APM_ENDPOINT, path);
 			// logger.info("Atatus Debug: Payload: {}", payload);
 			final HttpURLConnection connection = createHttpConnection(path);
