@@ -314,12 +314,12 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
     private boolean shouldFlush() {
     	return false;
-//        final long written = deflater.getBytesWritten() + DslJsonSerializer.BUFFER_SIZE;
-//        final boolean flush = written >= reporterConfiguration.getApiRequestSize();
-//        if (flush && logger.isDebugEnabled()) {
-//            logger.debug("Flushing, because request size limit exceeded {}/{}", written, reporterConfiguration.getApiRequestSize());
-//        }
-//        return flush;
+        // final long written = deflater.getBytesWritten() + DslJsonSerializer.BUFFER_SIZE;
+        // final boolean flush = written >= reporterConfiguration.getApiRequestSize();
+        // if (flush && logger.isDebugEnabled()) {
+        //    logger.debug("Flushing, because request size limit exceeded {}/{}", written, reporterConfiguration.getApiRequestSize());
+        // }
+        // return flush;
     }
 
     void flush() {
@@ -333,7 +333,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 			// Send every one 30 minutes
 			int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
-			if (currentMinute == 0 && currentMinute == 30) {
+			if (currentMinute == 0 || currentMinute == 30) {
 				transporter.send(payloadSerializer.toJsonHostInfo(reporterConfiguration,
 						metaData), Transporter.HOST_INFO_PATH);
 			}
@@ -346,15 +346,15 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			//		this.transactionPayloadMap.size(), this.tracePayloadQueue.size(), this.errorMetricPayload.size(),
 			//		this.errorQueue.size(), this.metricsQueue.size());
 
-			HashMap<String, TransactionPayload> transactionPayloadMapToWrite = this.transactionPayloadMap;
-			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
-			if (transactionPayloadMapToWrite.size() > 0) {
-				// sampleRateByService.set(client.sendTraces(tracesToWrite, traceCount.getAndSet(0)));
+			
+			if (!this.transactionPayloadMap.isEmpty()) {
+				HashMap<String, TransactionPayload> transactionPayloadMapToWrite = this.transactionPayloadMap;
+				this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
 				transporter.send(payloadSerializer.toJsonTransactions(transactionPayloadMapToWrite,
-						reporterConfiguration, metaData), Transporter.TRANSACTION_PATH);
+							reporterConfiguration, metaData), Transporter.TRANSACTION_PATH);
 			}
 
-			if (this.tracePayloadQueue.size() > 0) {
+			if (!this.tracePayloadQueue.isEmpty()) {
 				PriorityBlockingQueue<TracePayload> tracePayloadQueueToWrite = new PriorityBlockingQueue<>(TRACE_DEFAULT_QUEUE_SIZE, new TracePayloadComparator());
 				this.tracePayloadQueue.drainTo(tracePayloadQueueToWrite);
 				transporter.send(payloadSerializer.toJsonTraces(tracePayloadQueueToWrite,
@@ -368,14 +368,14 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 						reporterConfiguration, metaData), Transporter.ERROR_METRIC_PATH);
 			}
 
-			if (this.errorQueue.size() > 0) {
+			if (!this.errorQueue.isEmpty()) {
 				BlockingQueue<ErrorCapture> errorQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.errorQueue.drainTo(errorQueueToWrite);
 				transporter.send(payloadSerializer.toJsonErrors(errorQueueToWrite,
 						reporterConfiguration, metaData), Transporter.ERROR_PATH);
 			}
 
-			if (this.metricsQueue.size() > 0) {
+			if (!this.metricsQueue.isEmpty()) {
 				BlockingQueue<MetricRegistry> metricsQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.metricsQueue.drainTo(metricsQueueToWrite);
 				transporter.send(payloadSerializer.toJsonMetrics(metricsQueueToWrite,

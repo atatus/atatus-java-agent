@@ -27,9 +27,6 @@ package com.atatus.apm.agent.collector.payload;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 
@@ -46,7 +43,6 @@ public class TransactionPayload extends Payload {
 	private final boolean background;
 	private final Long[] durations;
 	private final HashMap<String, SpanPayload> spanPayloadMap;
-	private static final Logger logger = LoggerFactory.getLogger(TransactionPayload.class);
 
 	public TransactionPayload(Transaction transaction, String frameworkName) {
 		this.name = transaction.getNameAsString();
@@ -72,16 +68,18 @@ public class TransactionPayload extends Payload {
 			this.durations[3] = Math.max(duration, this.durations[3]);
 		}
 
+		long totalSpanTime = 0;
 		if (spans != null) {
 			for (int i = 0; i < spans.size(); i++) {
 				Span span = spans.get(i);
 				String spanName = span.getNameAsString();
+				totalSpanTime += span.getDuration();
 				// logger.info("Span name {}", spanName);
 				// logger.info("Span duration {}", span.getDuration());
 
 				SpanPayload spanPayload = spanPayloadMap.get(spanName);
 				if (spanPayload != null) {
-					spanPayload.aggregate(span);
+					spanPayload.aggregate(span.getDuration());
 				} else {
 					spanPayload = new SpanPayload(span);
 					spanPayloadMap.put(spanName, spanPayload);
@@ -90,6 +88,20 @@ public class TransactionPayload extends Payload {
 				span.decrementReferences();
 			}
 		}
+
+	    if (totalSpanTime < duration) {
+	        long codeDuration = duration - totalSpanTime;
+	        String spanName = type;
+
+	        SpanPayload spanPayload = spanPayloadMap.get(spanName);
+	        if (spanPayload == null) {
+	        	spanPayload = new SpanPayload(spanName, Types.TYPE_JAVA, Types.TYPE_JAVA, codeDuration);
+	        	spanPayloadMap.put(spanName, spanPayload);
+	        } else {
+				spanPayload.aggregate(codeDuration);
+	        }
+	    }
+
 	}
 
 	public String getName() {

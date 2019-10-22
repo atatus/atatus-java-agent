@@ -38,6 +38,17 @@ public class SpanPayload extends Payload {
 	private final String type;
 	private final Long[] durations = new Long[4];
 
+	public SpanPayload(String name, String type, String kind, Long duration) {
+		this.name = name;
+		this.type = type;
+		this.kind = kind;
+
+		this.durations[0] = 1l;
+		this.durations[1] = duration;
+		this.durations[2] = duration;
+		this.durations[3] = duration;
+	}
+
 	public SpanPayload(Span span) {
 		this.name = span.getNameAsString();
 		this.kind = Types.getCleanType(span.getType());
@@ -51,8 +62,7 @@ public class SpanPayload extends Payload {
 		this.durations[3] = duration;
 	}
 
-	public void aggregate(Span span) {
-		long duration = span.getDuration();
+	public void aggregate(long duration) {
 
 		this.durations[0]++;
 		this.durations[1] += duration;

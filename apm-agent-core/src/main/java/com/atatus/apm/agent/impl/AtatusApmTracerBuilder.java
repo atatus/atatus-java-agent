@@ -115,10 +115,10 @@ public class AtatusApmTracerBuilder {
         final DslJsonSerializer payloadSerializer = new DslJsonSerializer(configurationRegistry.getConfig(StacktraceConfiguration.class), apmServerClient);
         final MetaData metaData = MetaData.create(configurationRegistry, null, null);
         ApmServerConfigurationSource configurationSource = null;
-        if (addApmServerConfigSource) {
-            configurationSource = new ApmServerConfigurationSource(payloadSerializer, metaData, apmServerClient);
-            configurationRegistry.addConfigurationSource(configurationSource);
-        }
+        // if (addApmServerConfigSource) {
+        //     configurationSource = new ApmServerConfigurationSource(payloadSerializer, metaData, apmServerClient);
+        //     configurationRegistry.addConfigurationSource(configurationSource);
+        // }
         if (reporter == null) {
             reporter = new ReporterFactory().createReporter(configurationRegistry, apmServerClient, metaData);
         }

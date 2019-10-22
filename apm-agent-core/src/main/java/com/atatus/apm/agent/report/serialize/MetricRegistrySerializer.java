@@ -179,7 +179,11 @@ public class MetricRegistrySerializer {
 
     private static void serializeCounter(String key, AtomicLong value, JsonWriter jw) {
         serializeValueStart(key, "", jw);
-        NumberConverter.serialize(value.get(), jw);
+        long valueLong = value.get();
+        if (valueLong < 0) {
+        	valueLong = 0;
+        }
+        NumberConverter.serialize(valueLong, jw);
         // jw.writeByte(JsonWriter.OBJECT_END);
         value.set(0);
     }
@@ -201,12 +205,18 @@ public class MetricRegistrySerializer {
 
     private static void serializeValue(String key, String suffix, double value, JsonWriter jw) {
         serializeValueStart(key, suffix, jw);
+        if (value < 0) {
+        	value = 0;
+        }
         NumberConverter.serialize(value, jw);
         // jw.writeByte(JsonWriter.OBJECT_END);
     }
 
     private static void serializeValue(String key, String suffix, long value, JsonWriter jw) {
         serializeValueStart(key, suffix, jw);
+        if (value < 0) {
+        	value = 0;
+        }
         NumberConverter.serialize(value, jw);
         // jw.writeByte(JsonWriter.OBJECT_END);
     }
