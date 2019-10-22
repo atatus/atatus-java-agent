@@ -13,6 +13,9 @@ cd /Users/apple/development/git/atatus/atatus-java-agent/apm-agent-java
 
     ./mvnw clean install versions:set -DremoveSnapshot -DskipTests=true -Dmaven.javadoc.skip=true
 
+### Check manifest file
+
+    unzip -p atatus-java-agent.jar META-INF/MANIFEST.MF
 
 --------------------------------------------------------------------------------
 
