@@ -61,9 +61,19 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
                 "\n" +
                 "Both the agents and the APM server have to be configured with the same app name.\n" +
                 "Use if APM Server requires an app name.")
-            .sensitive()
             .build();
 
+    private final ConfigurationOption<String> notifyHost = ConfigurationOption.stringOption()
+            .key("notify_host")
+            .configurationCategory(REPORTER_CATEGORY)
+            .description("The URLs must be fully qualified, including protocol (http or https) and port.\n" +
+                    "\n" +
+                    "If outgoing HTTP traffic has to go through a proxy," +
+                    "you can use the Java system properties `http.proxyHost` and `http.proxyPort` to set that up.\n" +
+                    "See also [Java's proxy documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html) for more information.\n" +
+                    "\n")
+            .build();
+    
     private final ConfigurationOption<List<URL>> serverUrl = ConfigurationOption.urlsOption()
         .key("server_urls")
         .aliasKeys("server_url")
@@ -191,6 +201,10 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
         return appName.get();
     }
 
+    public String getNotifyHost() {
+        return notifyHost.get();
+    }
+    
     public List<URL> getServerUrls() {
         return serverUrl.get();
     }

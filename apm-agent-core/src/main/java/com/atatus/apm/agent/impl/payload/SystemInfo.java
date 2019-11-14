@@ -187,7 +187,7 @@ public class SystemInfo {
                 }
             }
         } catch (Throwable e) {
-            logger.warn("Failed to read/parse boot ID from '/proc/sys/kernel/random/boot_id'", e);
+            logger.debug("Failed to read/parse boot ID from '/proc/sys/kernel/random/boot_id'", e);
         }
 
         return this;
@@ -204,7 +204,7 @@ public class SystemInfo {
                 }
             }
         } catch (Throwable e) {
-            logger.warn("Failed to read/parse product ID from '/sys/class/dmi/id/product_uuid'", e);
+            logger.debug("Failed to read/parse product ID from '/sys/class/dmi/id/product_uuid'", e);
         }
 
         return this;
@@ -237,7 +237,7 @@ public class SystemInfo {
                 }
             }
         } catch (Throwable e) {
-            logger.warn("Failed to read/parse container ID from '/proc/self/cgroup'", e);
+            logger.debug("Failed to read/parse container ID from '/proc/self/cgroup'", e);
         }
 
         try {
@@ -258,7 +258,7 @@ public class SystemInfo {
                 kubernetes = new Kubernetes(podName, nodeName, namespace, podUid);
             }
         } catch (Throwable e) {
-            logger.warn("Failed to read environment variables for Kubernetes Downward API discovery", e);
+            logger.debug("Failed to read environment variables for Kubernetes Downward API discovery", e);
         }
 
         logger.debug("container ID is {}", containerId);
@@ -336,7 +336,7 @@ public class SystemInfo {
 	    		totalMem = linuxSystemInfo.getTotalMemory();
 	    	}
     	} catch (Throwable e) {
-            logger.warn("Failed to read system memory", e);
+            logger.debug("Failed to read system memory", e);
         }
 
     	return this;
@@ -350,7 +350,7 @@ public class SystemInfo {
 	    		cpuModelName = linuxSystemInfo.getCPUModelName();
 	    	}
 		} catch (Throwable e) {
-	        logger.warn("Failed to read system cpu information", e);
+	        logger.debug("Failed to read system cpu information", e);
 	    }
     	return this;
     }
@@ -361,7 +361,7 @@ public class SystemInfo {
 	    		platform = linuxSystemInfo.getOSDistribution();
 	    	}
 		} catch (Throwable e) {
-	        logger.warn("Failed to read system os distribution", e);
+	        logger.debug("Failed to read system os distribution", e);
 	    }
     	return this;
     }

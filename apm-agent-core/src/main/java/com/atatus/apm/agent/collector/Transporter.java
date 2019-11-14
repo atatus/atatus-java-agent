@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Elastic APM Java agent
+ * Atatus APM Java agent
  * %%
- * Copyright (C) 2018 - 2019 Elastic and contributors
+ * Copyright (C) 2018 - 2019 Atatus and contributors
  * %%
  * Licensed to Elasticsearch B.V. under one or more contributor
  * license agreements. See the NOTICE file distributed with
@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -35,26 +35,24 @@ import org.slf4j.LoggerFactory;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonReader;
-import com.dslplatform.json.MapConverter;
-
+import com.dslplatform.json.ObjectConverter;
 import com.atatus.apm.agent.collector.util.BlockingException;
 import com.atatus.apm.agent.report.HttpUtils;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Transporter {
 
-	static final String APM_ENDPOINT = "https://apm-rx.atatus.com/track/apm/";
-	// static final String APM_ENDPOINT = "http://127.0.0.1:8091/track/apm/";
-	public static final String HOST_INFO_PATH = "hostinfo";
-	public static final String ERROR_PATH = "error";
-	public static final String ERROR_METRIC_PATH = "error_metric";
-	public static final String TRANSACTION_PATH = "txn";
-	public static final String TRACE_PATH = "trace";
-	public static final String METRIC_PATH = "metric";
+	static final String APM_ENDPOINT = "https://apm-rx.atatus.com";
+	public static final String HOST_INFO_PATH = "/track/apm/hostinfo";
+	public static final String ERROR_PATH = "/track/apm/error";
+	public static final String ERROR_METRIC_PATH = "/track/apm/error_metric";
+	public static final String TRANSACTION_PATH = "/track/apm/txn";
+	public static final String TRACE_PATH = "/track/apm/trace";
+	public static final String METRIC_PATH = "/track/apm/metric";
 
 	static final String CONTENT_TYPE = "Content-Type";
 	static final String APPLICATION_JSON = "application/json";
@@ -64,9 +62,16 @@ public class Transporter {
     private final DslJson<Object> dslJson = new DslJson<>(new DslJson.Settings<>());
 
 	private static final Logger logger = LoggerFactory.getLogger(Transporter.class);
+	
+	private final String notifyHost;
 
+	public Transporter(String notifyHost) {
 
-	public Transporter() {
+		if (notifyHost == null || notifyHost.trim().equals("")) {
+			this.notifyHost = APM_ENDPOINT;
+		} else {
+			this.notifyHost = notifyHost.trim();
+		}
 	}
 
 	/**
@@ -78,10 +83,9 @@ public class Transporter {
 	 */
 	public void send(final String payload, String path) throws BlockingException {
 		try {
-			logger.debug("Sending payload to Atatus server. {} {}", APM_ENDPOINT, path);
+			logger.debug("Sending payload to Atatus server. {} {}", notifyHost, path);
+			// logger.debug("Atatus Debug: Payload: {}", payload);
 
-			// logger.info("Atatus Debug: Sending to {} {}", APM_ENDPOINT, path);
-			// logger.info("Atatus Debug: Payload: {}", payload);
 			final HttpURLConnection connection = createHttpConnection(path);
 
 			// Serialize payload into string and write into output stream.
@@ -97,9 +101,14 @@ public class Transporter {
 				logger.error(error);
 
 				if (responseCode == 400) {
-					AtatusResponse atatusResponse = parseResponse(connection.getInputStream());
+	                InputStream responseInputStream = connection.getErrorStream();
+	                if (responseInputStream == null) {
+	                    responseInputStream = connection.getInputStream();
+	                }
+					AtatusResponse atatusResponse = parseResponse(responseInputStream);
+					logger.error("Error: {}", atatusResponse.getErrorMessage());
 					if (atatusResponse.isBlocked()) {
-						throw new BlockingException(error);
+						throw new BlockingException(atatusResponse.getErrorMessage());
 					}
 				}
 			}
@@ -108,42 +117,55 @@ public class Transporter {
 			throw e;
 		} catch (final Exception e) {
 			logger.warn("Error while sending '{}' payload to the Atatus agent.", path);
+			logger.debug("Error: {}", e);
 		}
 	}
 
 	private AtatusResponse parseResponse(InputStream in) {
 		try {
-            // prints out the version info of the APM Server
             String body = HttpUtils.readToString(in);
-            // logger.info("Atatus Debug: Response Body: {}", body);
+            logger.debug("Response Body: {}", body);
             JsonReader<Object> reader = dslJson.newReader(body.getBytes(UTF_8));
             reader.startObject();
 
-            Map<String, String> map = MapConverter.deserialize(reader);
-            String errorCode = map.get("errorCode");
-            String errorMessage = map.get("errorMessage");
-            String blockedString = map.get("blocked");
+            String errorCode = null;
+            String errorMessage = null;
+            Boolean blocked = false;
+            LinkedHashMap<String, Object> map = ObjectConverter.deserializeMap(reader);
+            if (map.get("errorCode") instanceof String) {
+            	errorCode = (String) map.get("errorCode");
+            }
+            if (map.get("errorMessage") instanceof String) {
+            	errorMessage = (String) map.get("errorMessage");
+            }
+            if (map.get("blocked") instanceof Boolean) {
+            	blocked = (Boolean) map.get("blocked");
+            }
 
-            // logger.info("Atatus Debug: Response Body blockedString: {}", blockedString);
+            if (errorMessage == null && map.get("error") instanceof String) {
+            	errorMessage = (String) map.get("error");
+            }
 
-            return new AtatusResponse(errorCode, errorMessage, blockedString);
+            // logger.debug("Atatus Debug: {} {} {}", errorCode, errorMessage, blocked);
+            return new AtatusResponse(errorCode, errorMessage, blocked);
 
         } catch (Exception e) {
         	logger.warn("Error while parsing response from Atatus agent.", e);
+        	logger.debug("Error: ", e);
         }
 
-		return new AtatusResponse(null, null, null);
+		return new AtatusResponse(null, null, false);
 	}
 
 	private HttpURLConnection createHttpConnection(String path) throws IOException {
 		URL agentUrl;
 		try {
-			agentUrl = new URL(APM_ENDPOINT + path);
+			agentUrl = new URL(notifyHost + path);
 		} catch (final MalformedURLException e) {
 			// This should essentially mean agent should bail out from installing, we cannot
 			// meaningfully
 			// recover from this.
-			throw new RuntimeException("Cannot parse agent url: " + APM_ENDPOINT, e);
+			throw new RuntimeException("Cannot parse agent url: " + notifyHost + path, e);
 		}
 
 		final HttpURLConnection connection = (HttpURLConnection) agentUrl.openConnection();
@@ -169,12 +191,12 @@ class AtatusResponse {
 
 	private final String errorCode;
 	private final String errorMessage;
-	private final boolean isBlocked;
+	private final boolean blocked;
 
-	public AtatusResponse(String errorCode, String errorMessage, String blockedString) {
+	public AtatusResponse(String errorCode, String errorMessage, boolean blocked) {
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
-		this.isBlocked = (blockedString == "true");
+		this.blocked = blocked;
 	}
 
 	public String getErrorCode() {
@@ -186,7 +208,7 @@ class AtatusResponse {
 	}
 
 	public boolean isBlocked() {
-		return isBlocked;
+		return blocked;
 	}
 
 }

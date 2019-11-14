@@ -108,7 +108,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 		this.metaData = metaData;
 		this.apmServerClient = apmServerClient;
 
-		this.transporter = new Transporter();
+		this.transporter = new Transporter(reporterConfiguration.getNotifyHost());
 		this.errorMetricPayload = new ErrorMetricPayload();
 
 		this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
@@ -333,9 +333,12 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 			// Send every one 30 minutes
 			int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
-			if (currentMinute == 0 || currentMinute == 30) {
+			if (currentMinute == 0 || currentMinute == 30) { 
+				// currentMinute == 10 || currentMinute == 20 ||  
+				// currentMinute == 40 || currentMinute == 50) {
 				transporter.send(payloadSerializer.toJsonHostInfo(reporterConfiguration,
 						metaData), Transporter.HOST_INFO_PATH);
+				shutDown = false;
 			}
 
 			if (shutDown) {
@@ -384,8 +387,6 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			}
 
 		} catch (final BlockingException e) {
-			logger.debug("Failed to send payload to the Atatus: {}", e.getMessage());
-			// logger.info("Atatus Debug: Failed to send payload to the Atatus: {}", e);
 
 			// Reset all queues and map
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();

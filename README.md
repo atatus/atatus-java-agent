@@ -2,7 +2,7 @@
 
 ## Build Agent
 
-cd /Users/apple/development/git/atatus/atatus-java-agent/apm-agent-java
+cd ~/development/git/atatus/atatus-java-agent/
 ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true
 
 * Remove snapshot from jar
