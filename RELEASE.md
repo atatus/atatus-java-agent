@@ -1,5 +1,8 @@
 # Release
 
+TODO: In future, we need to revisit the LICENSE file contents in the jar file.
+
+
 1. Change release version in all pom.xml files
 
     <version>1.0.0</version>
