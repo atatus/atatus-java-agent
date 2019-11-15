@@ -15,6 +15,12 @@
     cp atatus-apm-agent-1.0.0.jar atatus-java-agent.jar
     cp atatus-apm-agent-1.0.0.jar atatus-java-agent-1.0.0.jar
 
+
+Check version in the jar file
+
+    unzip -p atatus-java-agent.jar | head -n 15
+
+
 4. Upload those files to following folder
 
     atatus-artifacts/atatus-java/downloads/latest
