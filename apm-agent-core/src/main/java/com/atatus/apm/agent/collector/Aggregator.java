@@ -258,6 +258,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         } else if (event.getSpan() != null) {
 
         	Span span = event.getSpan();
+        	// logger.debug("====> SPAN Check {} {} {}", span.getNameAsString(), span.getType(), span.getSubtype());
         	String transactionId = span.getTraceContext().getTransactionId().toString();
 
         	ArrayList<Span> spans = spanMap.get(transactionId);

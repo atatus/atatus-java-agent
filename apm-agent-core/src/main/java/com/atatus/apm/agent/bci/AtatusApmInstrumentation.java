@@ -34,6 +34,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 import javax.annotation.Nullable;
 
 import com.atatus.apm.agent.impl.AtatusApmTracer;
+import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.TraceContextHolder;
 
 import java.security.ProtectionDomain;
@@ -73,11 +74,23 @@ public abstract class AtatusApmInstrumentation {
     }
 
     @Nullable
+    @VisibleForAdvice
     public static TraceContextHolder<?> getActive() {
         if (tracer != null) {
             return tracer.getActive();
         }
         return null;
+    }
+
+    @Nullable
+    @VisibleForAdvice
+    public static Span createExitSpan() {
+        final TraceContextHolder<?> activeSpan = getActive();
+        if (activeSpan == null || activeSpan.isExit()) {
+            return null;
+        }
+
+       return activeSpan.createExitSpan();
     }
 
     /**

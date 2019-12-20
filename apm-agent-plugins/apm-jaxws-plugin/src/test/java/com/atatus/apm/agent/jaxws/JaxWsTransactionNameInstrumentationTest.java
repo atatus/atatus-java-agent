@@ -60,7 +60,7 @@ class JaxWsTransactionNameInstrumentationTest extends AbstractInstrumentationTes
     }
 
     @SOAPBinding(style = SOAPBinding.Style.RPC)
-    @WebService(targetNamespace = "elastic")
+    @WebService(targetNamespace = "atatus")
     public interface HelloWorldService {
         @WebMethod
         String sayHello();
@@ -68,7 +68,7 @@ class JaxWsTransactionNameInstrumentationTest extends AbstractInstrumentationTes
 
     @WebService(serviceName = "HelloWorldService", portName = "HelloWorld", name = "HelloWorld",
         endpointInterface = "com.atatus.apm.agent.jaxws.JaxWsTransactionNameInstrumentationTest.HelloWorldService",
-        targetNamespace = "elastic")
+        targetNamespace = "atatus")
     public static class HelloWorldServiceImpl implements HelloWorldService {
         @Override
         public String sayHello() {

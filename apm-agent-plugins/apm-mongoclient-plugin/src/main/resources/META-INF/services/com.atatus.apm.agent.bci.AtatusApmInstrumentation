@@ -1,0 +1,2 @@
+com.atatus.apm.agent.mongoclient.ConnectionCommandInstrumentation
+com.atatus.apm.agent.mongoclient.ConnectionInstrumentation

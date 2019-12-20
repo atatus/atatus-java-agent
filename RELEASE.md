@@ -1,11 +1,15 @@
 # Release
 
 TODO: In future, we need to revisit the LICENSE file contents in the jar file.
+FIXME:
+    - Remove old spans
+    - API support for tags, custom data.
+    - Maven release steps.
 
 
 1. Change release version in all pom.xml files
 
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
 2. Build the new Java agent
 
