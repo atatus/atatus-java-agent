@@ -762,7 +762,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
             	writeField("dns", traceSpan.getInstance());
             }
 
-        	writeLastField("query", traceSpan.getStatement());
+            writeLongStringLastField("query", traceSpan.getStatement());
 
         } else if (traceSpan.getUrl() != null) {
         	writeField("url", traceSpan.getUrl());
@@ -1110,6 +1110,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
                     jw.writeByte(COMMA);
                 }
             }
+            
             writeField("type", db.getType());
             writeField("link", db.getDbLink());
             writeLastField("user", db.getUser());
@@ -1456,6 +1457,13 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
             writeFieldName(fieldName);
             writeLongStringValue(value);
             jw.writeByte(COMMA);
+        }
+    }
+
+	void writeLongStringLastField(final String fieldName, @Nullable final String value) {
+        if (value != null) {
+            writeFieldName(fieldName);
+            writeLongStringValue(value);
         }
     }
 
