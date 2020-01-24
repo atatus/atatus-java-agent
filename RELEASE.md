@@ -19,8 +19,8 @@ FIXME:
 
     cd atatus-apm-agent/target/
 
-    cp atatus-apm-agent-1.0.0.jar atatus-java-agent.jar
-    cp atatus-apm-agent-1.0.0.jar atatus-java-agent-1.0.0.jar
+    cp atatus-apm-agent-1.1.0.jar atatus-java-agent.jar
+    cp atatus-apm-agent-1.1.0.jar atatus-java-agent-1.1.0.jar
 
 
 Check version in the jar file
