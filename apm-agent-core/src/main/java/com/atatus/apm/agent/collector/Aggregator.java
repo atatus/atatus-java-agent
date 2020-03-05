@@ -26,6 +26,7 @@ package com.atatus.apm.agent.collector;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -94,7 +95,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
     @Nullable
     private ApmServerReporter reporter;
     private volatile boolean shutDown;
-
+    
 	/** Scheduled thread pool, acting like a cron */
 	private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1, THREAD_FACTORY);
 	private final ShutdownCallback shutdownCallback;
@@ -116,6 +117,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 		this.tracePayloadQueue = new PriorityBlockingQueue<>(TRACE_DEFAULT_QUEUE_SIZE, new TracePayloadComparator());
 		this.errorQueue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 		this.metricsQueue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
+	
 
 		shutdownCallback = new ShutdownCallback(executorService);
 		Types.load();
@@ -207,6 +209,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         }
     }
 
+    
     private void writeEvent(ReportingEvent event) {
 
         if (event.getTransaction() != null) {
@@ -248,8 +251,16 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 				transactionPayloadMap.put(transactionName, transactionPayload);
 			}
 
-			if (transaction.getContext().getResponse().getStatusCode() >= 400) {
-				errorMetricPayload.add(transaction, frameworkName);
+			if (transaction.getContext() != null && transaction.getContext().getResponse() != null) {
+				int statusCode = transaction.getContext().getResponse().getStatusCode();
+				Collection<Integer> ignoreStatusCodes = reporterConfiguration.getIgnoreStatusCodes();
+				if (statusCode >= 400) {
+					if (ignoreStatusCodes == null || !ignoreStatusCodes.contains(statusCode)) {
+						errorMetricPayload.add(transaction, frameworkName);
+					} else {
+						logger.debug("Dropping error metric payload. Ignored status code - {}", statusCode);
+					}
+				}
 			}
 
 			spanMap.remove(transactionId);
@@ -358,20 +369,13 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 							reporterConfiguration, metaData), Transporter.TRANSACTION_PATH);
 			}
 
-			if (!this.tracePayloadQueue.isEmpty()) {
-				PriorityBlockingQueue<TracePayload> tracePayloadQueueToWrite = new PriorityBlockingQueue<>(TRACE_DEFAULT_QUEUE_SIZE, new TracePayloadComparator());
-				this.tracePayloadQueue.drainTo(tracePayloadQueueToWrite);
-				transporter.send(payloadSerializer.toJsonTraces(tracePayloadQueueToWrite,
-						reporterConfiguration, metaData), Transporter.TRACE_PATH);
-			}
-
 			if (!this.errorMetricPayload.isEmpty()) {
 				ErrorMetricPayload errorMetricPayloadToWrite = this.errorMetricPayload;
 				this.errorMetricPayload = new ErrorMetricPayload();
 				transporter.send(payloadSerializer.toJsonErrorMetrics(errorMetricPayloadToWrite,
 						reporterConfiguration, metaData), Transporter.ERROR_METRIC_PATH);
 			}
-
+			
 			if (!this.errorQueue.isEmpty()) {
 				BlockingQueue<ErrorCapture> errorQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.errorQueue.drainTo(errorQueueToWrite);
@@ -387,17 +391,39 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 			}
 
+			if (!this.tracePayloadQueue.isEmpty()) {
+
+				ArrayList<TracePayload> tracePayloads = new ArrayList<TracePayload>();
+				this.tracePayloadQueue.drainTo(tracePayloads);
+
+				for (int i = 0; i < tracePayloads.size(); i++) {
+					transporter.send(payloadSerializer.toJsonTrace(tracePayloads.get(i),
+							reporterConfiguration, metaData), Transporter.TRACE_PATH);			
+				}
+				tracePayloads.clear();
+			}
+
+			
 		} catch (final BlockingException e) {
 
 			// Reset all queues and map
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
 			this.errorMetricPayload = new ErrorMetricPayload();
 
-			this.tracePayloadQueue.clear();
 			this.errorQueue.clear();
 			this.metricsQueue.clear();
-
+			this.tracePayloadQueue.clear();
+			
 	        shutDown = true;
+	        
+		} catch (final Exception e) {
+			// Reset all queues and map
+			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
+			this.errorMetricPayload = new ErrorMetricPayload();
+
+			this.errorQueue.clear();
+			this.metricsQueue.clear();
+			this.tracePayloadQueue.clear();
 		}
 
 	}

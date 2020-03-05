@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -56,13 +56,13 @@ public class Transporter {
 
 	static final String CONTENT_TYPE = "Content-Type";
 	static final String APPLICATION_JSON = "application/json";
-	static final int CONNECT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(1);
-	static final int READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(1);
+	static final int CONNECT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(20);
+	static final int READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(20);
 
     private final DslJson<Object> dslJson = new DslJson<>(new DslJson.Settings<>());
 
 	private static final Logger logger = LoggerFactory.getLogger(Transporter.class);
-	
+
 	private final String notifyHost;
 
 	public Transporter(String notifyHost) {
@@ -82,11 +82,13 @@ public class Transporter {
 	 * @throws BlockingException
 	 */
 	public void send(final String payload, String path) throws BlockingException {
+        HttpURLConnection connection = null;
+
 		try {
 			logger.debug("Sending payload to Atatus server. {} {}", notifyHost, path);
 			// logger.debug("Atatus Debug: Payload: {}", payload);
 
-			final HttpURLConnection connection = createHttpConnection(path);
+			connection = createHttpConnection(path);
 
 			// Serialize payload into string and write into output stream.
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
@@ -94,22 +96,32 @@ public class Transporter {
 			writer.close();
 
 			final int responseCode = connection.getResponseCode();
-			if (responseCode != 200) {
+			if (responseCode >= 400) {
 				String error = String.format(
 						"Error sending payload to the Atatus agent. Status: %d, ResponseMessage: %s",
 						responseCode, connection.getResponseMessage());
-				logger.error(error);
-
+				
 				if (responseCode == 400) {
 	                InputStream responseInputStream = connection.getErrorStream();
 	                if (responseInputStream == null) {
 	                    responseInputStream = connection.getInputStream();
 	                }
 					AtatusResponse atatusResponse = parseResponse(responseInputStream);
-					logger.error("Error: {}", atatusResponse.getErrorMessage());
+
+					if (atatusResponse.isEntityTooLarge()) {
+						logger.debug(error);
+						logger.debug("Error: {}", atatusResponse.getErrorMessage());
+					} else {
+						logger.error(error);
+						logger.error("Error: {}", atatusResponse.getErrorMessage());
+					}
+
 					if (atatusResponse.isBlocked()) {
 						throw new BlockingException(atatusResponse.getErrorMessage());
 					}
+				} else {
+					// This is for status codes 5XX
+					logger.error(error);
 				}
 			}
 
@@ -118,7 +130,9 @@ public class Transporter {
 		} catch (final Exception e) {
 			logger.warn("Error while sending '{}' payload to the Atatus agent.", path);
 			logger.debug("Error: {}", e);
-		}
+		} finally {
+            HttpUtils.consumeAndClose(connection);
+        }
 	}
 
 	private AtatusResponse parseResponse(InputStream in) {
@@ -131,6 +145,7 @@ public class Transporter {
             String errorCode = null;
             String errorMessage = null;
             Boolean blocked = false;
+            Boolean entityTooLarge = false;
             LinkedHashMap<String, Object> map = ObjectConverter.deserializeMap(reader);
             if (map.get("errorCode") instanceof String) {
             	errorCode = (String) map.get("errorCode");
@@ -141,20 +156,23 @@ public class Transporter {
             if (map.get("blocked") instanceof Boolean) {
             	blocked = (Boolean) map.get("blocked");
             }
-
+            if (map.get("entityTooLarge") instanceof Boolean) {
+            	entityTooLarge = (Boolean) map.get("entityTooLarge");
+            }
+            
             if (errorMessage == null && map.get("error") instanceof String) {
             	errorMessage = (String) map.get("error");
             }
 
-            // logger.debug("Atatus Debug: {} {} {}", errorCode, errorMessage, blocked);
-            return new AtatusResponse(errorCode, errorMessage, blocked);
+            // logger.debug("Atatus Debug: {} {} {} {}", errorCode, errorMessage, blocked, entity_toolarge);
+            return new AtatusResponse(errorCode, errorMessage, blocked, entityTooLarge);
 
         } catch (Exception e) {
         	logger.warn("Error while parsing response from Atatus agent.", e);
         	logger.debug("Error: ", e);
         }
 
-		return new AtatusResponse(null, null, false);
+		return new AtatusResponse(null, null, false, false);
 	}
 
 	private HttpURLConnection createHttpConnection(String path) throws IOException {
@@ -192,11 +210,13 @@ class AtatusResponse {
 	private final String errorCode;
 	private final String errorMessage;
 	private final boolean blocked;
+	private final boolean entityTooLarge;
 
-	public AtatusResponse(String errorCode, String errorMessage, boolean blocked) {
+	public AtatusResponse(String errorCode, String errorMessage, boolean blocked, boolean entityTooLarge) {
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
 		this.blocked = blocked;
+		this.entityTooLarge = entityTooLarge;
 	}
 
 	public String getErrorCode() {
@@ -211,4 +231,8 @@ class AtatusResponse {
 		return blocked;
 	}
 
+	public boolean isEntityTooLarge() {
+		return entityTooLarge;
+	}
+	
 }

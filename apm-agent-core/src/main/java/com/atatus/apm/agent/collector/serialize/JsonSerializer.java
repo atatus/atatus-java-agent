@@ -265,6 +265,19 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         return s;
     }
 
+    public String toJsonTrace(final TracePayload tracePayload,
+    		final ReporterConfiguration reporterConfiguration, final MetaData metaData) {
+        jw.reset();
+        jw.writeByte(OBJECT_START);
+        serializeTracePayloads(tracePayload);
+        jw.writeByte(COMMA);
+        serializeCommonInfo(reporterConfiguration, metaData);
+        jw.writeByte(JsonWriter.OBJECT_END);
+        final String s = jw.toString();
+        jw.reset();
+        return s;
+    }
+    
     public String toJsonTraces(final BlockingQueue<TracePayload> tracePayloads,
     		final ReporterConfiguration reporterConfiguration, final MetaData metaData) {
         jw.reset();
@@ -680,6 +693,20 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
     }
 
 
+    private void serializeTracePayloads(TracePayload tracePayload) {
+
+        // writeField("name", span.getNameForSerialization());
+        // writeTimestamp(span.getTimestamp());
+        // serializeTraceContext(span.getTraceContext(), true);
+        // writeField("duration", span.getDurationMs());
+
+        writeFieldName("traces");
+        jw.writeByte(ARRAY_START);
+        serializeTracePayload(tracePayload);
+        jw.writeByte(ARRAY_END);
+
+    }
+    
     private void serializeTracePayloads(final BlockingQueue<TracePayload> tracePayloadQueue) {
 
         // writeField("name", span.getNameForSerialization());

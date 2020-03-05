@@ -37,6 +37,7 @@ import org.stagemonitor.configuration.converter.UrlValueConverter;
 
 import javax.annotation.Nullable;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,6 +73,14 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
                     "you can use the Java system properties `http.proxyHost` and `http.proxyPort` to set that up.\n" +
                     "See also [Java's proxy documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html) for more information.\n" +
                     "\n")
+            .build();
+
+    private final ConfigurationOption<Collection<Integer>> ignoreStatusCodes = ConfigurationOption.integersOption()
+            .key("ignore_status_codes")
+            .configurationCategory(REPORTER_CATEGORY)
+            .description("List of status codes to be ignored from error metric reporting..\n" +
+                    "\n" +
+                    "NOTE: Allowed values are 4XX and 5XX.")
             .build();
     
     private final ConfigurationOption<List<URL>> serverUrl = ConfigurationOption.urlsOption()
@@ -203,6 +212,10 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
 
     public String getNotifyHost() {
         return notifyHost.get();
+    }
+
+    public Collection<Integer> getIgnoreStatusCodes() {
+        return ignoreStatusCodes.get();
     }
     
     public List<URL> getServerUrls() {
