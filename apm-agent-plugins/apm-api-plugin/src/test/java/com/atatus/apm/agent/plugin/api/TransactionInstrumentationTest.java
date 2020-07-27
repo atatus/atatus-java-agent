@@ -29,7 +29,7 @@ import com.atatus.apm.agent.AbstractInstrumentationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 import com.atatus.apm.api.Span;
 import com.atatus.apm.api.Transaction;
 
@@ -41,7 +41,7 @@ class TransactionInstrumentationTest extends AbstractInstrumentationTest {
 
     @BeforeEach
     void setUp() {
-        transaction = AtatusApm.startTransaction();
+        transaction = Atatus.startTransaction();
         transaction.setType("default");
     }
 

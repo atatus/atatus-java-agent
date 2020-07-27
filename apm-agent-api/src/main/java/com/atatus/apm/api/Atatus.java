@@ -38,12 +38,12 @@ import java.lang.invoke.MethodHandle;
  * Use this API to set a custom transaction name,
  * for example:
  * <pre>{@code
- * AtatusApm.currentTransaction().setName("SuchController#muchMethod");
+ * Atatus.currentTransaction().setName("SuchController#muchMethod");
  * }</pre>
  */
-public class AtatusApm {
+public class Atatus {
 
-    AtatusApm() {
+    Atatus() {
         // do not instantiate
     }
 
@@ -59,7 +59,7 @@ public class AtatusApm {
      * Example:
      * </p>
      * <pre>
-     * Transaction transaction = AtatusApm.startTransaction();
+     * Transaction transaction = Atatus.startTransaction();
      * try {
      *     transaction.setName("MyController#myAction");
      *     transaction.setType(Transaction.TYPE_REQUEST);
@@ -90,7 +90,7 @@ public class AtatusApm {
     }
 
     /**
-     * Similar to {@link AtatusApm#startTransaction()} but creates this transaction as the child of a remote parent.
+     * Similar to {@link Atatus#startTransaction()} but creates this transaction as the child of a remote parent.
      *
      * <p>
      * Example:
@@ -99,7 +99,7 @@ public class AtatusApm {
      * // Hook into a callback provided by the framework that is called on incoming requests
      * public Response onIncomingRequest(Request request) throws Exception {
      *     // creates a transaction representing the server-side handling of the request
-     *     Transaction transaction = AtatusApm.startTransactionWithRemoteParent(key -&gt; request.getHeader(key));
+     *     Transaction transaction = Atatus.startTransactionWithRemoteParent(key -&gt; request.getHeader(key));
      *     try (final Scope scope = transaction.activate()) {
      *         String name = "a useful name like ClassName#methodName where the request is handled";
      *         transaction.setName(name);
@@ -127,7 +127,7 @@ public class AtatusApm {
     }
 
     /**
-     * Similar to {@link AtatusApm#startTransaction()} but creates this transaction as the child of a remote parent.
+     * Similar to {@link Atatus#startTransaction()} but creates this transaction as the child of a remote parent.
      *
      * <p>
      * Example:
@@ -136,7 +136,7 @@ public class AtatusApm {
      * // Hook into a callback provided by the framework that is called on incoming requests
      * public Response onIncomingRequest(Request request) throws Exception {
      *     // creates a transaction representing the server-side handling of the request
-     *     Transaction transaction = AtatusApm.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
+     *     Transaction transaction = Atatus.startTransactionWithRemoteParent(request::getHeader, request::getHeaders);
      *     try (final Scope scope = transaction.activate()) {
      *         String name = "a useful name like ClassName#methodName where the request is handled";
      *         transaction.setName(name);
@@ -195,6 +195,25 @@ public class AtatusApm {
     private static Object doGetCurrentTransaction() {
         // com.atatus.apm.api.AtatusApmInstrumentation.CurrentTransactionInstrumentation.doGetCurrentTransaction
         return null;
+    }
+
+    /**
+     * Set the transaction name
+     * <p>
+     * Change transaction name with given name
+     * </p>
+     * <p>
+     * NOTE: Transactions created via {@link #startTransaction()} can not be changed by calling this method.
+     * </p>
+     *
+     * @return 
+     */
+    @Nonnull
+    public static void setTransactionName(String name) {
+    	Transaction transaction = currentTransaction();
+    	if (transaction != null && name != null && !name.isEmpty()) {
+    		transaction.setName(name);
+    	}
     }
 
     /**

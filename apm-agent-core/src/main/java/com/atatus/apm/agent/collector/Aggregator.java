@@ -73,7 +73,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 	/** Maximum amount of time to await for scheduler to shutdown */
 	static final long SHUTDOWN_TIMEOUT_SECONDS = 10;
 	/** Maximum response time in milliseconds to be reported as trace */
-	static final long TRACE_THRESHOLD_MS = 2000;
+	private long traceMinDurationMilli = 2000;
 
 	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 
@@ -95,7 +95,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
     @Nullable
     private ApmServerReporter reporter;
     private volatile boolean shutDown;
-    
+
 	/** Scheduled thread pool, acting like a cron */
 	private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1, THREAD_FACTORY);
 	private final ShutdownCallback shutdownCallback;
@@ -117,7 +117,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 		this.tracePayloadQueue = new PriorityBlockingQueue<>(TRACE_DEFAULT_QUEUE_SIZE, new TracePayloadComparator());
 		this.errorQueue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 		this.metricsQueue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
-	
+		this.traceMinDurationMilli = reporterConfiguration.getTraceMinDuration().getMillis();
 
 		shutdownCallback = new ShutdownCallback(executorService);
 		Types.load();
@@ -209,7 +209,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
         }
     }
 
-    
+
     private void writeEvent(ReportingEvent event) {
 
         if (event.getTransaction() != null) {
@@ -227,7 +227,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 	        ArrayList<Span> spanList = spanMap.get(transactionId);
 
-			if (transaction.getDurationMs() >= TRACE_THRESHOLD_MS &&
+			if (transaction.getDurationMs() >= traceMinDurationMilli &&
 					spanList != null && spanList.size() > 0) {
 		        TracePayload tracePayload = new TracePayload(transaction, spanList, frameworkName);
 
@@ -345,8 +345,8 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 			// Send every one 30 minutes
 			int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
-			if (currentMinute == 0 || currentMinute == 30) { 
-				// currentMinute == 10 || currentMinute == 20 ||  
+			if (currentMinute == 0 || currentMinute == 30) {
+				// currentMinute == 10 || currentMinute == 20 ||
 				// currentMinute == 40 || currentMinute == 50) {
 				transporter.send(payloadSerializer.toJsonHostInfo(reporterConfiguration,
 						metaData), Transporter.HOST_INFO_PATH);
@@ -361,7 +361,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			//		this.transactionPayloadMap.size(), this.tracePayloadQueue.size(), this.errorMetricPayload.size(),
 			//		this.errorQueue.size(), this.metricsQueue.size());
 
-			
+
 			if (!this.transactionPayloadMap.isEmpty()) {
 				HashMap<String, TransactionPayload> transactionPayloadMapToWrite = this.transactionPayloadMap;
 				this.transactionPayloadMap = new HashMap<String, TransactionPayload>();
@@ -375,7 +375,7 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 				transporter.send(payloadSerializer.toJsonErrorMetrics(errorMetricPayloadToWrite,
 						reporterConfiguration, metaData), Transporter.ERROR_METRIC_PATH);
 			}
-			
+
 			if (!this.errorQueue.isEmpty()) {
 				BlockingQueue<ErrorCapture> errorQueueToWrite = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 				this.errorQueue.drainTo(errorQueueToWrite);
@@ -398,12 +398,12 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 
 				for (int i = 0; i < tracePayloads.size(); i++) {
 					transporter.send(payloadSerializer.toJsonTrace(tracePayloads.get(i),
-							reporterConfiguration, metaData), Transporter.TRACE_PATH);			
+							reporterConfiguration, metaData), Transporter.TRACE_PATH);
 				}
 				tracePayloads.clear();
 			}
 
-			
+
 		} catch (final BlockingException e) {
 
 			// Reset all queues and map
@@ -413,9 +413,9 @@ public class Aggregator implements ReportingEventHandler, Runnable {
 			this.errorQueue.clear();
 			this.metricsQueue.clear();
 			this.tracePayloadQueue.clear();
-			
+
 	        shutDown = true;
-	        
+
 		} catch (final Exception e) {
 			// Reset all queues and map
 			this.transactionPayloadMap = new HashMap<String, TransactionPayload>();

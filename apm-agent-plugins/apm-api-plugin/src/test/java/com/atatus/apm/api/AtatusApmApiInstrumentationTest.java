@@ -31,7 +31,7 @@ import com.atatus.apm.agent.impl.sampling.ConstantSampler;
 import com.atatus.apm.agent.impl.transaction.TraceContext;
 import org.junit.jupiter.api.Test;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 import com.atatus.apm.api.NoopSpan;
 import com.atatus.apm.api.NoopTransaction;
 import com.atatus.apm.api.Span;
@@ -47,47 +47,47 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testCreateTransaction() {
-        assertThat(AtatusApm.startTransaction()).isNotSameAs(NoopTransaction.INSTANCE);
-        assertThat(AtatusApm.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
+        assertThat(Atatus.startTransaction()).isNotSameAs(NoopTransaction.INSTANCE);
+        assertThat(Atatus.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
     }
 
     @Test
     void testNoCurrentTransaction() {
-        assertThat(AtatusApm.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
+        assertThat(Atatus.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
     }
 
     @Test
     void testLegacyTransactionCreateSpan() {
-        assertThat(AtatusApm.startTransaction().createSpan()).isNotSameAs(NoopSpan.INSTANCE);
-        assertThat(AtatusApm.currentSpan()).isSameAs(NoopSpan.INSTANCE);
+        assertThat(Atatus.startTransaction().createSpan()).isNotSameAs(NoopSpan.INSTANCE);
+        assertThat(Atatus.currentSpan()).isSameAs(NoopSpan.INSTANCE);
     }
 
     @Test
     void testStartSpan() {
-        assertThat(AtatusApm.startTransaction().startSpan()).isNotSameAs(NoopSpan.INSTANCE);
-        assertThat(AtatusApm.currentSpan()).isSameAs(NoopSpan.INSTANCE);
+        assertThat(Atatus.startTransaction().startSpan()).isNotSameAs(NoopSpan.INSTANCE);
+        assertThat(Atatus.currentSpan()).isSameAs(NoopSpan.INSTANCE);
     }
 
     @Test
     void testNoCurrentSpan() {
-        assertThat(AtatusApm.currentSpan()).isSameAs(NoopSpan.INSTANCE);
+        assertThat(Atatus.currentSpan()).isSameAs(NoopSpan.INSTANCE);
     }
 
     @Test
     void testCaptureException() {
-        AtatusApm.captureException(new RuntimeException("Bazinga"));
+        Atatus.captureException(new RuntimeException("Bazinga"));
         assertThat(reporter.getErrors()).hasSize(1);
     }
 
     @Test
     void testCaptureExceptionNoopSpan() {
-        AtatusApm.currentSpan().captureException(new RuntimeException("Bazinga"));
+        Atatus.currentSpan().captureException(new RuntimeException("Bazinga"));
         assertThat(reporter.getErrors()).hasSize(1);
     }
 
     @Test
     void testTransactionWithError() {
-        final Transaction transaction = AtatusApm.startTransaction();
+        final Transaction transaction = Atatus.startTransaction();
         transaction.setType("request");
         transaction.setName("transaction");
         transaction.captureException(new RuntimeException("Bazinga"));
@@ -99,7 +99,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testCreateChildSpanOfCurrentTransaction() {
         final com.atatus.apm.agent.impl.transaction.Transaction transaction = tracer.startTransaction(TraceContext.asRoot(), null, null).withType("request").withName("transaction").activate();
-        final Span span = AtatusApm.currentSpan().startSpan("db", "mysql", "query");
+        final Span span = Atatus.currentSpan().startSpan("db", "mysql", "query");
         span.setName("span");
         span.end();
         transaction.deactivate().end();
@@ -115,7 +115,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testLegacySpanCreationAndTyping() {
         final com.atatus.apm.agent.impl.transaction.Transaction transaction = tracer.startTransaction(TraceContext.asRoot(), null, null).withType("request").withName("transaction").activate();
-        final Span span = AtatusApm.currentSpan().createSpan();
+        final Span span = Atatus.currentSpan().createSpan();
         span.setName("span");
         span.setType("db.mysql.query.etc");
         span.end();
@@ -133,7 +133,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testAutomaticAndManualTransactions() {
         final com.atatus.apm.agent.impl.transaction.Transaction transaction = tracer.startTransaction(TraceContext.asRoot(), null, null).withType("request").withName("transaction").activate();
-        final Transaction manualTransaction = AtatusApm.startTransaction();
+        final Transaction manualTransaction = Atatus.startTransaction();
         manualTransaction.setName("manual transaction");
         manualTransaction.setType("request");
         manualTransaction.end();
@@ -145,14 +145,14 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     void testGetId_distributedTracingEnabled() {
         com.atatus.apm.agent.impl.transaction.Transaction transaction = tracer.startTransaction(TraceContext.asRoot(), null, null).withType(Transaction.TYPE_REQUEST);
         try (Scope scope = transaction.activateInScope()) {
-            assertThat(AtatusApm.currentTransaction().getId()).isEqualTo(transaction.getTraceContext().getId().toString());
-            assertThat(AtatusApm.currentTransaction().getTraceId()).isEqualTo(transaction.getTraceContext().getTraceId().toString());
-            assertThat(AtatusApm.currentSpan().getId()).isEqualTo(transaction.getTraceContext().getId().toString());
-            assertThat(AtatusApm.currentSpan().getTraceId()).isEqualTo(transaction.getTraceContext().getTraceId().toString());
+            assertThat(Atatus.currentTransaction().getId()).isEqualTo(transaction.getTraceContext().getId().toString());
+            assertThat(Atatus.currentTransaction().getTraceId()).isEqualTo(transaction.getTraceContext().getTraceId().toString());
+            assertThat(Atatus.currentSpan().getId()).isEqualTo(transaction.getTraceContext().getId().toString());
+            assertThat(Atatus.currentSpan().getTraceId()).isEqualTo(transaction.getTraceContext().getTraceId().toString());
             com.atatus.apm.agent.impl.transaction.Span span = transaction.createSpan().withType("db").withName("SELECT");
             try (Scope spanScope = span.activateInScope()) {
-                assertThat(AtatusApm.currentSpan().getId()).isEqualTo(span.getTraceContext().getId().toString());
-                assertThat(AtatusApm.currentSpan().getTraceId()).isEqualTo(span.getTraceContext().getTraceId().toString());
+                assertThat(Atatus.currentSpan().getId()).isEqualTo(span.getTraceContext().getId().toString());
+                assertThat(Atatus.currentSpan().getTraceId()).isEqualTo(span.getTraceContext().getTraceId().toString());
             } finally {
                 span.end();
             }
@@ -163,13 +163,13 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testGetId_noop() {
-        assertThat(AtatusApm.currentTransaction().getId()).isEmpty();
-        assertThat(AtatusApm.currentSpan().getId()).isEmpty();
+        assertThat(Atatus.currentTransaction().getId()).isEmpty();
+        assertThat(Atatus.currentSpan().getId()).isEmpty();
     }
 
     @Test
     void testAddLabel() {
-        Transaction transaction = AtatusApm.startTransaction();
+        Transaction transaction = Atatus.startTransaction();
         transaction.setName("foo");
         transaction.setType("bar");
         transaction.addLabel("foo1", "bar1");
@@ -202,7 +202,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testAddCustomContext() {
-        Transaction transaction = AtatusApm.startTransaction();
+        Transaction transaction = Atatus.startTransaction();
         transaction.setName("foo");
         transaction.setType("bar");
         transaction.addCustomContext("foo1", "bar1");
@@ -221,20 +221,20 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testScopes() {
-        Transaction transaction = AtatusApm.startTransaction();
+        Transaction transaction = Atatus.startTransaction();
         try (com.atatus.apm.api.Scope scope = transaction.activate()) {
-            assertThat(AtatusApm.currentTransaction().getId()).isEqualTo(transaction.getId());
+            assertThat(Atatus.currentTransaction().getId()).isEqualTo(transaction.getId());
             Span span = transaction.startSpan();
             try (com.atatus.apm.api.Scope spanScope = span.activate()) {
-                assertThat(AtatusApm.currentSpan().getId()).isEqualTo(span.getId());
+                assertThat(Atatus.currentSpan().getId()).isEqualTo(span.getId());
             } finally {
                 span.end();
             }
-            assertThat(AtatusApm.currentSpan().getId()).isEqualTo(transaction.getId());
+            assertThat(Atatus.currentSpan().getId()).isEqualTo(transaction.getId());
         } finally {
             transaction.end();
         }
-        assertThat(AtatusApm.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
+        assertThat(Atatus.currentTransaction()).isSameAs(NoopTransaction.INSTANCE);
 
     }
 
@@ -242,7 +242,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     void testTraceContextScopes() {
         com.atatus.apm.agent.impl.transaction.Transaction transaction = tracer.startTransaction(TraceContext.asRoot(), null, getClass().getClassLoader());
         tracer.activate(transaction.getTraceContext());
-        final Span span = AtatusApm.currentSpan();
+        final Span span = Atatus.currentSpan();
         assertThat(tracer.getActive()).isInstanceOf(TraceContext.class);
         tracer.deactivate(transaction.getTraceContext());
         assertThat(tracer.getActive()).isNull();
@@ -253,7 +253,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
 
     @Test
     void testEnsureParentId() {
-        final Transaction transaction = AtatusApm.startTransaction();
+        final Transaction transaction = Atatus.startTransaction();
         try (com.atatus.apm.api.Scope scope = transaction.activate()) {
             assertThat(tracer.currentTransaction()).isNotNull();
             assertThat(tracer.currentTransaction().getTraceContext().getParentId().isEmpty()).isTrue();
@@ -267,7 +267,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     void testTransactionWithRemoteParentFunction() {
         final TraceContext parent = TraceContext.with64BitId(tracer);
         parent.asRootSpan(ConstantSampler.of(true));
-        AtatusApm.startTransactionWithRemoteParent(key -> parent.getOutgoingTraceParentHeader().toString()).end();
+        Atatus.startTransactionWithRemoteParent(key -> parent.getOutgoingTraceParentHeader().toString()).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().isChildOf(parent)).isTrue();
     }
 
@@ -276,7 +276,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
         final TraceContext parent = TraceContext.with64BitId(tracer);
         parent.asRootSpan(ConstantSampler.of(true));
         final Map<String, String> map = Map.of(TraceContext.TRACE_PARENT_HEADER, parent.getOutgoingTraceParentHeader().toString());
-        AtatusApm.startTransactionWithRemoteParent(map::get, key -> Collections.singletonList(map.get(key))).end();
+        Atatus.startTransactionWithRemoteParent(map::get, key -> Collections.singletonList(map.get(key))).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().isChildOf(parent)).isTrue();
     }
 
@@ -285,25 +285,25 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
         final TraceContext parent = TraceContext.with64BitId(tracer);
         parent.asRootSpan(ConstantSampler.of(true));
         final Map<String, String> map = Map.of(TraceContext.TRACE_PARENT_HEADER, parent.getOutgoingTraceParentHeader().toString());
-        AtatusApm.startTransactionWithRemoteParent(null, key -> Collections.singletonList(map.get(key))).end();
+        Atatus.startTransactionWithRemoteParent(null, key -> Collections.singletonList(map.get(key))).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().isChildOf(parent)).isTrue();
     }
 
     @Test
     void testTransactionWithRemoteParentNullFunction() {
-        AtatusApm.startTransactionWithRemoteParent(null).end();
+        Atatus.startTransactionWithRemoteParent(null).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().isRoot()).isTrue();
     }
 
     @Test
     void testTransactionWithRemoteParentNullFunctions() {
-        AtatusApm.startTransactionWithRemoteParent(null, null).end();
+        Atatus.startTransactionWithRemoteParent(null, null).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().isRoot()).isTrue();
     }
 
     @Test
     void testManualTimestamps() {
-        final Transaction transaction = AtatusApm.startTransaction().setStartTimestamp(0);
+        final Transaction transaction = Atatus.startTransaction().setStartTimestamp(0);
         transaction.startSpan().setStartTimestamp(1000).end(2000);
         transaction.end(3000);
 
@@ -314,7 +314,7 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testManualTimestampsDeactivated() {
         when(config.getConfig(CoreConfiguration.class).isActive()).thenReturn(false);
-        final Transaction transaction = AtatusApm.startTransaction().setStartTimestamp(0);
+        final Transaction transaction = Atatus.startTransaction().setStartTimestamp(0);
         transaction.startSpan().setStartTimestamp(1000).end(2000);
         transaction.end(3000);
 
@@ -325,14 +325,14 @@ class AtatusApmApiInstrumentationTest extends AbstractInstrumentationTest {
     @Test
     void testOverrideServiceNameForClassLoader() {
         tracer.overrideServiceNameForClassLoader(Transaction.class.getClassLoader(), "overridden");
-        AtatusApm.startTransaction().end();
+        Atatus.startTransaction().end();
         assertThat(reporter.getFirstTransaction().getTraceContext().getServiceName()).isEqualTo("overridden");
     }
 
     @Test
     void testOverrideServiceNameForClassLoaderWithRemoteParent() {
         tracer.overrideServiceNameForClassLoader(Transaction.class.getClassLoader(), "overridden");
-        AtatusApm.startTransactionWithRemoteParent(key -> null).end();
+        Atatus.startTransactionWithRemoteParent(key -> null).end();
         assertThat(reporter.getFirstTransaction().getTraceContext().getServiceName()).isEqualTo("overridden");
     }
 }

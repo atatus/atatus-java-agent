@@ -277,7 +277,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         jw.reset();
         return s;
     }
-    
+
     public String toJsonTraces(final BlockingQueue<TracePayload> tracePayloads,
     		final ReporterConfiguration reporterConfiguration, final MetaData metaData) {
         jw.reset();
@@ -706,7 +706,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         jw.writeByte(ARRAY_END);
 
     }
-    
+
     private void serializeTracePayloads(final BlockingQueue<TracePayload> tracePayloadQueue) {
 
         // writeField("name", span.getNameForSerialization());
@@ -748,6 +748,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         serializeTraceSpans(tracePayload.getTraceSpans());
         jw.writeByte(COMMA);
         serializeContext(tracePayload.getContext());
+        serializeCustomData(tracePayload.getContext(), tracePayload.getRequestPayload());
         serializeRequestPayload(tracePayload.getRequestPayload());
         jw.writeByte(OBJECT_END);
     }
@@ -1137,7 +1138,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
                     jw.writeByte(COMMA);
                 }
             }
-            
+
             writeField("type", db.getType());
             writeField("link", db.getDbLink());
             writeLastField("user", db.getUser());
@@ -1178,17 +1179,41 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         }
 
         serializeRequestAndResponse(context.getRequest(), context.getResponse());
+
+        // writeFieldName("tags");
+        // serializeLabels(context);
+        // jw.writeByte(COMMA);
+    }
+
+
+    private void serializeCustomData(final TransactionContext context, RequestPayload requestPayload) {
+
+    	Object requestBody = requestPayload.getRequestBody();
+
         if (context.hasCustom()) {
+
             writeFieldName("customData");
             serializeStringKeyScalarValueMap(context.getCustomIterator(), replaceBuilder, jw, true, true);
             jw.writeByte(COMMA);
-        }
 
-         // writeFieldName("tags");
-         // serializeLabels(context);
-         // jw.writeByte(COMMA);
+        } else if (requestBody != null) {
+
+            writeFieldName("customData");
+            jw.writeByte(OBJECT_START);
+            if (requestBody instanceof CharBuffer) {
+                writeFieldName("body");
+            	jw.writeString((CharBuffer) requestBody);
+            } else if (requestBody instanceof PotentiallyMultiValuedMap){
+            	writeField("body", (PotentiallyMultiValuedMap) requestBody, false);
+            } else if (requestBody instanceof String){
+            	writeLastField("body", (String) requestBody);
+            }
+            jw.writeByte(OBJECT_END);
+            jw.writeByte(COMMA);
+        }
     }
 
+    // Seems like it is not being used. TODO: We need to check.
     private void serializeRequestAndResponse(final Request request, final Response response) {
 
         if (request.hasContent()) {
@@ -1425,7 +1450,7 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
         }
     }
 
-    private void writeField(final String fieldName, final PotentiallyMultiValuedMap map) {
+    private void writeField(final String fieldName, final PotentiallyMultiValuedMap map, boolean needLastComma) {
         if (map.size() > 0) {
             writeFieldName(fieldName);
             jw.writeByte(OBJECT_START);
@@ -1433,13 +1458,19 @@ public class JsonSerializer implements PayloadSerializer, MetricRegistry.Metrics
             if (size > 0) {
                 serializePotentiallyMultiValuedEntry(map.getKey(0), map.getValue(0));
                 for (int i = 1; i < size; i++) {
-                    jw.writeByte(COMMA);
+                	jw.writeByte(COMMA);
                     serializePotentiallyMultiValuedEntry(map.getKey(i), map.getValue(i));
                 }
             }
             jw.writeByte(OBJECT_END);
-            jw.writeByte(COMMA);
+            if (needLastComma) {
+            	jw.writeByte(COMMA);
+            }
         }
+    }
+
+    private void writeField(final String fieldName, final PotentiallyMultiValuedMap map) {
+    	this.writeField(fieldName, map, true);
     }
 
     private void serializePotentiallyMultiValuedEntry(String key, @Nullable Object value) {

@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,9 +44,9 @@ public class SoapClientServlet extends HttpServlet {
             .create(new URL("http", req.getLocalAddr(), req.getLocalPort(),req.getServletContext().getContextPath() + "/HelloWorldService?wsdl"), serviceName)
             .getPort(HelloWorldService.class);
         final String remoteTraceId = service.sayHello();
-        if (!AtatusApm.currentTransaction().getTraceId().equals(remoteTraceId)) {
+        if (!Atatus.currentTransaction().getTraceId().equals(remoteTraceId)) {
             throw new IllegalStateException(String.format("Trace not propagated local=%s remote=%s",
-                AtatusApm.currentTransaction().getTraceId(), remoteTraceId));
+                Atatus.currentTransaction().getTraceId(), remoteTraceId));
         }
         resp.getWriter().print(remoteTraceId);
     }

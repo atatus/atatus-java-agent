@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotating a method with {@code @}{@link CaptureSpan} creates a {@link Span} as the child of the currently active span or transaction
- * ({@link AtatusApm#currentSpan()}).
+ * ({@link Atatus#currentSpan()}).
  * <p>
  * When there is no current span,
  * no span will be created.

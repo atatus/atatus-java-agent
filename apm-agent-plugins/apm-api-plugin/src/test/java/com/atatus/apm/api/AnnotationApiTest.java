@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import com.atatus.apm.api.CaptureSpan;
 import com.atatus.apm.api.CaptureTransaction;
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -106,7 +106,7 @@ class AnnotationApiTest extends AbstractInstrumentationTest {
 
         @CaptureTransaction("transaction")
         void transaction() {
-            AtatusApm.currentTransaction().addLabel("foo", "bar");
+            Atatus.currentTransaction().addLabel("foo", "bar");
             span();
         }
 
@@ -117,7 +117,7 @@ class AnnotationApiTest extends AbstractInstrumentationTest {
 
         @CaptureSpan
         void nestedSpan() {
-            AtatusApm.currentSpan().addLabel("foo", "bar");
+            Atatus.currentSpan().addLabel("foo", "bar");
         }
 
         @CaptureTransaction(value = "transactionWithType", type = "job")

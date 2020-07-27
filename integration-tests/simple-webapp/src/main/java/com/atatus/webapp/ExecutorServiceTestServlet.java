@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 import com.atatus.apm.api.Transaction;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ExecutorServiceTestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final Transaction transaction = AtatusApm.currentTransaction();
+        final Transaction transaction = Atatus.currentTransaction();
         if (!transaction.isSampled()) {
             throw new IllegalStateException("Transaction is not sampled");
         }
@@ -56,10 +56,10 @@ public class ExecutorServiceTestServlet extends HttpServlet {
             executor.submit(new Runnable() {
                 @Override
                 public void run() {
-                    if (!AtatusApm.currentSpan().getId().equals(transaction.getId())) {
+                    if (!Atatus.currentSpan().getId().equals(transaction.getId())) {
                         throw new IllegalStateException("Context not propagated");
                     }
-                    AtatusApm.currentSpan().createSpan().setName("Async").end();
+                    Atatus.currentSpan().createSpan().setName("Async").end();
                 }
             }).get();
         } catch (Exception e) {

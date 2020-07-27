@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  * and the type will hold information about the database type.
  * </p>
  * <p>
- * Call {@link AtatusApm#currentSpan()} to get a reference of the current span.
+ * Call {@link Atatus#currentSpan()} to get a reference of the current span.
  * </p>
  * <p>
  * Note: Calling any methods after {@link #end()} has been called is illegal.
@@ -206,7 +206,7 @@ public interface Span {
      * }
      * </pre>
      * <p>
-     * NOTE: Spans created via this method can not be retrieved by calling {@link AtatusApm#currentSpan()}.
+     * NOTE: Spans created via this method can not be retrieved by calling {@link Atatus#currentSpan()}.
      * See {@link #activate()} on how to achieve that.
      * </p>
      * <p>
@@ -251,7 +251,7 @@ public interface Span {
      * }
      * </pre>
      * <p>
-     * NOTE: Spans created via this method can not be retrieved by calling {@link AtatusApm#currentSpan()}.
+     * NOTE: Spans created via this method can not be retrieved by calling {@link Atatus#currentSpan()}.
      * See {@link #activate()} on how to achieve that.
      * </p>
      *
@@ -323,7 +323,7 @@ public interface Span {
      * </p>
      * <pre>
      * Span span = parent.startSpan();
-     * // within the try block the span is available on the current thread via {@link AtatusApm#currentSpan()}
+     * // within the try block the span is available on the current thread via {@link Atatus#currentSpan()}
      * // this is also true for methods called within the try block
      * try (final Scope scope = span.activate()) {
      *     span.setName("SELECT FROM customer");
@@ -364,7 +364,7 @@ public interface Span {
      * // Hook into a callback provided by the RPC framework that is called on outgoing requests
      * public Response onOutgoingRequest(Request request) throws Exception {
      *     // creates a span representing the external call
-     *     Span span = AtatusApm.currentSpan()
+     *     Span span = Atatus.currentSpan()
      *             .startSpan("external", "http", null)
      *             .setName(request.getMethod() + " " + request.getHost());
      *     try (final Scope scope = transaction.activate()) {

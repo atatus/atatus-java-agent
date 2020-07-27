@@ -59,7 +59,7 @@ import com.atatus.apm.agent.impl.AtatusApmTracerBuilder;
 import com.atatus.apm.agent.impl.transaction.Transaction;
 import com.atatus.apm.agent.report.ReporterConfiguration;
 import com.atatus.apm.agent.web.WebConfiguration;
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 
 import java.util.Collections;
 
@@ -138,7 +138,7 @@ public abstract class AbstractSpringBootTest {
 
         @GetMapping("/")
         public String greeting() {
-            AtatusApm.currentTransaction().setUser("id", "email", "username");
+            Atatus.currentTransaction().setUser("id", "email", "username");
             return "Hello World";
         }
 

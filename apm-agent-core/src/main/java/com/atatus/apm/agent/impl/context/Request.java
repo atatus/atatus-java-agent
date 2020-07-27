@@ -134,6 +134,10 @@ public class Request implements Recyclable {
         setRawBody("[REDACTED]");
     }
 
+    public boolean isRedactBody() {
+    	return "[REDACTED]".equals(this.rawBody);
+    }
+
     public Request addFormUrlEncodedParameter(String key, String value) {
         this.postParams.add(key, value);
         return this;

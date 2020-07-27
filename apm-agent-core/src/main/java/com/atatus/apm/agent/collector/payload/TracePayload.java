@@ -24,8 +24,12 @@
  */
 package com.atatus.apm.agent.collector.payload;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -37,6 +41,10 @@ import com.atatus.apm.agent.impl.transaction.Db;
 import com.atatus.apm.agent.impl.transaction.Http;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.atatus.apm.agent.impl.transaction.Transaction;
+import com.dslplatform.json.DslJson;
+import com.dslplatform.json.JsonReader;
+import com.dslplatform.json.JsonWriter;
+import com.dslplatform.json.ObjectConverter;
 
 
 /**
@@ -89,24 +97,32 @@ public class TracePayload extends Payload {
 			this.functions.add(span.getNameAsString());
 			this.traceSpans.add(traceSpan);
 
-			getDbContext(span.getContext().getDb(), traceSpan);
+			getDbContext(traceSpan.getType(), span.getContext().getDb(), traceSpan);
 			getHttpContext(span.getContext().getHttp(), traceSpan);
 		}
 	}
 
-    private void getDbContext(final Db db, final TraceSpanPayload traceSpan) {
+    private void getDbContext(final String dbType, final Db db, final TraceSpanPayload traceSpan) {
         if (db.hasContent()) {
         	traceSpan.setInstance(db.getInstance());
-
-            if (db.getStatement() != null) {
-            	traceSpan.setStatement(db.getStatement());
-            } else {
+        	
+        	String statement = db.getStatement();
+            if (statement == null) {
                 final CharBuffer statementBuffer = db.getStatementBuffer();
                 if (statementBuffer != null && statementBuffer.length() > 0) {
-                	traceSpan.setStatement(statementBuffer.toString());
+                	statement = statementBuffer.toString();
                 }
             }
-            // traceSpan.setUser(db.getUser());
+
+            if (statement != null && !statement.trim().isEmpty()) {
+	        	if (dbType.equalsIgnoreCase("MongoDB")) {
+	        		traceSpan.setStatement(this.obfuscateMongoDBStatement(statement));
+	        	} else {
+	        		traceSpan.setStatement(statement);
+	        	}
+            }
+
+        	// traceSpan.setUser(db.getUser());
             // traceSpan.setType(db.getType());
             // traceSpan.setDBLink(db.getDbLink());
 
@@ -124,6 +140,62 @@ public class TracePayload extends Payload {
             	traceSpan.setStatusCode(statusCode);
             }
             traceSpan.setUrl(http.getUrl());
+        }
+    }
+
+    private final DslJson<Object> dslJson = new DslJson<>(new DslJson.Settings<>());
+	private static final String QUESTION_MARK = "?";
+    private final String obfuscateMongoDBStatement(String statement) {
+
+    	try {
+    		// statement = "{\"$project\":{\"multiply\":{\"$multiply\":[\"$rate\",\"$hrs\",52]},\"rate\":1,\"class\":1}}";
+    		// statement = "{\"$project\":{\"multiply\":{\"$multiply\":[\"$rate\",\"$hrs\",52]},\"rate\":1,\"class\":1},\"aggregate\":[{\"$match\":{\"$or\":[{\"class\":\"a\"},{\"$and\":[{\"class\":\"b\"},{\"hrs\":{\"$exists\":1}}]}]}},{\"$project\":{\"rateMultiply\":{\"$multiply\":[\"$rate\",\"$hrs\",52]},\"rate\":1,\"class\":1,\"hrs\":1}},{\"$match\":{\"$or\":[{\"$and\":[{\"class\":\"a\"},{\"rate\":{\"$gt\":20000}}]},{\"$and\":[{\"class\":\"b\"},{\"rateMultiply\":{\"$gt\":20000}}]}]}},{\"$project\":{\"class\":1,\"rate\":1,\"hrs\":1}}]}";
+
+	        JsonReader<Object> reader = dslJson.newReader(statement.getBytes(UTF_8));
+	        reader.startObject();
+
+	        LinkedHashMap<String, Object> map = ObjectConverter.deserializeMap(reader);
+	        this.obfuscateValue(map);
+
+	        JsonWriter newWriter = dslJson.newWriter(16384);
+	        ObjectConverter.serializeObject(map, newWriter);
+	        String obfuscatedStatement = newWriter.toString();
+	        newWriter.reset();
+
+	        // logger.info("Atatus Debug: MongoDB Statement {}", statement);
+	        // logger.info("Atatus Debug: MongoDB Obfuscation {}", obfuscatedStatement);
+
+	        return obfuscatedStatement;
+
+        } catch (Exception e) {
+        	logger.warn("Error while obfuscating mongodb statement.", e);
+        	logger.debug("Error: ", e);
+        	return statement;
+        }
+    }
+
+    private void obfuscateValue(LinkedHashMap<String, Object> map) {
+
+        for(Map.Entry<String, Object> entry: map.entrySet()) {
+
+            Object value = entry.getValue();
+            if(value instanceof LinkedHashMap) {
+            	obfuscateValue((LinkedHashMap<String, Object>) value);
+
+            } else if(value instanceof ArrayList<?>) {
+
+            	ArrayList<Object> array = (ArrayList<Object>) value;
+
+                for(int i = 0; i < array.size(); i++) {
+                	if(array.get(i) instanceof LinkedHashMap) {
+                		obfuscateValue((LinkedHashMap<String, Object>) array.get(i));
+                	} else {
+                		array.set(i, QUESTION_MARK);
+                	}
+                }
+            } else {
+            	entry.setValue(QUESTION_MARK);
+            }
         }
     }
 
@@ -158,7 +230,6 @@ public class TracePayload extends Payload {
 	public ArrayList<String> getFunctions() {
 		return functions;
 	}
-
 
 }
 

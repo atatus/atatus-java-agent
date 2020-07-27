@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,8 +45,8 @@ public class TestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         // just to test public API availability
-        if (!AtatusApm.currentTransaction().isSampled()) {
-            throw new IllegalStateException("Current transaction is not sampled: " + AtatusApm.currentTransaction());
+        if (!Atatus.currentTransaction().isSampled()) {
+            throw new IllegalStateException("Current transaction is not sampled: " + Atatus.currentTransaction());
         }
 
         boolean causeDbError = req.getParameter(CAUSE_DB_ERROR) != null;

@@ -30,7 +30,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.atatus.apm.api.AtatusApm;
+import com.atatus.apm.api.Atatus;
 import com.atatus.apm.api.Scope;
 import com.atatus.apm.api.Span;
 import com.atatus.apm.api.Transaction;
@@ -66,7 +66,7 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
                     }
                     final CompletableFuture<String> result = element.getWrappedObject();
                     try (Scope scope = span.activate()) {
-                        String spanId = AtatusApm.currentSpan().getId();
+                        String spanId = Atatus.currentSpan().getId();
                         Thread.sleep(20);
                         span.end();
                         result.complete(spanId);
@@ -91,7 +91,7 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
 
     @Test
     public void testAsyncTransactionDelegation() throws ExecutionException, InterruptedException {
-        Transaction transaction = AtatusApm.startTransaction();
+        Transaction transaction = Atatus.startTransaction();
         long startTime = TimeUnit.NANOSECONDS.toMicros(nanoTimeOffsetToEpoch + System.nanoTime());
         transaction.setStartTimestamp(startTime);
         final CompletableFuture<String> result = new CompletableFuture<>();
@@ -117,13 +117,13 @@ public class BlockingQueueContextPropagationTest extends AbstractInstrumentation
 
     @Test
     public void testAsyncSpanDelegation() throws ExecutionException, InterruptedException {
-        Transaction transaction = AtatusApm.startTransaction();
+        Transaction transaction = Atatus.startTransaction();
         long startTime = TimeUnit.NANOSECONDS.toMicros(nanoTimeOffsetToEpoch + System.nanoTime());
         transaction.setStartTimestamp(startTime);
         final CompletableFuture<String> result = new CompletableFuture<>();
         String asyncSpanId = null;
         try (Scope scope = transaction.activate()) {
-            final Span asyncSpan = AtatusApm.currentSpan().startSpan("async", "blocking-queue", null);
+            final Span asyncSpan = Atatus.currentSpan().startSpan("async", "blocking-queue", null);
             asyncSpanId = asyncSpan.getId();
             blockingQueue.offer(new AtatusApmQueueElementWrapper<>(result, asyncSpan));
         } catch (Exception e) {

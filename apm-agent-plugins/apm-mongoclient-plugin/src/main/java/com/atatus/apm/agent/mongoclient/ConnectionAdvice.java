@@ -28,6 +28,8 @@ import com.atatus.apm.agent.bci.AtatusApmInstrumentation;
 import com.atatus.apm.agent.bci.VisibleForAdvice;
 import com.atatus.apm.agent.impl.transaction.Span;
 import com.mongodb.MongoNamespace;
+import com.mongodb.ServerAddress;
+import com.mongodb.connection.Connection;
 import net.bytebuddy.asm.Advice;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
@@ -43,7 +45,7 @@ public class ConnectionAdvice {
 
     @Nullable
     @Advice.OnMethodEnter(suppress = Throwable.class)
-    public static Span onEnter(@Advice.Argument(0) Object databaseOrMongoNamespace, @Advice.Argument(1) BsonDocument command) {
+    public static Span onEnter(@Advice.This Connection thiz, @Advice.Argument(0) Object databaseOrMongoNamespace, @Advice.Argument(1) BsonDocument command) {
         Span span = AtatusApmInstrumentation.createExitSpan();
 
         if (span == null) {
@@ -59,9 +61,19 @@ public class ConnectionAdvice {
             database = namespace.getDatabaseName();
             collection = namespace.getCollectionName();
         }
+        // System.out.println("Debug Starts with ConnectionAdvice....");
+        // System.out.println(command.toJson());
 
         span.withType("db").withSubtype("mongodb")
             .appendToName(database).getContext().getDb().withType("mongodb");
+
+        ServerAddress serverAddress = thiz.getDescription().getServerAddress();
+        String host = serverAddress.getHost();
+        int port = serverAddress.getPort();
+        if (host != null && !host.isEmpty()) {
+            span.getContext().getDb().withInstance(host + ":" + port);
+        }
+
         try {
             String cmd =
                 // try to determine main commands in a garbage free way
@@ -83,6 +95,7 @@ public class ConnectionAdvice {
                     span.appendToName(".").appendToName(collection);
                 }
             }
+
             if (collection == null) {
                 BsonValue collectionName = command.get("collection");
                 if (collectionName != null && collectionName.isString()) {
@@ -90,7 +103,18 @@ public class ConnectionAdvice {
                     span.appendToName(".").appendToName(collection);
                 }
             }
+
+            if (command.containsKey("filter")) {
+                BsonValue filter = command.get("filter");
+                if (filter != null && filter instanceof BsonDocument) {
+                    String filterJson = ((BsonDocument)filter).toJson();
+                    span.getContext().getDb().withStatement(filterJson);
+                    span.withAction("query");
+                }
+            }
+
             span.appendToName(".").appendToName(cmd).withAction(cmd);
+
         } catch (RuntimeException e) {
             logger.error("Exception while determining MongoDB command and collection", e);
         }

@@ -32,7 +32,9 @@ docker exec -it mongodb bash
 
 cd ~/development/git/atatus/atatus-java-agent/java-test-projects/SpringBoot/spring-boot-mongodb/target
 
-java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.server_urls=http://localhost:8200  -Datatus.application_packages=guru.springframework -Datatus.log_level=Debug -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
+java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.server_urls=http://localhost:8200  -Datatus.application_packages=guru.springframework -Datatus.log_level=Debug -Datatus.trace_min_duration=10ms -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
+
+java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.server_urls=http://localhost:8200  -Datatus.application_packages=guru.springframework -Datatus.log_level=Debug -Datatus.trace_min_duration=10ms -Datatus.use_path_as_transaction_name=true -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
 
 java8 -javaagent:/Users/apple/development/git/atatus/atatus-java-apm/atatus-java-agent/atatus-apm-agent/target/atatus-apm-agent-1.0.0.jar -Datatus.license_key="lic_apm_0dc7f9851bc44b08ad915eca1ed05b51" -Datatus.app_name="Java APM Backend"  -Datatus.application_packages=guru.springframework -Datatus.log_level=Info -jar spring-boot-mongodb-0.0.1-SNAPSHOT.jar
 

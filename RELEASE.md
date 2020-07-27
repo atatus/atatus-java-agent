@@ -16,7 +16,7 @@ FIXME:
 
 1. Change release version in all pom.xml files
 
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 
 2. Build the new Java agent
 
@@ -26,8 +26,14 @@ FIXME:
 
     cd atatus-apm-agent/target/
 
-    cp atatus-apm-agent-1.2.0.jar atatus-java-agent.jar
-    cp atatus-apm-agent-1.2.0.jar atatus-java-agent-1.2.0.jar
+    cp atatus-apm-agent-1.3.0.jar atatus-java-agent.jar
+    cp atatus-apm-agent-1.3.0.jar atatus-java-agent-1.3.0.jar
+
+
+    cd ../../apm-agent-api/target
+
+    cp apm-agent-api-1.3.0.jar atatus-java-api.jar
+    cp apm-agent-api-1.3.0.jar atatus-java-api-1.3.0.jar
 
 
 Check version in the jar file

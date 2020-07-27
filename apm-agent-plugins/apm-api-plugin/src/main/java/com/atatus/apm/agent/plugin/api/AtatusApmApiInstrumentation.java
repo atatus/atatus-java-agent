@@ -40,7 +40,7 @@ import java.util.Iterator;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
- * Injects the actual implementation of the public API class com.atatus.apm.api.AtatusApm.
+ * Injects the actual implementation of the public API class com.atatus.apm.api.Atatus.
  */
 public class AtatusApmApiInstrumentation extends ApiInstrumentation {
 

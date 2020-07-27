@@ -82,7 +82,7 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
                     "\n" +
                     "NOTE: Allowed values are 4XX and 5XX.")
             .build();
-    
+
     private final ConfigurationOption<List<URL>> serverUrl = ConfigurationOption.urlsOption()
         .key("server_urls")
         .aliasKeys("server_url")
@@ -197,6 +197,16 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
         .dynamic(false)
         .buildWithDefault(Collections.<WildcardMatcher>emptyList());
 
+    private final ConfigurationOption<TimeDuration> traceMinDuration = TimeDurationValueConverter.durationOption("ms")
+            .key("trace_min_duration")
+            .configurationCategory(REPORTER_CATEGORY)
+            .description("Sets the minimum duration of traces.\n" +
+                "Traces that execute faster than this threshold are attempted to be discarded.\n" +
+                "\n" +
+                "The attempt fails if they lead up to a trace that can't be discarded.")
+            .dynamic(true)
+            .buildWithDefault(TimeDuration.of("2s"));
+
 
     public String getSecretToken() {
         return licenseKey.get();
@@ -217,7 +227,7 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
     public Collection<Integer> getIgnoreStatusCodes() {
         return ignoreStatusCodes.get();
     }
-    
+
     public List<URL> getServerUrls() {
         return serverUrl.get();
     }
@@ -260,6 +270,10 @@ public class ReporterConfiguration extends ConfigurationOptionProvider {
 
     public ConfigurationOption<List<URL>> getServerUrlsOption() {
         return this.serverUrl;
+    }
+    
+    public TimeDuration getTraceMinDuration() {
+        return traceMinDuration.get();
     }
 
 }

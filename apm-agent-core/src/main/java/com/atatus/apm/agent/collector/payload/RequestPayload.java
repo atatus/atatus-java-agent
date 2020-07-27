@@ -25,12 +25,14 @@
 
 package com.atatus.apm.agent.collector.payload;
 
+import java.nio.CharBuffer;
 import java.util.HashMap;
 
 import com.atatus.apm.agent.impl.context.Request;
 import com.atatus.apm.agent.impl.context.Response;
 import com.atatus.apm.agent.impl.context.Socket;
 import com.atatus.apm.agent.impl.context.Url;
+import com.atatus.apm.agent.util.PotentiallyMultiValuedMap;
 
 /**
  * Request payload
@@ -39,7 +41,8 @@ import com.atatus.apm.agent.impl.context.Url;
  */
 public class RequestPayload extends Payload  {
 
-	HashMap<String, Object> requestMap = new HashMap<String, Object>();
+    HashMap<String, Object> requestMap = new HashMap<String, Object>();
+    Object requestBody;
 
     public RequestPayload(Request request, Response response) {
 
@@ -48,61 +51,71 @@ public class RequestPayload extends Payload  {
         requestMap.put("statusCode", Integer.valueOf(response.getStatusCode()));
 
         if (!request.getHeaders().isEmpty()) {
-        	requestMap.put("accept", request.getHeaders().get("accept"));
-        	requestMap.put("accept-encoding", request.getHeaders().get("accept-encoding"));
-        	requestMap.put("accept-language", request.getHeaders().get("accept-language"));
-        	requestMap.put("referer", request.getHeaders().get("referer"));
-        	requestMap.put("userAgent", request.getHeaders().get("user-agent"));
-
-            // writeField("cookies", request.getCookies());
-            // // only one of those can be non-empty
-            // if (!request.getFormUrlEncodedParameters().isEmpty()) {
-            //     requestMap.put("body", request.getFormUrlEncodedParameters());
-            // } else if (request.getRawBody() != null) {
-            //     requestMap.put("body", request.getRawBody());
-            // } else {
-            //     final CharBuffer bodyBuffer = request.getBodyBufferForSerialization();
-            //     if (bodyBuffer != null && bodyBuffer.length() > 0) {
-            //         writeFieldName("body");
-            //         jw.writeString(bodyBuffer);
-            //         jw.writeByte(COMMA);
-            //     }
-            // }
-    	}
+            requestMap.put("accept", request.getHeaders().get("accept"));
+            requestMap.put("accept-encoding", request.getHeaders().get("accept-encoding"));
+            requestMap.put("accept-language", request.getHeaders().get("accept-language"));
+            requestMap.put("referer", request.getHeaders().get("referer"));
+            requestMap.put("userAgent", request.getHeaders().get("user-agent"));
+        }
 
         if (request.getUrl().hasContent()) {
-        	getUrlInfo(request.getUrl());
+            setUrlInfo(request.getUrl());
         }
         if (request.getSocket().hasContent()) {
-        	getSocketInfo(request.getSocket());
+            setSocketInfo(request.getSocket());
         }
+
+        setRequestBody(request);
+        // getCustomData(request);
+
     }
 
-	private void getUrlInfo(final Url url) {
-    	requestMap.put("url", url.getFull());
-    	requestMap.put("host", url.getHostname());
+    private void setUrlInfo(final Url url) {
+        requestMap.put("url", url.getFull());
+        requestMap.put("host", url.getHostname());
         requestMap.put("port", getIntegerValue(url.getPort().toString()));
         requestMap.put("path", url.getPathname());
         requestMap.put("search", url.getSearch());
     }
 
-    private void getSocketInfo(final Socket socket) {
-    	requestMap.put("encrypted", socket.isEncrypted());
+    private void setSocketInfo(final Socket socket) {
+        requestMap.put("encrypted", socket.isEncrypted());
         requestMap.put("ip", socket.getRemoteAddress());
     }
 
+    private void setRequestBody(final Request request) {
+
+        // only one of those can be non-empty
+        if (!request.getFormUrlEncodedParameters().isEmpty()) {
+            PotentiallyMultiValuedMap multiValueMap = new PotentiallyMultiValuedMap();
+            multiValueMap.copyFrom(request.getFormUrlEncodedParameters());
+            requestBody = multiValueMap;
+        } else if (request.getRawBody() != null && !request.isRedactBody()) {
+            requestBody = request.getRawBody();
+        } else {
+            final CharBuffer bodyBuffer = request.getBodyBufferForSerialization();
+            if (bodyBuffer != null && bodyBuffer.length() > 0) {
+                requestBody = bodyBuffer.duplicate();
+            }
+        }
+    }
+
     private Integer getIntegerValue(String valStr) {
-    	Integer val = 0;
+        Integer val = 0;
         try {
-        	val = Integer.parseInt(valStr);
+            val = Integer.parseInt(valStr);
         } catch (Exception e) {
-        	// Do nothing.
+            // Do nothing.
         }
         return val;
     }
 
-	public HashMap<String, Object> getRequestMap() {
-		return requestMap;
+    public HashMap<String, Object> getRequestMap() {
+        return requestMap;
+    }
+
+	public Object getRequestBody() {
+		return requestBody;
 	}
 
 }
