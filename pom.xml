@@ -86,7 +86,7 @@
         <module>atatus-apm-agent</module>
         <module>apm-agent-benchmarks</module>
         <module>apm-agent-plugins</module>
-        <module>apm-agent-api</module>
+        <module>atatus-agent-api</module>
         <module>apm-opentracing</module>
         <module>integration-tests</module>
         <module>apm-agent-attach</module>

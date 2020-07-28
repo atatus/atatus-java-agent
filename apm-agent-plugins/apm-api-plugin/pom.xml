@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>apm-agent-api</artifactId>
+            <artifactId>atatus-agent-api</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

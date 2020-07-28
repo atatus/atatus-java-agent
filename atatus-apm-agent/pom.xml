@@ -173,7 +173,7 @@
                         <configuration>
                             <includeDependencySources>true</includeDependencySources>
                             <dependencySourceIncludes>
-                                <dependencySourceInclude>${project.groupId}:apm-agent-api</dependencySourceInclude>
+                                <dependencySourceInclude>${project.groupId}:atatus-agent-api</dependencySourceInclude>
                                 <dependencySourceInclude>${project.groupId}:apm-agent-core</dependencySourceInclude>
                             </dependencySourceIncludes>
                         </configuration>

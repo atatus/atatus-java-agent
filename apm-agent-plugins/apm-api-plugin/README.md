@@ -3,7 +3,7 @@
 As the agent is not a library, users don't declare a dependency on the agent itself.
 Instead, the agent is added as a `-javaagent` JVM flag.
 
-That's why there is a separate module (`apm-agent-api`),
+That's why there is a separate module (`atatus-agent-api`),
 which contains the public API users declare a dependency on,
 in order to customize spans created by the agent or to create custom spans.
 
@@ -19,7 +19,7 @@ as the API could end up twice on the classpath.
 
 The consequence is that neither the API nor the agent can access each other's classes.
 
-That's why yhe API module (`apm-agent-api`) users declare a dependency on is implemented as a noop.
+That's why yhe API module (`atatus-agent-api`) users declare a dependency on is implemented as a noop.
 
 
 If the agent is active (`-javaagent` JVM flag set),

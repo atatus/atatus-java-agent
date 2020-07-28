@@ -16,7 +16,7 @@ The first step in getting started with the API is to declare a dependency to the
 ----
 <dependency>
     <groupId>com.atatus.apm</groupId>
-    <artifactId>apm-agent-api</artifactId>
+    <artifactId>atatus-agent-api</artifactId>
     <version>${elastic-apm.version}</version>
 </dependency>
 ----
@@ -24,13 +24,13 @@ The first step in getting started with the API is to declare a dependency to the
 [source,groovy]
 .build.gradle
 ----
-compile "com.atatus.apm:apm-agent-api:$elasticApmVersion"
+compile "com.atatus.apm:atatus-agent-api:$elasticApmVersion"
 ----
 
 Replace the version placeholders with the
-link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:apm-agent-api[
+link:https://search.maven.org/search?q=g:com.atatus.apm%20AND%20a:atatus-agent-api[
 latest version from maven central]:
-image:https://img.shields.io/maven-central/v/com.atatus.apm/apm-agent-api.svg[Maven Central]
+image:https://img.shields.io/maven-central/v/com.atatus.apm/atatus-agent-api.svg[Maven Central]
 
 [float]
 [[api-tracer-api]]
