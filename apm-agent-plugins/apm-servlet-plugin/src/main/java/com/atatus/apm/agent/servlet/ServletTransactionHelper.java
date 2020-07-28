@@ -50,6 +50,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import static com.atatus.apm.agent.impl.transaction.AbstractSpan.PRIO_DEFAULT;
 import static com.atatus.apm.agent.impl.transaction.AbstractSpan.PRIO_LOW_LEVEL_FRAMEWORK;
@@ -70,6 +71,9 @@ public class ServletTransactionHelper {
     public static final WildcardMatcher ENDS_WITH_JSP = WildcardMatcher.valueOf("*.jsp");
     @VisibleForAdvice
     public static Set<String> nameInitialized = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
+    private static final Pattern MONGODB_ID_PATTERN = Pattern.compile("^[0-9a-fA-F]{24}$");
 
     private final Logger logger = LoggerFactory.getLogger(ServletTransactionHelper.class);
 
@@ -239,6 +243,26 @@ public class ServletTransactionHelper {
                 if (groupMatcher != null) {
                     transactionName.append(method).append(' ').append(groupMatcher.toString());
                 } else {
+
+                    // Update number, mongodb id into wildcard.
+                    if (servletPath != null) {
+                        String[] parts = servletPath.split("/");
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        for (int i = 1; i < parts.length; i++) {
+                            String part = parts[i];
+                            if (NUMBER_PATTERN.matcher(part).find() || MONGODB_ID_PATTERN.matcher(part).find()) {
+                                stringBuilder.append("/*");
+                            } else {
+                                stringBuilder.append("/" + part);
+                            }
+                        }
+                        servletPath = stringBuilder.toString();
+                        if (servletPath.isEmpty()) {
+                            servletPath = "/";
+                        }
+                    }
+
                     transactionName.append(method).append(' ').append(servletPath);
                     if (pathInfo != null) {
                         transactionName.append(pathInfo);

@@ -25,6 +25,7 @@ FIXME:
 3. Rename target agent file
 
     cd atatus-apm-agent/target/
+    cp atatus-apm-agent-1.3.0.jar atatus-java-agent.jar
     cp atatus-apm-agent-1.3.0.jar atatus-agent.jar
     cp atatus-apm-agent-1.3.0.jar atatus-agent-1.3.0.jar
 
@@ -34,7 +35,7 @@ FIXME:
 
 Check version in the jar file
 
-    unzip -p atatus-java-agent.jar | head -n 15
+    unzip -p atatus-agent.jar | head -n 15
 
 
 4. Upload those files to following folder
