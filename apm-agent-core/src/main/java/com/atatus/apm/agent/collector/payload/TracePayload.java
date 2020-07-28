@@ -97,15 +97,15 @@ public class TracePayload extends Payload {
 			this.functions.add(span.getNameAsString());
 			this.traceSpans.add(traceSpan);
 
-			getDbContext(traceSpan.getType(), span.getContext().getDb(), traceSpan);
+			getDbContext(traceSpan.getType(), traceSpan.getName(), span.getContext().getDb(), traceSpan);
 			getHttpContext(span.getContext().getHttp(), traceSpan);
 		}
 	}
 
-    private void getDbContext(final String dbType, final Db db, final TraceSpanPayload traceSpan) {
+    private void getDbContext(final String dbType, final String spanName, final Db db, final TraceSpanPayload traceSpan) {
         if (db.hasContent()) {
         	traceSpan.setInstance(db.getInstance());
-        	
+
         	String statement = db.getStatement();
             if (statement == null) {
                 final CharBuffer statementBuffer = db.getStatementBuffer();
@@ -116,7 +116,7 @@ public class TracePayload extends Payload {
 
             if (statement != null && !statement.trim().isEmpty()) {
 	        	if (dbType.equalsIgnoreCase("MongoDB")) {
-	        		traceSpan.setStatement(this.obfuscateMongoDBStatement(statement));
+	        		traceSpan.setStatement(spanName + " " + this.obfuscateMongoDBStatement(statement));
 	        	} else {
 	        		traceSpan.setStatement(statement);
 	        	}
