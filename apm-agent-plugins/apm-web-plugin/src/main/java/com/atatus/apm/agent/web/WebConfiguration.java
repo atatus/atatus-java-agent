@@ -11,9 +11,9 @@
  * the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -145,7 +145,7 @@ public class WebConfiguration extends ConfigurationOptionProvider {
             "you should be very careful when enabling this flag,\n" +
             "as it can lead to an explosion of transaction groups.\n" +
             "Take a look at the `url_groups` option on how to mitigate this problem by grouping URLs together.")
-        .buildWithDefault(false);
+        .buildWithDefault(true);
 
     private final ConfigurationOption<List<WildcardMatcher>> urlGroups = ConfigurationOption
         .builder(new ListValueConverter<>(new WildcardMatcherValueConverter()), List.class)
