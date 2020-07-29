@@ -53,7 +53,7 @@ public class AtatusApmApiInstrumentation extends ApiInstrumentation {
 
     @Override
     public ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return named("com.atatus.apm.api.AtatusApm");
+        return named("com.atatus.apm.api.Atatus");
     }
 
     @Override

@@ -24,7 +24,7 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:atatus/apm-agent-java.git</connection>
+        <connection>scm:git:git@github.com:atatus/atatus-java-agent.git</connection>
         <developerConnection>scm:git:git@github.com:atatus/atatus-java-agent.git</developerConnection>
         <url>https://github.com/atatus/atatus-java-agent</url>
         <tag>HEAD</tag>
