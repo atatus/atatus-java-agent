@@ -12,7 +12,7 @@
 
     <properties>
         <version.spring-boot-1.5>1.5.14.RELEASE</version.spring-boot-1.5>
-        <apm-agent-parent.base.dir>${project.basedir}/../..</apm-agent-parent.base.dir>
+        <atatus-agent-base.base.dir>${project.basedir}/../..</atatus-agent-base.base.dir>
     </properties>
 
     <dependencies>
