@@ -14,12 +14,14 @@
     <parent>
         <artifactId>apm-agent-parent</artifactId>
         <groupId>com.atatus.apm</groupId>
-        <version>1.3.0</version>
+        <version>1.3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>atatus-agent-api</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>Atatus Java Agent API Jar</name>
+    <description>Atatus Java Agent API</description>
+    <url>https://atatus.com/</url>
 
     <build>
         <resources>
@@ -64,5 +66,21 @@
             </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <id>atatus</id>
+            <name>Atatus</name>
+            <url>https://www.atatus.com</url>
+            <email>success@atatus.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:atatus/atatus-java-agent.git</connection>
+        <developerConnection>scm:git:git@github.com:atatus/atatus-java-agent.git</developerConnection>
+        <url>https://github.com/atatus/atatus-java-agent</url>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>

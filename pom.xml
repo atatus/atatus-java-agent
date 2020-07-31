@@ -5,7 +5,7 @@
     <groupId>com.atatus.apm</groupId>
     <artifactId>apm-agent-parent</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <version>1.3.0</version>
+    <version>1.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <inceptionYear>2018</inceptionYear>
     <organization>
@@ -33,8 +33,8 @@
     <developers>
         <developer>
             <name>Atatus</name>
-            <url>https://www.atatus.com/contact</url>
-            <organization>Atatus Inc.</organization>
+            <url>https://www.atatus.com</url>
+            <organization>Atatus</organization>
             <organizationUrl>https://www.atatus.com</organizationUrl>
         </developer>
     </developers>
@@ -271,7 +271,7 @@
                 </configuration>
             </plugin>
             <!-- The shadowed source files of this module need to be included explicitly to create a javadoc artifact.-->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${version.plugin.javadoc}</version>
@@ -285,19 +285,19 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
+                <dependencies> -->
                     <!--
                     The transitive dependency has version 3.5,
                     which is not compatible with Java 10.
                     TODO Remove this when updating the javadoc plugin version.
                     -->
-                    <dependency>
+                    <!-- <dependency>
                         <groupId>org.apache.commons</groupId>
                         <artifactId>commons-lang3</artifactId>
                         <version>3.7</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin> -->
             <!-- Check that we don't accidentally use features only available in Java 8+ -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

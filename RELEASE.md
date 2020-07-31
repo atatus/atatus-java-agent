@@ -13,10 +13,12 @@ FIXME:
     - API support for tags, custom data.
     - Maven release steps.
 
+Requirement: Java 11
+
 
 1. Change release version in all pom.xml files
 
-    <version>1.3.0</version>
+    <version>1.3.0-SNAPSHOT</version>
 
 2. Build the new Java agent
 
