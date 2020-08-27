@@ -17,6 +17,14 @@ cd ~/development/git/atatus/atatus-java-agent/
 
     unzip -p atatus-java-agent.jar META-INF/MANIFEST.MF
 
+### Prepare release build
+
+    mvn release:clean release:prepare -Darguments="-DskipTests -Dmaven.javadoc.skip=true -DdryRun=true"
+
+### Clean release files
+
+    mvn release:clean
+
 --------------------------------------------------------------------------------
 
 ## Test
